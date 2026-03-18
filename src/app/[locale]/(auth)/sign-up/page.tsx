@@ -2,16 +2,16 @@
 
 import React, { useState } from "react";
 import styles from "../auth.module.css";
-import ErrorAlert from "@/components/CustomAlert/ErrorAlert";
+import ErrorAlert from "@/presentation/components/CustomAlert/ErrorAlert";
 import { FaEnvelope, FaLock } from "react-icons/fa";
-import InputWrapper from "@/components/InputWrapper/InputWrapper";
-import { PasswordInput } from "@/components/PasswordInput/PasswordInput";
-import CustomButton from "@/components/CustomButton/CustomButton";
-import { PasswordChecklist, Validation } from "@/validation/validation";
-import { authSchema } from "@/validation/schema";
+import InputWrapper from "@/presentation/components/InputWrapper/InputWrapper";
+import { PasswordInput } from "@/presentation/components/PasswordInput/PasswordInput";
+import CustomButton from "@/presentation/components/CustomButton/CustomButton";
+import { PasswordChecklist, Validation } from "@/domain/validation/validation";
+import { authSchema } from "@/domain/validation/schema";
 import z from "zod";
 import { useRouter } from "next/navigation";
-import { useBusinessSignUp } from "@/infrastructure/context/business-signup.context";
+import { useBusinessSignUp } from "@/application/context/business-signup.context";
 
 export default function SignUpView() {
   const router = useRouter();

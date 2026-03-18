@@ -1,0 +1,151 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import styles from "./ServicePicker.module.css";
+
+export interface ServiceItem {
+  id: string;
+  label: string;
+  category: string;
+}
+
+interface ServicePickerProps {
+  label: string;
+  placeholder?: string;
+  services: ServiceItem[];
+  selected: string[];
+  onChange: (selected: string[]) => void;
+  error?: string;
+}
+
+export default function ServicePicker({
+  label,
+  placeholder = "",
+  services,
+  selected,
+  onChange,
+  error = "",
+}: ServicePickerProps) {
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const filled = selected.length > 0 || query.length > 0;
+
+  // close dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const available = services.filter(
+    (s) =>
+      !selected.includes(s.id) &&
+      s.label.toLowerCase().includes(query.toLowerCase()),
+  );
+
+  // group available services by category
+  const grouped: Record<string, ServiceItem[]> = {};
+  for (const s of available) {
+    (grouped[s.category] ??= []).push(s);
+  }
+
+  const handleSelect = (id: string) => {
+    onChange([...selected, id]);
+    setQuery("");
+  };
+
+  const handleRemove = (id: string) => {
+    onChange(selected.filter((s) => s !== id));
+  };
+
+  const selectedServices = selected
+    .map((id) => services.find((s) => s.id === id)!)
+    .filter(Boolean);
+
+  const wrapperClass = [
+    styles.fieldWrapper,
+    filled ? styles.filled : "",
+    error ? styles.error : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div ref={wrapperRef} className={styles.container}>
+      {/* Input area — same style as FormTextField */}
+      <div
+        className={wrapperClass}
+        onClick={() => {
+          wrapperRef.current?.querySelector("input")?.focus();
+        }}
+      >
+        <label className={styles.label}>{label}</label>
+        <input
+          className={styles.input}
+          type="text"
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setOpen(true);
+          }}
+          onFocus={() => {
+            setFocused(true);
+            setOpen(true);
+          }}
+          onBlur={() => setFocused(false)}
+          placeholder={focused ? placeholder : ""}
+        />
+      </div>
+
+      {/* Dropdown */}
+      {open && Object.keys(grouped).length > 0 && (
+        <div className={styles.dropdown}>
+          {Object.entries(grouped).map(([category, items]) => (
+            <div key={category} className={styles.group}>
+              <span className={styles.categoryTitle}>{category}</span>
+              {items.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={styles.option}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => handleSelect(item.id)}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Selected chips */}
+      {selectedServices.length > 0 && (
+        <div className={styles.chips}>
+          {selectedServices.map((s) => (
+            <span key={s.id} className={styles.chip}>
+              {s.label}
+              <button
+                type="button"
+                className={styles.chipRemove}
+                onClick={() => handleRemove(s.id)}
+                aria-label={`Remove ${s.label}`}
+              >
+                ×
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
+
+      {error && <p className={styles.errorText}>{error}</p>}
+    </div>
+  );
+}

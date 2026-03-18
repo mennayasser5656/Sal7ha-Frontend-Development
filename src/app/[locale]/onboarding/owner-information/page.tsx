@@ -1,0 +1,176 @@
+"use client";
+
+import { useState } from "react";
+import FormRow from "@/presentation/components/form/FormRow/FormRow";
+import FormTextField from "@/presentation/components/form/FormTextField/FormTextField";
+import FormSelectField from "@/presentation/components/form/FormSelectField/FormSelectField";
+import GetStartedButton from "@/presentation/components/form/GetStartedButton/GetStartedButton";
+import { useOnboardingSteps } from "@/application/hooks/useOnboardingSteps";
+import { validateStep } from "@/domain/validation/validation";
+import { ownerInformationSchema } from "@/domain/validation/schema";
+import layoutStyles from "../Onboarding.module.css";
+import styles from "./OwnerInformation.module.css";
+
+const COUNTRIES = [
+  { value: "sa", label: "Saudi Arabia" },
+  { value: "ae", label: "United Arab Emirates" },
+  { value: "us", label: "United States" },
+  { value: "uk", label: "United Kingdom" },
+  { value: "eg", label: "Egypt" },
+  { value: "jo", label: "Jordan" },
+  { value: "kw", label: "Kuwait" },
+  { value: "bh", label: "Bahrain" },
+  { value: "qa", label: "Qatar" },
+  { value: "om", label: "Oman" },
+];
+
+type Errors = Partial<Record<string, string>>;
+
+export default function OwnerInformationPage() {
+  const { goToNextStep } = useOnboardingSteps();
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [country, setCountry] = useState("");
+  const [streetAddress, setStreetAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [errors, setErrors] = useState<Errors>({});
+
+  function handleContinue() {
+    const result = validateStep(ownerInformationSchema, {
+      firstName,
+      lastName,
+      email,
+      location: { country, streetAddress, city, state, zipCode },
+    });
+
+    if (!result.success) {
+      setErrors(result.errors as Errors);
+      return;
+    }
+
+    setErrors({});
+    goToNextStep();
+  }
+
+  let delay = 0;
+  const step = 150;
+
+  return (
+    <div className={styles.screen}>
+      <div
+        className={layoutStyles.animated}
+        style={{ animationDelay: `${(delay += step, delay)}ms` }}
+      >
+        <FormRow title="Business Owner Name">
+          <FormTextField
+            label="First Name"
+            placeholder='Ex: "John"'
+            span={6}
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            error={errors["firstName"]}
+            required
+          />
+          <FormTextField
+            label="Last Name"
+            placeholder='Ex: "Doe"'
+            span={6}
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            error={errors["lastName"]}
+            required
+          />
+        </FormRow>
+      </div>
+
+      <div
+        className={layoutStyles.animated}
+        style={{ animationDelay: `${(delay += step, delay)}ms` }}
+      >
+        <FormRow title="Email Address">
+          <FormTextField
+            label="Email"
+            placeholder="Ex: john@example.com"
+            span={12}
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            error={errors["email"]}
+            required
+          />
+        </FormRow>
+      </div>
+
+      <div
+        className={`${styles.section} ${layoutStyles.animated}`}
+        style={{ animationDelay: `${(delay += step, delay)}ms` }}
+      >
+        <FormRow title="Location Details">
+          <FormSelectField
+            label="Country"
+            placeholder="Select a country"
+            span={12}
+            options={COUNTRIES}
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            error={errors["location.country"]}
+            required
+          />
+        </FormRow>
+
+        <FormRow>
+          <FormTextField
+            label="Street Address"
+            placeholder='Ex: "123 Main Street"'
+            span={12}
+            value={streetAddress}
+            onChange={(e) => setStreetAddress(e.target.value)}
+            error={errors["location.streetAddress"]}
+            required
+          />
+        </FormRow>
+
+        <FormRow>
+          <FormTextField
+            label="City"
+            placeholder='Ex: "Riyadh"'
+            span={6}
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            error={errors["location.city"]}
+            required
+          />
+          <FormTextField
+            label="State"
+            placeholder='Ex: "Riyadh Region"'
+            span={3}
+            value={state}
+            onChange={(e) => setState(e.target.value)}
+            error={errors["location.state"]}
+            required
+          />
+          <FormTextField
+            label="Zip Code"
+            placeholder='Ex: "12345"'
+            span={3}
+            value={zipCode}
+            onChange={(e) => setZipCode(e.target.value)}
+            error={errors["location.zipCode"]}
+            required
+          />
+        </FormRow>
+      </div>
+
+      <div
+        className={layoutStyles.animated}
+        style={{ animationDelay: `${(delay += step, delay)}ms` }}
+      >
+        <GetStartedButton label="Continue" onClick={handleContinue} />
+      </div>
+    </div>
+  );
+}

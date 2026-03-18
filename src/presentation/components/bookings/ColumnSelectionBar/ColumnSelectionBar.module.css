@@ -1,0 +1,46 @@
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 1rem;
+  border: 1px solid lightgray;
+  border-radius: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  position: relative;
+  animation: slideDown 0.18s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.checkBox[type="checkbox"] {
+  width: 0.9rem;
+  height: 0.9rem;
+  accent-color: var(--selective-yellow);
+}
+
+.closeBtn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  color: gray;
+  padding: 0 0.25rem;
+  transition: color 0.15s;
+}
+
+.closeBtn:hover {
+  color: #333;
+}

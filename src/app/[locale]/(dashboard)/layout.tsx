@@ -2,7 +2,7 @@
 
 import React from "react";
 import styles from "./dashboard.module.css";
-import DashboardBar from "@/components/Dashboard/DashboardBar/DashboardBar";
+import DashboardBar from "@/presentation/components/Dashboard/DashboardBar/DashboardBar";
 import { RiNotification3Line } from "react-icons/ri";
 import { IoSettingsOutline } from "react-icons/io5";
 

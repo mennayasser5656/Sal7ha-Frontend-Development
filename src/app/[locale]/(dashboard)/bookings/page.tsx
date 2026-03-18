@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./bookings.module.css";
 import { HiOutlineTableCells } from "react-icons/hi2";
 import { FaSortAmountDown } from "react-icons/fa";
@@ -10,14 +10,13 @@ import { RiSearch2Line } from "react-icons/ri";
 import { BsKanban } from "react-icons/bs";
 import { FaListUl } from "react-icons/fa";
 import { FaSortAlphaDown } from "react-icons/fa";
-import TableView from "@/components/bookings/TableView/TableView";
-import ListView from "@/components/bookings/ListView/ListView";
-import DropdownButton from "@/components/common/DropdownButton/DropdownButton";
-import { DropdownOption } from "@/components/common/DropdownButton/DropdownButton";
+import TableView from "@/presentation/components/bookings/TableView/TableView";
+import ListView from "@/presentation/components/bookings/ListView/ListView";
+import DropdownButton from "@/presentation/components/common/DropdownButton/DropdownButton";
+import { DropdownOption } from "@/presentation/components/common/DropdownButton/DropdownButton";
 import { FaRegClock } from "react-icons/fa";
 import { TbStatusChange } from "react-icons/tb";
-import Booking from "@/domain/entities/Booking";
-import { BookingsRepository } from "@/domain/repositories/BookingsRepository";
+import { useBookings } from "@/application/hooks/useBookings";
 
 const VIEW_OPTIONS: DropdownOption[] = [
   { label: "Table View", icon: <HiOutlineTableCells /> },
@@ -51,7 +50,6 @@ const SORT_OPTIONS: DropdownOption[] = [
 
 export default function BookingsView() {
   const [showStats, setShowStats] = useState(false);
-  const [bookings] = useState<Booking[]>(BookingsRepository.generateMockData());
   const [selectedView, setSelectedView] = useState<DropdownOption>(
     VIEW_OPTIONS[0],
   );
@@ -61,15 +59,12 @@ export default function BookingsView() {
   const [selectedSort, setSelectedSort] = useState<DropdownOption>(
     SORT_OPTIONS[0],
   );
-  const [searchQuery, setSearchQuery] = useState("");
 
-  const processedBookings = BookingsRepository.search(
-    BookingsRepository.sort(
-      BookingsRepository.filter(bookings, selectedFilter.label),
-      selectedSort.label,
-    ),
+  const {
+    bookings: processedBookings,
     searchQuery,
-  );
+    setSearchQuery,
+  } = useBookings(selectedFilter.label, selectedSort.label);
 
   const renderView = () => {
     switch (selectedView.label) {

@@ -1,0 +1,22 @@
+.task {
+  display: flex;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #F7F4F1;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.left h1 {
+  font-size: 0.90rem;
+  font-weight: 500;
+}
+
+.left svg {
+    font-size: 1.05rem;
+  color: #dfdfdf;
+}

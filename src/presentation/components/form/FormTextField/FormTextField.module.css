@@ -1,0 +1,82 @@
+.fieldWrapper {
+  position: relative;
+  border: 1.5px solid var(--pale-steel-gray);
+  border-radius: 8px;
+  padding: 0;
+  background: white;
+  transition: border-color 0.2s ease;
+  cursor: text;
+}
+
+.fieldWrapper:focus-within {
+  border-color: var(--selective-yellow);
+}
+
+.fieldWrapper.error {
+  border-color: #d32f2f;
+}
+
+/* Label — sits as placeholder by default, floats up on focus/filled */
+.label {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.875rem;
+  color: var(--state-blue-gray);
+  background: transparent;
+  padding: 0 4px;
+  pointer-events: none;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 28px);
+}
+
+/* Floated state — on focus OR when input has a value */
+.fieldWrapper:focus-within .label,
+.fieldWrapper.filled .label {
+  top: 0;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: var(--selective-yellow);
+  background: white;
+}
+
+.fieldWrapper.error:focus-within .label,
+.fieldWrapper.error.filled .label {
+  color: #d32f2f;
+}
+
+/* Input */
+.input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 0.875rem;
+  font-family: var(--font-inter);
+  color: var(--dark-gray);
+  background: transparent;
+  padding: 18px 14px 8px;
+  border-radius: 8px;
+}
+
+/* Hide the hint placeholder when NOT focused */
+.input::placeholder {
+  opacity: 0;
+  color: var(--pale-steel-gray);
+  transition: opacity 0.15s ease;
+}
+
+.fieldWrapper:focus-within .input::placeholder {
+  opacity: 1;
+}
+
+/* Error message */
+.errorText {
+  font-size: 0.7rem;
+  color: #d32f2f;
+  margin-top: 4px;
+  padding-left: 14px;
+}

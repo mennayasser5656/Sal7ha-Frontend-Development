@@ -1,8 +1,8 @@
 import "../globals.css";
-import { Bebas_Neue, Inter } from "next/font/google";
+import { Bebas_Neue, Inter, Playfair_Display } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { NextIntlClientProvider } from "next-intl";
-import { BusinessSignUpProvider } from "@/infrastructure/context/business-signup.context";
+import { BusinessSignUpProvider } from "@/application/context/business-signup.context";
 
 const bebas = Bebas_Neue({
   weight: "400",
@@ -13,6 +13,11 @@ const bebas = Bebas_Neue({
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
 });
 
 export default async function RootLayout({
@@ -27,7 +32,7 @@ export default async function RootLayout({
   const messages = (await import(`../../../messages/${locale}.json`)).default;
 
   return (
-    <html lang={locale} className={`${bebas.variable} ${inter.variable}`}>
+    <html lang={locale} className={`${bebas.variable} ${inter.variable} ${playfair.variable}`}>
       <body>
         <AppRouterCacheProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>

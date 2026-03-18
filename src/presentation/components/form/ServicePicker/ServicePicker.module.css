@@ -1,0 +1,182 @@
+.container {
+  position: relative;
+  z-index: 10;
+}
+
+/* ── Input wrapper — mirrors FormTextField ── */
+
+.fieldWrapper {
+  position: relative;
+  border: 1.5px solid var(--pale-steel-gray);
+  border-radius: 8px;
+  background: white;
+  transition: border-color 0.2s ease;
+  cursor: text;
+}
+
+.fieldWrapper:focus-within {
+  border-color: var(--selective-yellow);
+}
+
+.fieldWrapper.error {
+  border-color: #d32f2f;
+}
+
+.label {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.875rem;
+  color: var(--state-blue-gray);
+  background: transparent;
+  padding: 0 4px;
+  pointer-events: none;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.fieldWrapper:focus-within .label,
+.fieldWrapper.filled .label {
+  top: 0;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: var(--selective-yellow);
+  background: white;
+}
+
+.fieldWrapper.error:focus-within .label,
+.fieldWrapper.error.filled .label {
+  color: #d32f2f;
+}
+
+.input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 0.875rem;
+  font-family: var(--font-inter);
+  color: var(--dark-gray);
+  background: transparent;
+  padding: 18px 14px 8px;
+  border-radius: 8px;
+}
+
+.input::placeholder {
+  opacity: 0;
+  color: var(--pale-steel-gray);
+  transition: opacity 0.15s ease;
+}
+
+.fieldWrapper:focus-within .input::placeholder {
+  opacity: 1;
+}
+
+/* ── Dropdown ── */
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  margin-top: 4px;
+  max-height: 240px;
+  overflow-y: auto;
+  background: white;
+  border: 1.5px solid var(--pale-steel-gray);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+}
+
+.group + .group {
+  border-top: 1px solid var(--pale-steel-gray);
+}
+
+.categoryTitle {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--state-blue-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 8px 14px 4px;
+}
+
+.option {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 8px 14px;
+  font-size: 0.825rem;
+  font-family: var(--font-inter);
+  color: var(--dark-gray);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.option:hover {
+  background-color: rgb(from var(--selective-yellow) r g b / 0.08);
+}
+
+/* ── Chips ── */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--dark-gray);
+  background: rgb(from var(--selective-yellow) r g b / 0.1);
+  border: 1px solid rgb(from var(--selective-yellow) r g b / 0.3);
+  border-radius: 100px;
+  animation: chipIn 0.2s ease;
+}
+
+@keyframes chipIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.chipRemove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  line-height: 1;
+  color: var(--state-blue-gray);
+  padding: 0;
+  transition: color 0.15s;
+}
+
+.chipRemove:hover {
+  color: #d32f2f;
+}
+
+/* ── Error ── */
+
+.errorText {
+  font-size: 0.7rem;
+  color: #d32f2f;
+  margin-top: 4px;
+  padding-left: 14px;
+}
