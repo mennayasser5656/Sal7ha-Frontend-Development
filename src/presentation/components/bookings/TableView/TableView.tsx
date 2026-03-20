@@ -2,40 +2,44 @@ import React, { useState } from "react";
 import styles from "./TableView.module.css";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { MdKeyboardArrowLeft } from "react-icons/md";
-import { MdKeyboardDoubleArrowRight } from "react-icons/md";
-import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
+import { MdCheckCircle, MdAccessTime, MdCancel } from "react-icons/md";
 import SelectionToolBar from "../SelectionToolBar/SelectionToolBar";
-import {
-  InProgressComponent,
-  PendingComponent,
-  CanceledComponent,
-  CompletedComponent,
-} from "@/presentation/components/common/StatusComponent/StatusComponent";
 import OverlayBookingDetails from "../OverlayBookingDetails/OverlayBookingDetails";
+import { IoIosCheckmarkCircle } from "react-icons/io";
+import { MdPending } from "react-icons/md";
+import { FaClock } from "react-icons/fa6";
 import Booking from "@/domain/entities/Booking";
-import ColumnSelectionBar, { ColumnOption } from "../ColumnSelectionBar/ColumnSelectionBar";
 
-const renderStatusComponent = (status: string) => {
-  switch (status) {
-    case "In-Progress":
-      return <InProgressComponent />;
-    case "Pending":
-      return <PendingComponent />;
-    case "Cancelled":
-      return <CanceledComponent />;
-    case "Completed":
-      return <CompletedComponent />;
-    default:
-      return <span>{status}</span>;
-  }
+const getOwnerImage = (index: number): string => {
+  const images = [
+    "/assets/man1.avif",
+    "/assets/man2.avif",
+    "/assets/woman1.jpg",
+    "/assets/woman2.avif",
+  ];
+  return images[index % images.length];
 };
 
-const OPTIONAL_COLUMNS: Omit<ColumnOption, "visible">[] = [
-  { key: "carOwner", label: "Car Owner" },
-  { key: "carType",  label: "Car Type"  },
-  { key: "startDate", label: "Start Date" },
-  { key: "endDate",   label: "End Date"  },
-];
+const getStatusIcon = (status: string) => {
+  const statusLower = status.toLowerCase();
+
+  if (statusLower.includes("completed") || statusLower.includes("done")) {
+    return <IoIosCheckmarkCircle className={styles.statusIconComplete} />;
+  } else if (statusLower.includes("pending")) {
+    return <MdPending className={styles.statusIconPending} />;
+  } else if (
+    statusLower.includes("progress") ||
+    statusLower.includes("ongoing")
+  ) {
+    return <FaClock className={styles.statusIconInProgress} />;
+  } else if (
+    statusLower.includes("cancelled") ||
+    statusLower.includes("cancel")
+  ) {
+    return <MdCancel className={styles.statusIconCancelled} />;
+  }
+  return null;
+};
 
 interface TableViewProps {
   bookings: Booking[];
@@ -43,28 +47,13 @@ interface TableViewProps {
 
 export default function TableView({ bookings }: TableViewProps) {
   const [isChecked, setIsChecked] = useState(false);
-  const [selectedBookings, setSelectedBookings] = useState<Set<string>>(new Set());
+  const [selectedBookings, setSelectedBookings] = useState<Set<string>>(
+    new Set(),
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [goToPageInput, setGoToPageInput] = useState("");
   const [openBooking, setOpenBooking] = useState<Booking | null>(null);
-  const [showColumnBar, setShowColumnBar] = useState(false);
-  const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
-    new Set(OPTIONAL_COLUMNS.map((c) => c.key))
-  );
-
-  const columns: ColumnOption[] = OPTIONAL_COLUMNS.map((c) => ({
-    ...c,
-    visible: visibleColumns.has(c.key),
-  }));
-
-  const handleToggleColumn = (key: string) => {
-    setVisibleColumns((prev) => {
-      const next = new Set(prev);
-      next.has(key) ? next.delete(key) : next.add(key);
-      return next;
-    });
-  };
 
   const totalItems = bookings.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -93,6 +82,11 @@ export default function TableView({ bookings }: TableViewProps) {
     setIsChecked(newSelected.size === currentBookings.length);
   };
 
+  const handleActionClick = (bookingId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    console.log("Action menu for booking:", bookingId);
+  };
+
   const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
     if (value > 0) {
@@ -111,10 +105,10 @@ export default function TableView({ bookings }: TableViewProps) {
     }
   };
 
-  const goToFirstPage = () => setCurrentPage(1);
-  const goToLastPage = () => setCurrentPage(totalPages);
-  const goToPreviousPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-  const goToNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const goToPreviousPage = () =>
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  const goToNextPage = () =>
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
 
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
@@ -148,31 +142,27 @@ export default function TableView({ bookings }: TableViewProps) {
         <table className={styles.table}>
           <thead>
             <tr>
-              <th className={styles.idColumn}>
-                <input
-                  className={styles.checkBox}
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={handleSelectAll}
-                />
-                ID
+              <th>
+                <div className={styles.idColumn}>
+                  <input
+                    className={styles.checkBox}
+                    type="checkbox"
+                    checked={isChecked}
+                    onChange={handleSelectAll}
+                  />
+                </div>
               </th>
               <th>Service Name</th>
-              {visibleColumns.has("carOwner") && <th>Car Owner</th>}
-              {visibleColumns.has("carType")  && <th>Car Type</th>}
-              {visibleColumns.has("startDate") && <th>Start Date</th>}
-              {visibleColumns.has("endDate")   && <th>End Date</th>}
+              <th>Car Owner</th>
+              <th>Brand</th>
+              <th>Start Date</th>
+              <th>End Date</th>
               <th>Status</th>
-              <th
-                className={`${styles.addColumn} ${showColumnBar ? styles.addColumnActive : ""}`}
-                onClick={() => setShowColumnBar((v) => !v)}
-              >
-                +
-              </th>
+              <th className={styles.actionColumn}></th>
             </tr>
           </thead>
           <tbody>
-            {currentBookings.map((booking) => (
+            {currentBookings.map((booking, index) => (
               <tr
                 key={booking.id}
                 className={`${styles.clickableRow} ${selectedBookings.has(booking.id) ? styles.isSelected : ""}`}
@@ -187,7 +177,6 @@ export default function TableView({ bookings }: TableViewProps) {
                       onChange={() => {}}
                       onClick={(e) => handleSelectBooking(booking.id, e)}
                     />
-                    {booking.id}
                   </div>
                 </td>
                 <td>
@@ -198,25 +187,39 @@ export default function TableView({ bookings }: TableViewProps) {
                     </div>
                   </div>
                 </td>
-                {visibleColumns.has("carOwner")  && <td>{booking.name}</td>}
-                {visibleColumns.has("carType")   && <td>{booking.carType}</td>}
-                {visibleColumns.has("startDate") && <td>{booking.startDate}</td>}
-                {visibleColumns.has("endDate")   && <td>{booking.endDate}</td>}
-                <td>{renderStatusComponent(booking.status)}</td>
-                <td></td>
+                <td>
+                  <div className={styles.ownerInfo}>
+                    <img
+                      src={getOwnerImage(index)}
+                      alt={booking.name}
+                      className={styles.ownerImage}
+                    />
+                    <span>{booking.name}</span>
+                  </div>
+                </td>
+                <td>{booking.carType}</td>
+                <td>{booking.startDate}</td>
+                <td>{booking.endDate}</td>
+                <td>
+                  <div className={styles.statusCell}>
+                    {getStatusIcon(booking.status)}
+                    <span>{booking.status}</span>
+                  </div>
+                </td>
+                <td className={styles.actionColumn}>
+                  <button
+                    className={styles.actionBtn}
+                    onClick={(e) => handleActionClick(booking.id, e)}
+                    aria-label="Row actions"
+                  >
+                    ⋯
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-
-      {showColumnBar && (
-        <ColumnSelectionBar
-          columns={columns}
-          onToggle={handleToggleColumn}
-          onClose={() => setShowColumnBar(false)}
-        />
-      )}
 
       <SelectionToolBar
         selectedCount={selectedBookings.size}
@@ -242,9 +245,6 @@ export default function TableView({ bookings }: TableViewProps) {
           />
         </div>
         <div className={styles.pageNumbers}>
-          <div className={styles.icon} onClick={goToFirstPage}>
-            <MdKeyboardDoubleArrowLeft />
-          </div>
           <div className={styles.icon} onClick={goToPreviousPage}>
             <MdKeyboardArrowLeft />
           </div>
@@ -260,14 +260,11 @@ export default function TableView({ bookings }: TableViewProps) {
           <div className={styles.icon} onClick={goToNextPage}>
             <MdKeyboardArrowRight />
           </div>
-          <div className={styles.icon} onClick={goToLastPage}>
-            <MdKeyboardDoubleArrowRight />
-          </div>
         </div>
         <div className={styles.chooseNumber}>
-          <span>Go To Page</span>
+          <span>Go to page</span>
           <input
-            type="number"
+            type="text"
             value={goToPageInput}
             onChange={(e) => setGoToPageInput(e.target.value)}
             onKeyDown={handleGoToPage}

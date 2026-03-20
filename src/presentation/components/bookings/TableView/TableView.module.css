@@ -3,13 +3,13 @@
   overflow-x: auto;
   overflow-y: auto;
   max-height: 70vh;
-  border: 1px solid lightgray;
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem;
+  border-bottom: 1px solid lightgray;
 }
 
 .table {
-  min-width: 90rem;
+  min-width: 60rem;
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
@@ -28,58 +28,69 @@
   gap: 0.5rem;
 }
 
-.table td.addColumn,
-.table th.addColumn {
-  text-align: center;
-  cursor: pointer;
-  user-select: none;
-  transition: color 0.15s, background-color 0.15s;
-}
-
 .table th.addColumnActive {
   color: var(--selective-yellow);
   background-color: rgb(from var(--selective-yellow) r g b / 0.08);
 }
 
 .table th {
-  background-color: #f8f9fb;
   border-bottom: 1px solid lightgray;
+  background-color: white;
   color: gray;
-  font-size: 0.75rem;
-  font-weight: 500;
+  font-size: 0.7rem;
+  font-weight: 400;
 }
 
 .table th,
 .table td {
-  text-align: left;
-  padding: 0.5rem 1rem;
-  border-right: 1px solid lightgray;
-  border-bottom: 1px solid lightgray;
-  min-width: 8rem;
+  text-align: start;
+  padding: 0.8rem 0.5rem;
+  border-bottom: 1px solid #f3f3f3;
 }
+
+.table th {
+  border-bottom: 1px solid lightgray;
+}
+
 .table th:nth-child(1),
 .table td:nth-child(1) {
-  min-width: 4rem;
+  width: 1%;
+  white-space: nowrap;
+  padding-left: 1.5rem;
+  padding-right: 1rem;
 }
 
 .table th:nth-child(2),
 .table td:nth-child(2) {
-  width: 20%;
+  width: 25%;
 }
+
+.table th:nth-child(3),
+.table td:nth-child(3) {
+  width: 15%;
+}
+
+.table th:nth-child(4),
+.table td:nth-child(4) {
+  width: 10%;
+}
+
+.table th:nth-child(5),
+.table td:nth-child(5) {
+  width: 10%;
+}
+
 .table th:nth-child(7),
 .table td:nth-child(7) {
+  width: 20%;
+}
+
+.actionColumn {
   width: 1%;
   white-space: nowrap;
-}
-
-.table th:last-child,
-.table td:last-child {
-  border-right: none;
-  border-left: 1px solid lightgray;
-}
-
-.table td:last-child {
-  border-bottom: none;
+  text-align: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .checkBox[type="checkbox"] {
@@ -90,8 +101,12 @@
 
 .table td {
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 400;
   cursor: pointer;
+  vertical-align: middle;
+}
+
+.table th {
   vertical-align: middle;
 }
 
@@ -109,6 +124,20 @@
 
 .serviceName img {
   border-radius: 0.3rem;
+}
+
+.ownerInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ownerImage {
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
 }
 
 .tableWrapper::-webkit-scrollbar {
@@ -129,12 +158,38 @@
   background-color: rgb(from var(--selective-yellow) r g b / 0.1);
 }
 
+/* ── 3-dot action button ── */
+.actionBtn {
+  background: #f1f0f0;
+  border: 1px solid transparent;
+  border-radius: 0.4rem;
+  padding: 0.25rem 0.3rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+  color: black;
+  letter-spacing: 1px;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actionBtn:hover {
+  background-color: #f0f0f0;
+  border-color: lightgray;
+  color: #333;
+}
+
+/* ── Pagination ── */
 .pagination {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  border: 1px solid lightgray;
   padding: 1rem;
   border-bottom-left-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
@@ -145,27 +200,28 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.8rem;
-  font-weight: 500;
+  font-weight: 400;
   color: gray;
 }
 
 .chooseNumber input {
-  width: 60px;
-  padding: 0.4rem;
+  width: 3rem;
+  padding: 0.3rem 0.4rem;
   border: 1px solid lightgray;
   border-radius: 0.5rem;
   text-align: center;
   font-size: 0.8rem;
+  font-weight: 400;
 }
 
 .chooseNumber input:focus {
   outline: none;
-  border-color: var(--selective-yellow);
+  border-color: black;
 }
 
 .pageNumbers {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.3rem;
   align-items: center;
 }
 
@@ -183,11 +239,11 @@
 
 .icon:hover {
   background-color: #f8f9fb;
-  border-color: var(--selective-yellow);
+  border-color: gray;
 }
 
 .pageNumber {
-  padding: 0.3rem 0.7rem;
+  padding: 0.25rem 0.7rem;
   border: 1px solid lightgray;
   border-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -200,18 +256,18 @@
 
 .pageNumber:hover {
   background-color: #f8f9fb;
-  border-color: var(--selective-yellow);
+  border-color: gray;
 }
 
 .activePage {
-  background-color: var(--selective-yellow);
-  border-color: var(--selective-yellow);
+  background-color: black;
+  border-color: black;
   color: white;
 }
 
 .activePage:hover {
-  background-color: var(--selective-yellow);
-  border-color: var(--selective-yellow);
+  background-color: black;
+  border-color: black;
 }
 
 .dots {
@@ -224,4 +280,35 @@
 .dots:hover {
   background-color: transparent;
   border: none;
+}
+
+/* ── Status Cell ── */
+.statusCell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.statusIconComplete {
+  color: #10b981;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.statusIconPending {
+  color: #ffbf51;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.statusIconInProgress {
+  color: lightgray;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.statusIconCancelled {
+  color: #ef4444;
+  font-size: 1.1rem;
+  flex-shrink: 0;
 }

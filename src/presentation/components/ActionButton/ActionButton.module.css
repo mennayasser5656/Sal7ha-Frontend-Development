@@ -1,0 +1,28 @@
+.actionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2rem;
+  background-color: #e5e5e5;
+  border: none;
+  font-size: 0.7rem;
+  font-weight: 400;
+  padding: 0.3rem 0.4rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #333;
+  text-transform: uppercase;
+}
+
+.actionButton:hover {
+  background-color: #d0d0d0;
+}
+
+.actionButton.active {
+  background-color: #000;
+  color: #fff;
+}
+
+.actionButton.active:hover {
+  background-color: #1a1a1a;
+}

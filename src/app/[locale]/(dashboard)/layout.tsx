@@ -16,17 +16,6 @@ export default function DashboardLayout({
       <DashboardBar></DashboardBar>
       <div className={styles.section}>
         <div className={styles.content}>
-          <div className={styles.topBar}>
-            <h1>Bookings</h1>
-            <div className={styles.icons}>
-              <div className={styles.icon}>
-                <RiNotification3Line />
-              </div>
-              <div className={styles.icon}>
-                <IoSettingsOutline />
-              </div>
-            </div>
-          </div>
           <div className={styles.children}>{children}</div>
         </div>
       </div>

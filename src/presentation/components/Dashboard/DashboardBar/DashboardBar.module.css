@@ -7,58 +7,38 @@
 }
 
 .dashboardBar {
-  padding: 1rem 0.5rem 1rem 0.5rem;
-  width: 16rem;
+  width: 13rem;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #f4f4f4;
-  gap: 1rem;
+  background-color: white;
+  border-right: 1px solid lightgray;
+  padding-top: 1rem;
+  gap: 0.5rem;
   flex-shrink: 0;
 }
 
 .dashedDivider {
   border: 0;
-  border-top: 1.5px solid #ccc;
+  border-top: 1px solid #ccc;
 }
 
 .profile {
-  width: 100%;
-  background-color: white;
-  border: 1px solid lightgray;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-}
-
-.profileContent {
-  display: flex;
-  align-items: center;
   gap: 0.5rem;
+  align-items: center;
+  padding: 0.5rem 1rem;
 }
 
 .profileImg {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 20%;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
 }
 
-.profileDetails {
-  display: flex;
-  flex-direction: column;
-}
-.profileName {
+.profile h1 {
   font-size: 0.75rem;
-  font-weight: bold;
-}
-.profilePlan {
-  font-size: 0.65rem;
-  font-weight: bold;
-  color: gray;
+  font-weight: 400;
 }
 
 .items {
@@ -70,22 +50,28 @@
 .sectionItems {
   display: flex;
   flex-direction: column;
-  gap: 0rem;
+  padding: 0.5rem 1rem;
+  gap: 0.7rem;
 }
-
-.sectionItems h1 {
-  font-size: 0.7rem;
-  margin-left: 0.5rem;
-  color: gray;
-  margin-bottom: 0.5rem;
+.premium {
+  width: 100%;
+  padding: 1rem;
 }
-
-.icon {
-  padding: 0.5rem;
-  background-color: var(--selective-yellow);
+.premiumBox {
+  display: flex;
+  padding: 0.5rem 1rem;
   border-radius: 0.5rem;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #EFF0EB;
+  cursor: pointer;
+}
+
+.premiumBox h1 {
+  font-size: 0.75rem;
+  font-weight: 400;
 }
 
 .icon svg {
-  color: white;
+  color: var(--selective-yellow);
 }

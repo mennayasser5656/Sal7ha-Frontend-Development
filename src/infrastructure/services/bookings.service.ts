@@ -1,43 +1,9 @@
 import Booking from "@/domain/entities/Booking";
 
-export function filterBookings(bookings: Booking[], filter: string): Booking[] {
-  switch (filter) {
-    case "Alphabetically":
-      return [...bookings].sort((a, b) =>
-        a.serviceName.localeCompare(b.serviceName),
-      );
-    case "Status":
-      return [...bookings].sort((a, b) => a.status.localeCompare(b.status));
-    default:
-      return bookings;
-  }
-}
 
-export function sortBookings(bookings: Booking[], sort: string): Booking[] {
-  switch (sort) {
-    case "Ascending":
-      return [...bookings].sort((a, b) =>
-        a.serviceName.localeCompare(b.serviceName),
-      );
-    case "Descending":
-      return [...bookings].sort((a, b) =>
-        b.serviceName.localeCompare(a.serviceName),
-      );
-    case "Time: Early":
-      return [...bookings].sort(
-        (a, b) =>
-          Number(a.startDate.split(" ")[1]) -
-          Number(b.startDate.split(" ")[1]),
-      );
-    case "Time: Late":
-      return [...bookings].sort(
-        (a, b) =>
-          Number(b.startDate.split(" ")[1]) -
-          Number(a.startDate.split(" ")[1]),
-      );
-    default:
-      return bookings;
-  }
+export function filterByStatus(bookings: Booking[], status: string | null): Booking[] {
+  if (!status) return bookings;
+  return bookings.filter((b) => b.status === status);
 }
 
 export function searchBookings(bookings: Booking[], query: string): Booking[] {
