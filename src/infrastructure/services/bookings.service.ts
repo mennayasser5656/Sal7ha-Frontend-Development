@@ -1,9 +1,36 @@
 import Booking from "@/domain/entities/Booking";
 
+export type SortKey = "serviceName" | "name" | "carType" | "startDate" | "endDate" | "status" | null;
+export type SortDirection = "asc" | "desc";
 
 export function filterByStatus(bookings: Booking[], status: string | null): Booking[] {
   if (!status) return bookings;
   return bookings.filter((b) => b.status === status);
+}
+
+export function updateBookingStatuses(
+  bookings: Booking[],
+  ids: Set<string>,
+  newStatus: string,
+): Booking[] {
+  return bookings.map((b) =>
+    ids.has(b.id) ? { ...b, status: newStatus } : b,
+  );
+}
+
+export function filterByDateRange(
+  bookings: Booking[],
+  rangeStart: Date | null,
+  rangeEnd: Date | null,
+): Booking[] {
+  if (!rangeStart) return bookings;
+  const start = rangeStart.getTime();
+  const end = rangeEnd ? rangeEnd.getTime() : start;
+  return bookings.filter((b) => {
+    const bStart = parseDate(b.startDate);
+    const bEnd = parseDate(b.endDate);
+    return bEnd >= start && bStart <= end;
+  });
 }
 
 export function searchBookings(bookings: Booking[], query: string): Booking[] {
@@ -15,6 +42,49 @@ export function searchBookings(bookings: Booking[], query: string): Booking[] {
       b.carType.toLowerCase().includes(q) ||
       b.id.toLowerCase().includes(q),
   );
+}
+
+function parseDate(dateStr: string): number {
+  const parts = dateStr.split("/");
+  if (parts.length === 3) {
+    // Format: M/D/YYYY
+    return new Date(`${parts[2]}-${parts[0].padStart(2, "0")}-${parts[1].padStart(2, "0")}`).getTime();
+  }
+  return new Date(dateStr).getTime();
+}
+
+export function sortBookings(
+  bookings: Booking[],
+  sortKey: SortKey,
+  sortDirection: SortDirection,
+): Booking[] {
+  if (!sortKey) return bookings;
+  return [...bookings].sort((a, b) => {
+    let comparison = 0;
+    if (sortKey === "serviceName") {
+      comparison = a.serviceName.localeCompare(b.serviceName);
+    } else if (sortKey === "name") {
+      comparison = a.name.localeCompare(b.name);
+    } else if (sortKey === "carType") {
+      comparison = a.carType.localeCompare(b.carType);
+    } else if (sortKey === "status") {
+      comparison = a.status.localeCompare(b.status);
+    } else if (sortKey === "startDate") {
+      comparison = parseDate(a.startDate) - parseDate(b.startDate);
+    } else if (sortKey === "endDate") {
+      comparison = parseDate(a.endDate) - parseDate(b.endDate);
+    }
+    return sortDirection === "asc" ? comparison : -comparison;
+  });
+}
+
+export function paginateBookings(
+  bookings: Booking[],
+  currentPage: number,
+  itemsPerPage: number,
+): Booking[] {
+  const start = (currentPage - 1) * itemsPerPage;
+  return bookings.slice(start, start + itemsPerPage);
 }
 
 export function generateMockBookings(): Booking[] {
@@ -42,7 +112,6 @@ export function generateMockBookings(): Booking[] {
   ];
   const names = ["Marwan", "Hassan", "Menna", "Ferial", "Eslam", "Mohamed"];
   const statuses = ["In-Progress", "Completed", "Pending", "Cancelled"];
-  const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
   const bookings: Booking[] = [];
 
@@ -51,10 +120,12 @@ export function generateMockBookings(): Booking[] {
     const carType = carTypes[Math.floor(Math.random() * carTypes.length)];
     const name = names[Math.floor(Math.random() * names.length)];
     const status = statuses[Math.floor(Math.random() * statuses.length)];
-    const startDay = days[Math.floor(Math.random() * days.length)];
-    const endDay = days[Math.floor(Math.random() * days.length)];
-    const startDayNum = Math.floor(Math.random() * 28) + 1;
-    const endDayNum = startDayNum + Math.floor(Math.random() * 3) + 1;
+
+    const startDate = new Date(2026, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1);
+    const endDate = new Date(startDate.getTime() + (Math.floor(Math.random() * 3) + 1) * 86400000);
+
+    const formatDate = (d: Date) =>
+      `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
 
     bookings.push({
       id: Math.random().toString(36).substring(2, 8).toUpperCase(),
@@ -62,8 +133,8 @@ export function generateMockBookings(): Booking[] {
       name: name,
       serviceIcon: service.icon,
       carType,
-      startDate: `${startDay} ${startDayNum}`,
-      endDate: `${endDay} ${endDayNum}`,
+      startDate: formatDate(startDate),
+      endDate: formatDate(endDate),
       status,
     });
   }

@@ -149,8 +149,3 @@
   background-color: var(--selective-yellow);
 }
 
-.statusButtons {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
