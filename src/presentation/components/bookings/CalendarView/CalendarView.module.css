@@ -1,0 +1,776 @@
+/* ── Layout ── */
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.navGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.navBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.5rem;
+  background: white;
+  cursor: pointer;
+  color: #333;
+  transition: all 0.15s ease;
+}
+
+.navBtn:hover {
+  background: #f5f5f5;
+  border-color: #ccc;
+}
+
+.navBtn svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.todayBtn {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.5rem;
+  background: white;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.todayBtn:hover {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.headerLabel {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111;
+  letter-spacing: -0.02em;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.viewToggle {
+  display: flex;
+  background: #f0f0f0;
+  border-radius: 0.5rem;
+  padding: 0.15rem;
+  gap: 0.15rem;
+}
+
+.viewBtn {
+  padding: 0.3rem 0.7rem;
+  border: none;
+  border-radius: 0.4rem;
+  background: transparent;
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.viewBtnActive {
+  background: white;
+  color: #111;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Status Filters ── */
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.filterPill {
+  padding: 0.3rem 0.65rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 2rem;
+  background: white;
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filterPill:hover {
+  border-color: #bbb;
+}
+
+.filterPillActive {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+/* ── Calendar Body ── */
+.body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  padding: 0 1rem 1rem;
+  gap: 1rem;
+}
+
+/* ── Mini Calendar Sidebar ── */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 220px;
+  flex-shrink: 0;
+  gap: 1rem;
+}
+
+.miniCalendar {
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+}
+
+.miniCalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.miniCalMonth {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #222;
+}
+
+.miniCalNav {
+  display: flex;
+  gap: 0.15rem;
+}
+
+.miniCalNavBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: none;
+  border-radius: 0.25rem;
+  background: transparent;
+  cursor: pointer;
+  color: #666;
+  transition: background 0.15s ease;
+}
+
+.miniCalNavBtn:hover {
+  background: #eee;
+}
+
+.miniCalNavBtn svg {
+  width: 0.65rem;
+  height: 0.65rem;
+}
+
+.miniCalDayLabels {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 0.2rem;
+}
+
+.miniCalDayLabel {
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: #aaa;
+  text-align: center;
+  padding: 0.1rem 0;
+}
+
+.miniCalDays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.1rem;
+}
+
+.miniCalDay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0 auto;
+  font-size: 0.55rem;
+  font-weight: 500;
+  color: #444;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  border: none;
+  background: transparent;
+}
+
+.miniCalDay:hover {
+  background: #eee;
+}
+
+.miniCalDayOutside {
+  color: #ddd;
+}
+
+.miniCalDayToday {
+  background: #111;
+  color: #fff;
+  font-weight: 600;
+}
+
+.miniCalDayToday:hover {
+  background: #333;
+}
+
+.miniCalDaySelected {
+  background: var(--selective-yellow, #ffb700);
+  color: #000;
+  font-weight: 600;
+}
+
+.miniCalDaySelected:hover {
+  background: var(--selective-yellow, #ffb700);
+}
+
+.miniCalDayHasBooking {
+  position: relative;
+}
+
+.miniCalDayHasBooking::after {
+  content: "";
+  position: absolute;
+  bottom: 1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--selective-yellow, #ffb700);
+}
+
+.miniCalDayToday.miniCalDayHasBooking::after {
+  background: #fff;
+}
+
+/* ── Upcoming List ── */
+.upcomingSection {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.upcomingSection::-webkit-scrollbar {
+  display: none;
+}
+
+.upcomingTitle {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.upcomingList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.upcomingItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.5rem;
+  border-radius: 0.5rem;
+  transition: background 0.12s ease;
+  cursor: pointer;
+}
+
+.upcomingItem:hover {
+  background: #f5f5f5;
+}
+
+.upcomingDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.upcomingInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.upcomingService {
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: #222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.upcomingDate {
+  font-size: 0.52rem;
+  color: #888;
+}
+
+/* ── Week Timeline ── */
+.timeline {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.weekHeader {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  flex-shrink: 0;
+}
+
+.weekDayHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-radius: 0.75rem;
+  transition: background 0.12s ease;
+}
+
+.weekDayHeaderToday {
+  background: #111;
+}
+
+.weekDayLabel {
+  font-size: 0.55rem;
+  font-weight: 500;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.weekDayHeaderToday .weekDayLabel {
+  color: #999;
+}
+
+.weekDayNumber {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222;
+  line-height: 1.2;
+}
+
+.weekDayHeaderToday .weekDayNumber {
+  color: #fff;
+}
+
+/* ── Lanes Grid (spanning bars) ── */
+.lanesGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: auto;
+  gap: 0.4rem 0;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0.25rem 0;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.lanesGrid::-webkit-scrollbar {
+  display: none;
+}
+
+.laneColumnBg {
+  border-right: 1px solid #f0f0f0;
+  pointer-events: none;
+}
+
+.laneColumnBg:last-of-type {
+  border-right: none;
+}
+
+/* ── Booking Bar (horizontal span) ── */
+.bookingBar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.65rem;
+  margin: 0.15rem 0.25rem;
+  border-radius: 0.5rem;
+  border-left: 3.5px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.bookingBar:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.barInProgress {
+  background: #f3f3f3;
+  border-left-color: #a0a0a0;
+}
+
+.barCompleted {
+  background: #ecfdf5;
+  border-left-color: #10b981;
+}
+
+.barPending {
+  background: #fffbeb;
+  border-left-color: #ffb700;
+}
+
+.barCancelled {
+  background: #fef2f2;
+  border-left-color: #ef4444;
+}
+
+.barAccepted {
+  background: #ecfdf5;
+  border-left-color: #10b981;
+}
+
+.barAvatar {
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.barContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.barService {
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: #222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.barMeta {
+  font-size: 0.52rem;
+  font-weight: 400;
+  color: #888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.barStatus {
+  font-size: 0.5rem;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Empty Week ── */
+.emptyWeek {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 120px;
+}
+
+.emptyWeekText {
+  font-size: 0.75rem;
+  color: #bbb;
+  font-weight: 500;
+}
+
+/* ── Month Grid ── */
+.monthGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.monthGrid::-webkit-scrollbar {
+  display: none;
+}
+
+.monthDayLabels {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  flex-shrink: 0;
+  margin-bottom: 0.25rem;
+}
+
+.monthDayLabel {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: #aaa;
+  text-align: center;
+  padding: 0.4rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.monthCell {
+  display: flex;
+  flex-direction: column;
+  min-height: 90px;
+  padding: 0.3rem;
+  border: 1px solid #f0f0f0;
+  gap: 0.2rem;
+  overflow: hidden;
+  transition: background 0.1s ease;
+}
+
+.monthCell:hover {
+  background: #fafafa;
+}
+
+.monthCellOutside {
+  background: #fafafa;
+}
+
+.monthCellToday {
+  background: #fffdf5;
+}
+
+.monthCellNumber {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 0.15rem;
+}
+
+.monthCellOutside .monthCellNumber {
+  color: #ccc;
+}
+
+.monthCellTodayNumber {
+  background: #111;
+  color: #fff;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.monthBookingPill {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.25rem;
+  font-size: 0.5rem;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: opacity 0.12s ease;
+}
+
+.monthBookingPill:hover {
+  opacity: 0.8;
+}
+
+.pillInProgress { background: #ececec; }
+.pillCompleted { background: #d1fae5; }
+.pillPending { background: #fef3c7; }
+.pillCancelled { background: #fee2e2; }
+.pillAccepted { background: #d1fae5; }
+
+.pillDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.monthMore {
+  font-size: 0.48rem;
+  font-weight: 500;
+  color: #999;
+  padding: 0.1rem 0.35rem;
+  cursor: pointer;
+}
+
+.monthMore:hover {
+  color: #555;
+}
+
+/* ── Booking Detail Overlay ── */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(2px);
+}
+
+.overlayCard {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  width: 380px;
+  max-width: 90vw;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  animation: slideUp 0.2s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.overlayHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.overlayTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111;
+}
+
+.overlayClose {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: #f0f0f0;
+  cursor: pointer;
+  color: #666;
+  font-size: 0.85rem;
+  transition: all 0.12s ease;
+}
+
+.overlayClose:hover {
+  background: #e0e0e0;
+}
+
+.overlayBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.overlayRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.overlayLabel {
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: #999;
+  width: 60px;
+  flex-shrink: 0;
+}
+
+.overlayValue {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #222;
+}
+
+.overlayAvatar {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.overlayStatusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 2rem;
+  font-size: 0.6rem;
+  font-weight: 600;
+}
+
+.badgeInProgress { background: #f3f3f3; color: #666; }
+.badgeCompleted { background: #d1fae5; color: #059669; }
+.badgePending { background: #fef3c7; color: #d97706; }
+.badgeCancelled { background: #fee2e2; color: #dc2626; }
+.badgeAccepted { background: #d1fae5; color: #059669; }

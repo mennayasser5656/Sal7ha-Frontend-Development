@@ -52,8 +52,9 @@ export default function OverlayBookingDetails({
       <div className={styles.backdrop} onClick={onClose} />
       <div className={styles.bookingContainerWrapper}>
         <div className={styles.bookingContainer}>
+          <h1 className={styles.title}>Service Details</h1>
           <div className={styles.sectionDetails}>
-            <h1 className={styles.title}>Service Details</h1>
+            <h2>Main Details</h2>
             {/* ID */}
             <div className={styles.details}>
               <h2>Service ID</h2>
