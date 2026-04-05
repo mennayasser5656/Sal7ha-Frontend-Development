@@ -7,27 +7,6 @@
   }
 }
 
-/* Status */
-.inProgress {
-  color: #038efd;
-  background-color: rgb(from #038efd r g b / 0.1);
-}
-
-.completed {
-  color: #3ac167;
-  background-color: rgb(from #3ac167 r g b / 0.1);
-}
-
-.pending {
-  color: #e68f3d;
-  background-color: rgb(from #e68f3d r g b / 0.1);
-}
-
-.canceled {
-  color: #ef685d;
-  background-color: rgb(from #ef685d r g b / 0.1);
-}
-
 /* UTILS */
 .horizontalDivider {
   width: 100%;
@@ -39,268 +18,148 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.4);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: end;
 }
 
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.bookingContainerWrapper {
+  width: 60vh;
+  height: 100%;
+  animation: slideInRight 0.4s ease forwards;
+}
+
 .bookingContainer {
   display: flex;
   flex-direction: column;
   background-color: #fff;
+  align-items: start;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  width: 55vh;
+  width: 100%;
   height: 100%;
   overflow-y: auto;
-  padding: 0;
+  gap: 2rem;
+  padding: 2rem;
   scrollbar-width: none;
-  animation: slideInRight 0.4s ease forwards;
+}
+.title {
+  font-size: 1.7rem;
+  font-weight: 500;
+}
+
+.sectionDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 1rem;
 }
 
 .bookingContainer::-webkit-scrollbar {
   display: none;
 }
 
-.topBar {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background-color: #fff;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  width: 100%;
-  padding: 1.3rem 1.3rem 0.8rem 1.3rem;
-  border-radius: 1rem 1rem 0 0;
-}
-
-.topBarContent {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  gap: 0.5rem;
-}
-
-.bill {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  font-weight: 500;
-}
-
-.billTitle {
-  color: gray;
-  font-size: 0.8rem;
-}
-
-.billID {
-  color: black;
-  font-size: 0.85rem;
-}
-
-.right {
-  display: flex;
-  align-items: center;
-  height: 100%;
-  gap: 0.5rem;
-}
-
-.button {
-  display: flex;
-  align-items: center;
-  height: 100%;
-  gap: 0.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid lightgray;
-  padding: 0.3rem 0.5rem;
-  font-size: 0.75rem;
-  color: gray;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
-  cursor: pointer;
-}
-
-.button svg {
-  width: 0.8rem;
-  height: 0.8rem;
-  color: gray;
-}
-
-.exit svg {
-  width: 1.3rem;
-  height: 1.3rem;
-  color: gray;
-  cursor: pointer;
-}
-
-.bookingContent {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+.row {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
   gap: 1rem;
-  padding: 0rem 1.3rem 1.3rem 1.3rem;
-}
-
-.bookingContentSection {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.title {
-  font-size: 0.7rem;
-  color: gray;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.detail {
-  display: flex;
-  gap: 0.3rem;
-  align-items: center;
-}
-
-.detail h1 {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: gray;
-}
-
-.detail span {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: black;
-}
-
-.status {
-  font-size: 0.65rem;
-  padding: 0.3rem 0.5rem;
-  border-radius: 0.4rem;
-}
-
-.cash {
-  color: green;
-}
-
-.serviceTable {
   width: 100%;
-  border: 2px solid lightgray;
-  border-radius: 0.5rem;
-  border-collapse: separate;
-  border-spacing: 0;
-  overflow: hidden;
+  overflow: visible;
 }
 
-.serviceTable th:first-child {
-  border-top-left-radius: 0.5rem;
-  width: 75%;
-}
-
-.serviceTable th:last-child {
-  border-top-right-radius: 0.5rem;
-}
-
-.serviceTable th {
-  padding: 0.5rem;
-  border-bottom: 2px solid lightgray;
-  text-align: start;
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: gray;
-  background-color: #f8f9fb;
-}
-
-.serviceName {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.serviceName img {
-  border-radius: 0.3rem;
-}
-
-.serviceTable td {
-  font-size: 0.7rem;
-  font-weight: 500;
-  padding: 0.5rem;
-}
-
-.viewDetails {
-  text-align: center;
-  padding: 0.4rem 0.5rem;
-  border: 1px solid lightgray;
-  border-radius: 0.4rem;
-  color: var(--selective-yellow);
-  font-size: 0.65rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-  cursor: pointer;
-}
-
-.addNote {
+.details {
   display: flex;
   flex-direction: column;
-  font-size: 0.7rem;
+  align-items: start;
+  gap: 0.1rem;
+}
+
+.details h2 {
+  font-size: 0.65rem;
   font-weight: 500;
-  gap: 0.5rem;
+  color: #999;
 }
 
-.addNote h1 {
-  color: black;
-}
-
-.addNote span {
-  color: gray;
-}
-
-.addNote textarea {
-  border: 1px solid lightgray;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-}
-
-.subPrice {
+.owner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  font-size: 0.75rem;
+  gap: 0.4rem;
+}
+
+.owner img {
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+}
+
+.owner span{
+  font-size: 0.8rem;
   font-weight: 500;
 }
 
-.subPrice h1 {
-  color: gray;
+.span1 {
+  grid-column: span 1;
+}
+.span2 {
+  grid-column: span 2;
+}
+.span3 {
+  grid-column: span 3;
+}
+.span4 {
+  grid-column: span 4;
+}
+.span5 {
+  grid-column: span 5;
+}
+.span6 {
+  grid-column: span 6;
+}
+.span7 {
+  grid-column: span 7;
+}
+.span8 {
+  grid-column: span 8;
+}
+.span9 {
+  grid-column: span 9;
+}
+.span10 {
+  grid-column: span 10;
+}
+.span11 {
+  grid-column: span 11;
+}
+.span12 {
+  grid-column: span 12;
 }
 
-.subPrice p {
-  color: black;
+.statusIconComplete {
+  color: #10b981;
+  font-size: 1.1rem;
+  flex-shrink: 0;
 }
 
-.total {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: black;
+.statusIconPending {
+  color: #ffbf51;
+  font-size: 1.1rem;
+  flex-shrink: 0;
 }
 
-.shield {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
+.statusIconInProgress {
+  color: lightgray;
+  font-size: 0.9rem;
+  flex-shrink: 0;
 }
 
-.shield svg {
-  width: 1rem;
-  height: 1rem;
-  color: green;
-}
-
-.shield span {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: gray;
+.statusIconCancelled {
+  color: #ef4444;
+  font-size: 1.1rem;
+  flex-shrink: 0;
 }

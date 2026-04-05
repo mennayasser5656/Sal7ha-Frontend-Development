@@ -1,0 +1,47 @@
+.profileCard {
+  grid-column: span 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background-color: #f2f0ea;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  min-height: 0;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.profileCard:hover {
+  transform: scale(1.03);
+}
+
+.profileImg {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profileName {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+.profileStatus {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #10b981;
+}
+
+.profileStatus svg {
+  width: 0.8rem;
+  height: 0.8rem;
+}

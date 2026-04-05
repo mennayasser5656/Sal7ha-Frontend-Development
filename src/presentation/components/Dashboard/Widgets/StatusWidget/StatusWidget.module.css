@@ -1,0 +1,68 @@
+.statusWidget {
+  grid-column: span 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f2f0ea;
+  border-radius: 0.75rem;
+  gap: 0.5rem;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.statusWidget:hover {
+  transform: scale(1.03);
+}
+
+.statusWidgetHeader {
+  align-self: flex-start;
+}
+
+.statusWidgetTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: black;
+}
+
+.statusWidgetSub {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: black;
+}
+
+.statusCircle {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  aspect-ratio: 1;
+}
+
+.statusCircle svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.statusCircleBg {
+  fill: none;
+  stroke: #e5e5e5;
+  stroke-width: 4;
+}
+
+.statusCircleFg {
+  fill: none;
+  stroke-width: 4;
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.statusCircleText {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: black;
+}

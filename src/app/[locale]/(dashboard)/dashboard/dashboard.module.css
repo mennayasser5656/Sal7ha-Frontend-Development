@@ -1,0 +1,46 @@
+.page {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  grid-auto-rows: 14rem;
+  width: 60%;
+  margin: 0 auto;
+  padding: 1.5rem;
+  align-content: start;
+  border-radius: 0.75rem;
+  overflow-y: auto;
+}
+
+.title {
+  grid-column: 1 / -1;
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: -0.1rem;
+  border-bottom: 1px solid lightgray;
+}
+
+/* ── Customize Button ── */
+.customizeBtn {
+  display: flex;
+  margin: 1.5rem auto;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  background-color: #e5e5e5;
+  border: none;
+  border-radius: 2rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.customizeBtn:hover {
+  background-color: #d0d0d0;
+}
+
+.customizeBtn svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}

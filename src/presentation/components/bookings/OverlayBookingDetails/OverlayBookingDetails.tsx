@@ -1,169 +1,124 @@
-import React from "react";
-import styles from "./OverlayBookingDetails.module.css";
-import { GrHistory } from "react-icons/gr";
-import { HiDotsHorizontal } from "react-icons/hi";
-import { IoClose } from "react-icons/io5";
-import { IoCash } from "react-icons/io5";
-import { GoShieldCheck } from "react-icons/go";
+"use client";
 
-interface Booking {
-  id: string;
-  serviceName: string;
-  serviceIcon: string;
-  carType: string;
-  startDate: string;
-  endDate: string;
-  status: string;
-}
+import styles from "./OverlayBookingDetails.module.css";
+import {
+  UnderlineDateInput,
+  UnderlineTextInput,
+  UnderlineDropdownInput,
+} from "../../UnderlineInput";
+import { useState } from "react";
+import Booking from "@/domain/entities/Booking";
+import { IoIosCheckmarkCircle } from "react-icons/io";
+import { MdCancel, MdPending } from "react-icons/md";
+import { FaClock } from "react-icons/fa6";
+
+const getStatusIcon = (status: string) => {
+  const s = status.toLowerCase();
+  if (s.includes("completed") || s.includes("done") || s.includes("accepted"))
+    return <IoIosCheckmarkCircle className={styles.statusIconComplete} />;
+  if (s.includes("pending"))
+    return <MdPending className={styles.statusIconPending} />;
+  if (s.includes("progress") || s.includes("ongoing"))
+    return <FaClock className={styles.statusIconInProgress} />;
+  if (s.includes("cancelled") || s.includes("cancel"))
+    return <MdCancel className={styles.statusIconCancelled} />;
+  return null;
+};
 
 interface OverlayBookingDetailsProps {
   booking: Booking;
   onClose: () => void;
 }
 
-const getStatusClass = (status: string) => {
-  switch (status) {
-    case "In-Progress":
-      return styles.inProgress;
-    case "Completed":
-      return styles.completed;
-    case "Pending":
-      return styles.pending;
-    case "Cancelled":
-      return styles.canceled;
-    default:
-      return "";
-  }
-};
-
 export default function OverlayBookingDetails({
   booking,
   onClose,
 }: OverlayBookingDetailsProps) {
+  const [startDate, setStartDate] = useState<Date | null>(
+    booking.startDate ? new Date(booking.startDate) : null,
+  );
+  const [endDate, setEndDate] = useState<Date | null>(
+    booking.endDate ? new Date(booking.endDate) : null,
+  );
+  const [name, setName] = useState(booking.name);
+  const [carMake, setCarMake] = useState(booking.carMake);
+  const [carModel, setCarModel] = useState(booking.carModel);
+  const [carYear, setCarYear] = useState(booking.carYear);
+  const [serviceName, setServiceName] = useState(booking.serviceName);
+  const [status, setStatus] = useState(booking.status);
+
   return (
-    <section className={styles.overlay} onClick={onClose}>
-      <div
-        className={styles.bookingContainer}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className={styles.topBar}>
-          <div className={styles.topBarContent}>
-            <div className={styles.bill}>
-              <span className={styles.billTitle}>Bill ID</span>
-              <span className={styles.billID}>#{booking.id}</span>
-            </div>
-            <div className={styles.right}>
-              <div className={styles.button}>
-                <GrHistory />
-                <span>History</span>
-              </div>
-              <div className={styles.button}>
-                <HiDotsHorizontal />
-              </div>
-              <div className={styles.exit} onClick={onClose}>
-                <IoClose />
+    <section className={styles.overlay}>
+      <div className={styles.backdrop} onClick={onClose} />
+      <div className={styles.bookingContainerWrapper}>
+        <div className={styles.bookingContainer}>
+          <div className={styles.sectionDetails}>
+            <h1 className={styles.title}>Service Details</h1>
+            {/* ID */}
+            <div className={styles.details}>
+              <h2>Service ID</h2>
+              <div className={styles.owner}>
+                <span>#{booking.id}</span>
               </div>
             </div>
-          </div>
-          <div className={styles.horizontalDivider} />
-        </div>
+            {/* Owner */}
+            <div className={styles.details}>
+              <h2>Owner</h2>
+              <div className={styles.owner}>
+                <img src={booking.ownerIcon} alt={booking.name} />
+                <span>{booking.name}</span>
+              </div>
+            </div>
 
-        <div className={styles.bookingContent}>
-          <div className={styles.bookingContentSection}>
-            <span className={styles.title}>Main Details</span>
-            <div className={styles.detail}>
-              <h1>Car Type:</h1>
-              <span>{booking.carType}</span>
-            </div>
-            <div className="flex gap-x-8">
-              <div className={styles.detail}>
-                <h1>Start Date:</h1>
-                <span>{booking.startDate}</span>
-              </div>
-              <div className={styles.detail}>
-                <h1>End Date:</h1>
-                <span>{booking.endDate}</span>
+            {/* Make */}
+            <div className={styles.details}>
+              <h2>Car Make</h2>
+              <div className={styles.owner}>
+                <span>{booking.carMake}</span>
               </div>
             </div>
-            <div className={styles.detail}>
-              <h1>Status:</h1>
-              <div
-                className={`${styles.status} ${getStatusClass(booking.status)}`}
-              >
-                {booking.status}
+            {/* Model */}
+            <div className={styles.details}>
+              <h2>Car Model</h2>
+              <div className={styles.owner}>
+                <span>{booking.carModel}</span>
               </div>
             </div>
-            <div className={styles.detail}>
-              <h1>Payment Method:</h1>
-              <div className="flex gap-1">
-                <IoCash className={styles.cash} />
-                <span>Cash</span>
+            {/* Year */}
+            <div className={styles.details}>
+              <h2>Car Year</h2>
+              <div className={styles.owner}>
+                <span>{booking.carYear}</span>
               </div>
             </div>
-          </div>
+            {/* Status */}
+            <div className={styles.details}>
+              <h2>Status</h2>
+              <div className={styles.owner}>
+                {getStatusIcon(booking.status)}
+                <span>{booking.status}</span>
+              </div>
+            </div>
 
-          {/* Services Section */}
-          <div className={styles.bookingContentSection}>
-            <table className={styles.serviceTable}>
-              <thead>
-                <tr>
-                  <th>Service</th>
-                  <th>Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <div className={styles.serviceName}>
-                      <img src={booking.serviceIcon} alt="" />
-                      <p>{booking.serviceName}</p>
-                    </div>
-                  </td>
-                  <td>200 EGP</td>
-                </tr>
-              </tbody>
-            </table>
-            <div className="w-full flex justify-center items-center">
-              <div className={styles.viewDetails}>View Details</div>
+            {/* Dates */}
+            <div className={styles.row}>
+              <UnderlineDateInput
+                label="Start Date"
+                value={startDate}
+                onChange={setStartDate}
+                span={6}
+              />
+              <UnderlineDateInput
+                label="End Date"
+                value={endDate}
+                onChange={setEndDate}
+                span={6}
+                dropdownAlign="right"
+              />
             </div>
           </div>
-
-          {/* Add Note Section */}
-          <div className={styles.bookingContentSection}>
-            <div className={styles.addNote}>
-              <div className="flex">
-                <h1>Add Note</h1>
-                <span>(Optional)</span>
-              </div>
-              <textarea
-                id="message"
-                name="message"
-                rows={2}
-                placeholder="Add a note here"
-              ></textarea>
-            </div>
-          </div>
-
-          {/* Price Section */}
-          <div className={styles.bookingContentSection}>
-            <div className={styles.subPrice}>
-              <h1>Subtotal</h1>
-              <p>200.00 EGP</p>
-            </div>
-            <div className={styles.subPrice}>
-              <h1>Tax</h1>
-              <p>0.00 EGP</p>
-            </div>
-            <div className={styles.total}>
-              <h1>Total</h1>
-              <p>200.00 EGP</p>
-            </div>
-          </div>
-
-          <div className={styles.shield}>
-            <GoShieldCheck />
-            <span>All your transactions are secure & fast</span>
-          </div>
+          {/* Service Details */}
+          <div className={styles.sectionDetails}></div>
         </div>
       </div>
     </section>

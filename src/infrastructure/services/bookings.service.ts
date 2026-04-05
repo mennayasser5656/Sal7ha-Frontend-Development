@@ -1,6 +1,6 @@
 import Booking from "@/domain/entities/Booking";
 
-export type SortKey = "serviceName" | "name" | "carType" | "startDate" | "endDate" | "status" | null;
+export type SortKey = "serviceName" | "name" | "carMake" | "startDate" | "endDate" | "status" | null;
 export type SortDirection = "asc" | "desc";
 
 export function filterByStatus(bookings: Booking[], status: string | null): Booking[] {
@@ -39,7 +39,7 @@ export function searchBookings(bookings: Booking[], query: string): Booking[] {
   return bookings.filter(
     (b) =>
       b.serviceName.toLowerCase().includes(q) ||
-      b.carType.toLowerCase().includes(q) ||
+      b.carMake.toLowerCase().includes(q) ||
       b.id.toLowerCase().includes(q),
   );
 }
@@ -65,8 +65,8 @@ export function sortBookings(
       comparison = a.serviceName.localeCompare(b.serviceName);
     } else if (sortKey === "name") {
       comparison = a.name.localeCompare(b.name);
-    } else if (sortKey === "carType") {
-      comparison = a.carType.localeCompare(b.carType);
+    } else if (sortKey === "carMake") {
+      comparison = a.carMake.localeCompare(b.carMake);
     } else if (sortKey === "status") {
       comparison = a.status.localeCompare(b.status);
     } else if (sortKey === "startDate") {
@@ -101,24 +101,34 @@ export function generateMockBookings(): Booking[] {
     },
   ];
 
-  const carTypes = [
-    "Nissan",
-    "Toyota",
-    "Honda",
-    "BMW",
-    "Mercedes",
-    "Audi",
-    "Ford",
+  const carMakes: { make: string; models: string[] }[] = [
+    { make: "Nissan", models: ["Altima", "Sentra", "Maxima", "Patrol"] },
+    { make: "Toyota", models: ["Camry", "Corolla", "Land Cruiser", "RAV4"] },
+    { make: "Honda", models: ["Civic", "Accord", "CR-V", "Pilot"] },
+    { make: "BMW", models: ["320i", "520i", "X3", "X5"] },
+    { make: "Mercedes", models: ["C200", "E300", "GLC", "S500"] },
+    { make: "Audi", models: ["A4", "A6", "Q5", "Q7"] },
+    { make: "Ford", models: ["Fusion", "Mustang", "Explorer", "F-150"] },
   ];
-  const names = ["Marwan", "Hassan", "Menna", "Ferial", "Eslam", "Mohamed"];
+  const carYears = ["2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"];
+  const names = ["Marwan Mohamed", "Hassan Mohamed", "Menna Yasser", "Ferial Nashaat", "Eslam Mahmoud", "Mohamed Hany"];
+  const ownerIcons = [
+    "/assets/man1.avif",
+    "/assets/man2.avif",
+    "/assets/woman1.jpg",
+    "/assets/woman2.avif",
+  ];
   const statuses = ["In-Progress", "Completed", "Pending", "Cancelled"];
 
   const bookings: Booking[] = [];
 
   for (let i = 1; i <= 25; i++) {
     const service = services[Math.floor(Math.random() * services.length)];
-    const carType = carTypes[Math.floor(Math.random() * carTypes.length)];
+    const car = carMakes[Math.floor(Math.random() * carMakes.length)];
+    const carModel = car.models[Math.floor(Math.random() * car.models.length)];
+    const carYear = carYears[Math.floor(Math.random() * carYears.length)];
     const name = names[Math.floor(Math.random() * names.length)];
+    const ownerIcon = ownerIcons[Math.floor(Math.random() * ownerIcons.length)];
     const status = statuses[Math.floor(Math.random() * statuses.length)];
 
     const startDate = new Date(2026, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1);
@@ -132,7 +142,10 @@ export function generateMockBookings(): Booking[] {
       serviceName: service.name,
       name: name,
       serviceIcon: service.icon,
-      carType,
+      ownerIcon,
+      carMake: car.make,
+      carModel,
+      carYear,
       startDate: formatDate(startDate),
       endDate: formatDate(endDate),
       status,

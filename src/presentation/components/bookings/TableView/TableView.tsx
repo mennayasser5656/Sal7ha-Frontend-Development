@@ -8,16 +8,6 @@ import { FaClock } from "react-icons/fa6";
 import Booking from "@/domain/entities/Booking";
 import { SortKey, SortDirection } from "@/infrastructure/services/bookings.service";
 
-const getOwnerImage = (index: number): string => {
-  const images = [
-    "/assets/man1.avif",
-    "/assets/man2.avif",
-    "/assets/woman1.jpg",
-    "/assets/woman2.avif",
-  ];
-  return images[index % images.length];
-};
-
 const getStatusIcon = (status: string) => {
   const s = status.toLowerCase();
   if (s.includes("completed") || s.includes("done") || s.includes("accepted"))
@@ -176,9 +166,9 @@ export default function TableView({
                   Car Owner
                 </div>
               </th>
-              <th className={`${styles.sortableTh} ${sortKey === "carType" ? styles.sortedTh : ""}`} onClick={() => handleSort("carType")}>
+              <th className={`${styles.sortableTh} ${sortKey === "carMake" ? styles.sortedTh : ""}`} onClick={() => handleSort("carMake")}>
                 <div className={styles.thContent}>
-                  {sortIcon("carType")}
+                  {sortIcon("carMake")}
                   Brand
                 </div>
               </th>
@@ -204,7 +194,7 @@ export default function TableView({
             </tr>
           </thead>
           <tbody>
-            {bookings.map((booking, index) => (
+            {bookings.map((booking) => (
               <tr
                 key={booking.id}
                 className={`${styles.clickableRow} ${selectedBookings.has(booking.id) ? styles.isSelected : ""}`}
@@ -232,14 +222,14 @@ export default function TableView({
                 <td>
                   <div className={styles.ownerInfo}>
                     <img
-                      src={getOwnerImage(index)}
+                      src={booking.ownerIcon}
                       alt={booking.name}
                       className={styles.ownerImage}
                     />
                     <span>{booking.name}</span>
                   </div>
                 </td>
-                <td>{booking.carType}</td>
+                <td>{booking.carMake} {booking.carModel} {booking.carYear}</td>
                 <td>{booking.startDate}</td>
                 <td>{booking.endDate}</td>
                 <td>
