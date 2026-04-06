@@ -1,0 +1,44 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--state-blue-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tag {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  font-family: var(--font-inter);
+  color: var(--dark-gray);
+  background: white;
+  border: 1.5px solid var(--pale-steel-gray);
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.tag:hover {
+  border-color: var(--selective-yellow);
+  background: rgb(from var(--selective-yellow) r g b / 0.04);
+}
+
+.tagSelected {
+  background: rgb(from var(--selective-yellow) r g b / 0.1);
+  border-color: var(--selective-yellow);
+  color: var(--dark-gray);
+}

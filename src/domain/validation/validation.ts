@@ -21,7 +21,7 @@ export function validateStep<T extends z.ZodTypeAny>(
       errors[key] = issue.message;
     }
   }
-  return { success: false, errors };
+  return { success: false, errors: errors as FieldErrors<z.infer<T>> };
 }
 
 // ── Password utilities ──

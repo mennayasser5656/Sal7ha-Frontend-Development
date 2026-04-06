@@ -17,6 +17,8 @@ interface ServicePickerProps {
   selected: string[];
   onChange: (selected: string[]) => void;
   error?: string;
+  /** When true, chips are not rendered (parent handles display) */
+  hideChips?: boolean;
 }
 
 export default function ServicePicker({
@@ -26,6 +28,7 @@ export default function ServicePicker({
   selected,
   onChange,
   error = "",
+  hideChips = false,
 }: ServicePickerProps) {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
@@ -116,7 +119,7 @@ export default function ServicePicker({
         </div>
       )}
 
-      {selectedServices.length > 0 && (
+      {!hideChips && selectedServices.length > 0 && (
         <div className={styles.chips}>
           {selectedServices.map((s) => (
             <span key={s.id} className={styles.chip}>

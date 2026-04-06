@@ -7,7 +7,9 @@ export default function CalendarPage() {
   return (
     <div className={styles.section}>
       <h1 className={styles.title}>Calendar</h1>
-      <CalendarView />
+      <div className={styles.calendarWrapper}>
+        <CalendarView />
+      </div>
     </div>
   );
 }
