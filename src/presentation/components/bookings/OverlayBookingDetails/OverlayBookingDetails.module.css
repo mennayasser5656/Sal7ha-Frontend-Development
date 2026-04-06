@@ -94,7 +94,13 @@
   display: flex;
   flex-direction: column;
   align-items: start;
-  gap: 1rem;
+  gap: 0.7rem;
+  width: 100%;
+}
+
+.sectionDetails h2 {
+  font-size: 1.25rem;
+  font-weight: 500;
 }
 
 .bookingContainer::-webkit-scrollbar {
@@ -139,26 +145,85 @@
   font-weight: 500;
 }
 
-.statusIconComplete {
-  color: #10b981;
-  font-size: 1.1rem;
-  flex-shrink: 0;
+.service {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: start;
+  gap: 0.5rem;
 }
 
-.statusIconPending {
-  color: #ffbf51;
-  font-size: 1.1rem;
-  flex-shrink: 0;
+.serviceDetails {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  color: gray;
+  margin-left: 1.5rem;
 }
 
-.statusIconInProgress {
-  color: lightgray;
-  font-size: 0.9rem;
-  flex-shrink: 0;
+.paymentDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  width: 100%;
+  gap: 0.2rem;
 }
 
-.statusIconCancelled {
-  color: #ef4444;
-  font-size: 1.1rem;
-  flex-shrink: 0;
+.paymentDetails h1 {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.price {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price h2 {
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.price span {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.actionsRow {
+  gap: 0.4rem;
+}
+
+.actionBtn {
+  grid-column: span 6;
+  padding: 0.5rem 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.accept {
+  background-color: var(--selective-yellow);
+  color: #000;
+}
+
+.decline {
+  background-color: #e0e0e0;
+  color: #555;
+}
+
+.priceInput {
+  border: none;
+  outline: none;
+  font-size: 1.2rem;
+  font-weight: 700;
+  width: 80px;
+  text-align: right;
+  background: transparent;
 }

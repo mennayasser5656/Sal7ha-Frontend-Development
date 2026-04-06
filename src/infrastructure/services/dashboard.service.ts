@@ -1,25 +1,15 @@
 import Booking from "@/domain/entities/Booking";
+import {
+  parseDate,
+  getCalendarDays as getCalendarDaysRaw,
+  formatBookingDateRange,
+  MONTH_NAMES,
+  SHORT_MONTHS,
+  DAY_LABELS,
+} from "./date.service";
 
-const MONTH_NAMES = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
-];
-
-const SHORT_MONTHS = [
-  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-];
-
-const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thr", "Fri", "Sat"];
-
-function parseDate(dateStr: string): Date {
-  const parts = dateStr.split("/");
-  return new Date(
-    parseInt(parts[2]),
-    parseInt(parts[0]) - 1,
-    parseInt(parts[1]),
-  );
-}
+// Re-export for consumers still importing from here
+export { formatBookingDateRange };
 
 export function getMonthName(month: number): string {
   return MONTH_NAMES[month];
@@ -34,28 +24,7 @@ export function getDayLabels(): string[] {
 }
 
 export function getCalendarDays(year: number, month: number) {
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const daysInPrevMonth = new Date(year, month, 0).getDate();
-
-  const cells: { day: number; outside: boolean }[] = [];
-
-  for (let i = firstDay - 1; i >= 0; i--) {
-    cells.push({ day: daysInPrevMonth - i, outside: true });
-  }
-
-  for (let d = 1; d <= daysInMonth; d++) {
-    cells.push({ day: d, outside: false });
-  }
-
-  const remaining = 7 - (cells.length % 7);
-  if (remaining < 7) {
-    for (let d = 1; d <= remaining; d++) {
-      cells.push({ day: d, outside: true });
-    }
-  }
-
-  return cells;
+  return getCalendarDaysRaw(year, month).map((c) => ({ day: c.day, outside: c.outside }));
 }
 
 export function getBookingsForMonth(
@@ -70,21 +39,6 @@ export function getBookingsForMonth(
     const monthEnd = new Date(year, month + 1, 0);
     return end >= monthStart && start <= monthEnd;
   });
-}
-
-export function formatBookingDateRange(startDate: string, endDate: string): string {
-  const s = parseDate(startDate);
-  const e = parseDate(endDate);
-
-  const sDay = s.getDate();
-  const eDay = e.getDate();
-  const sMonth = getShortMonthName(s.getMonth());
-  const eMonth = getShortMonthName(e.getMonth());
-
-  if (s.getMonth() === e.getMonth()) {
-    return `${sDay}-${eDay} ${sMonth}`;
-  }
-  return `${sDay} ${sMonth} - ${eDay} ${eMonth}`;
 }
 
 const CLIENT_IMAGES = [

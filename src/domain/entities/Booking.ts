@@ -1,3 +1,8 @@
+export interface ServiceDetail {
+  label: string;
+  value: string;
+}
+
 export default interface Booking {
   id: string;
   serviceName: string;
@@ -10,4 +15,6 @@ export default interface Booking {
   startDate: string;
   endDate: string;
   status: string;
+  price: number;
+  serviceDetails: ServiceDetail[];
 }

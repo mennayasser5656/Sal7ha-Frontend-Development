@@ -346,26 +346,4 @@
   gap: 0.5rem;
 }
 
-.statusIconComplete {
-  color: #10b981;
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
-
-.statusIconPending {
-  color: #ffbf51;
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
-
-.statusIconInProgress {
-  color: lightgray;
-  font-size: 0.9rem;
-  flex-shrink: 0;
-}
-
-.statusIconCancelled {
-  color: #ef4444;
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
+/* Status icon styles are in globals.css (.statusIcon*) */

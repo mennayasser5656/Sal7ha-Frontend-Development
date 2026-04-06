@@ -1,4 +1,5 @@
-import Booking from "@/domain/entities/Booking";
+import Booking, { ServiceDetail } from "@/domain/entities/Booking";
+import { parseDateMs, formatDate } from "./date.service";
 
 export type SortKey = "serviceName" | "name" | "carMake" | "startDate" | "endDate" | "status" | null;
 export type SortDirection = "asc" | "desc";
@@ -27,8 +28,8 @@ export function filterByDateRange(
   const start = rangeStart.getTime();
   const end = rangeEnd ? rangeEnd.getTime() : start;
   return bookings.filter((b) => {
-    const bStart = parseDate(b.startDate);
-    const bEnd = parseDate(b.endDate);
+    const bStart = parseDateMs(b.startDate);
+    const bEnd = parseDateMs(b.endDate);
     return bEnd >= start && bStart <= end;
   });
 }
@@ -42,15 +43,6 @@ export function searchBookings(bookings: Booking[], query: string): Booking[] {
       b.carMake.toLowerCase().includes(q) ||
       b.id.toLowerCase().includes(q),
   );
-}
-
-function parseDate(dateStr: string): number {
-  const parts = dateStr.split("/");
-  if (parts.length === 3) {
-    // Format: M/D/YYYY
-    return new Date(`${parts[2]}-${parts[0].padStart(2, "0")}-${parts[1].padStart(2, "0")}`).getTime();
-  }
-  return new Date(dateStr).getTime();
 }
 
 export function sortBookings(
@@ -70,9 +62,9 @@ export function sortBookings(
     } else if (sortKey === "status") {
       comparison = a.status.localeCompare(b.status);
     } else if (sortKey === "startDate") {
-      comparison = parseDate(a.startDate) - parseDate(b.startDate);
+      comparison = parseDateMs(a.startDate) - parseDateMs(b.startDate);
     } else if (sortKey === "endDate") {
-      comparison = parseDate(a.endDate) - parseDate(b.endDate);
+      comparison = parseDateMs(a.endDate) - parseDateMs(b.endDate);
     }
     return sortDirection === "asc" ? comparison : -comparison;
   });
@@ -88,16 +80,54 @@ export function paginateBookings(
 }
 
 export function generateMockBookings(): Booking[] {
-  const services = [
+  const services: { name: string; icon: string; price: number; details: ServiceDetail[] }[] = [
     {
       name: "Engine Diagnostics & Checkup",
       icon: "/assets/engine_service.svg",
+      price: 120,
+      details: [
+        { label: "Engine Code", value: "VQ35DE" },
+        { label: "Fault Codes", value: "P0300, P0301" },
+        { label: "Diagnostic Tool", value: "OBD-II Scanner" },
+        { label: "Last Serviced", value: "12,000 km ago" },
+        { label: "Recommended Action", value: "Replace spark plugs" },
+      ],
     },
-    { name: "Tire Rotation & Alignment", icon: "/assets/wheel_service.svg" },
-    { name: "Paint Job", icon: "/assets/paint_service.svg" },
+    {
+      name: "Tire Rotation & Alignment",
+      icon: "/assets/wheel_service.svg",
+      price: 65,
+      details: [
+        { label: "Tire Brand", value: "Michelin" },
+        { label: "Tire Size", value: "225/45R17" },
+        { label: "Rotation Pattern", value: "X-Pattern" },
+        { label: "Alignment Type", value: "4-Wheel" },
+        { label: "Tread Depth", value: "5mm" },
+      ],
+    },
+    {
+      name: "Paint Job",
+      icon: "/assets/paint_service.svg",
+      price: 350,
+      details: [
+        { label: "Paint Type", value: "Metallic" },
+        { label: "Color Code", value: "Pearl White" },
+        { label: "Coat Layers", value: "3" },
+        { label: "Surface Area", value: "Full Body" },
+        { label: "Finish", value: "Glossy" },
+      ],
+    },
     {
       name: "Battery Check & Replacement",
       icon: "/assets/battery_service.svg",
+      price: 85,
+      details: [
+        { label: "Battery Brand", value: "Bosch" },
+        { label: "Voltage", value: "12V" },
+        { label: "Capacity", value: "60Ah" },
+        { label: "Cold Crank Amps", value: "540A" },
+        { label: "Warranty", value: "2 years" },
+      ],
     },
   ];
 
@@ -134,9 +164,6 @@ export function generateMockBookings(): Booking[] {
     const startDate = new Date(2026, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1);
     const endDate = new Date(startDate.getTime() + (Math.floor(Math.random() * 3) + 1) * 86400000);
 
-    const formatDate = (d: Date) =>
-      `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
-
     bookings.push({
       id: Math.random().toString(36).substring(2, 8).toUpperCase(),
       serviceName: service.name,
@@ -149,6 +176,8 @@ export function generateMockBookings(): Booking[] {
       startDate: formatDate(startDate),
       endDate: formatDate(endDate),
       status,
+      price: service.price,
+      serviceDetails: service.details,
     });
   }
 

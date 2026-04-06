@@ -8,51 +8,46 @@ import {
   useCalendarTimeline,
   BookingWithParsedDates,
 } from "@/application/hooks/useCalendarTimeline";
+import { getStatusColor } from "@/infrastructure/services/status.service";
+import { formatDateShort } from "@/infrastructure/services/date.service";
+import { normalizeStatus } from "@/infrastructure/services/status.service";
 
 const STATUSES = ["In-Progress", "Completed", "Pending", "Cancelled", "Accepted"];
 
-function getBarClass(status: string): string {
-  const s = status.toLowerCase();
-  if (s.includes("completed") || s.includes("done")) return styles.barCompleted;
-  if (s.includes("accepted")) return styles.barAccepted;
-  if (s.includes("pending")) return styles.barPending;
-  if (s.includes("progress")) return styles.barInProgress;
-  if (s.includes("cancel")) return styles.barCancelled;
-  return "";
-}
+const BAR_CLASS_MAP: Record<string, string> = {
+  inProgress: styles.barInProgress,
+  completed: styles.barCompleted,
+  accepted: styles.barAccepted,
+  pending: styles.barPending,
+  cancelled: styles.barCancelled,
+};
 
-function getStatusColor(status: string): string {
-  const s = status.toLowerCase();
-  if (s.includes("completed") || s.includes("done") || s.includes("accepted")) return "#10b981";
-  if (s.includes("pending")) return "#ffb700";
-  if (s.includes("progress")) return "#a0a0a0";
-  if (s.includes("cancel")) return "#ef4444";
-  return "#ccc";
+const PILL_CLASS_MAP: Record<string, string> = {
+  inProgress: styles.pillInProgress,
+  completed: styles.pillCompleted,
+  accepted: styles.pillAccepted,
+  pending: styles.pillPending,
+  cancelled: styles.pillCancelled,
+};
+
+const BADGE_CLASS_MAP: Record<string, string> = {
+  inProgress: styles.badgeInProgress,
+  completed: styles.badgeCompleted,
+  accepted: styles.badgeAccepted,
+  pending: styles.badgePending,
+  cancelled: styles.badgeCancelled,
+};
+
+function getBarClass(status: string): string {
+  return BAR_CLASS_MAP[normalizeStatus(status) ?? ""] ?? "";
 }
 
 function getPillClass(status: string): string {
-  const s = status.toLowerCase();
-  if (s.includes("completed") || s.includes("done")) return styles.pillCompleted;
-  if (s.includes("accepted")) return styles.pillAccepted;
-  if (s.includes("pending")) return styles.pillPending;
-  if (s.includes("progress")) return styles.pillInProgress;
-  if (s.includes("cancel")) return styles.pillCancelled;
-  return "";
+  return PILL_CLASS_MAP[normalizeStatus(status) ?? ""] ?? "";
 }
 
 function getBadgeClass(status: string): string {
-  const s = status.toLowerCase();
-  if (s.includes("completed") || s.includes("done")) return styles.badgeCompleted;
-  if (s.includes("accepted")) return styles.badgeAccepted;
-  if (s.includes("pending")) return styles.badgePending;
-  if (s.includes("progress")) return styles.badgeInProgress;
-  if (s.includes("cancel")) return styles.badgeCancelled;
-  return "";
-}
-
-function formatDateShort(date: Date): string {
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  return `${date.getDate()} ${months[date.getMonth()]}`;
+  return BADGE_CLASS_MAP[normalizeStatus(status) ?? ""] ?? "";
 }
 
 /** Compute which grid column a booking starts/ends on within a 7-day week (1-indexed for CSS grid). */

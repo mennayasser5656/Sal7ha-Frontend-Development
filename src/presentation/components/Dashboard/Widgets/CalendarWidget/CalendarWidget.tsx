@@ -3,16 +3,18 @@
 import styles from "./CalendarWidget.module.css";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import Booking from "@/domain/entities/Booking";
+import { normalizeStatus } from "@/infrastructure/services/status.service";
 
-function getStatusClass(status: string, s: Record<string, string>): string {
-  const lower = status.toLowerCase();
-  if (lower.includes("completed") || lower.includes("done") || lower.includes("accepted"))
-    return s.statusCompleted;
-  if (lower.includes("pending")) return s.statusPending;
-  if (lower.includes("progress")) return s.statusInProgress;
-  if (lower.includes("cancelled") || lower.includes("cancel"))
-    return s.statusCancelled;
-  return "";
+const STATUS_CLASS_MAP: Record<string, string> = {
+  inProgress: styles.statusInProgress,
+  completed: styles.statusCompleted,
+  accepted: styles.statusCompleted,
+  pending: styles.statusPending,
+  cancelled: styles.statusCancelled,
+};
+
+function getStatusClass(status: string): string {
+  return STATUS_CLASS_MAP[normalizeStatus(status) ?? ""] ?? "";
 }
 
 interface CalendarWidgetProps {
@@ -104,7 +106,7 @@ export default function CalendarWidget({
                     {formatBookingDateRange(booking.startDate, booking.endDate)}
                   </span>
                   <span className={styles.dot} />
-                  <span className={`${styles.serviceStatusText} ${getStatusClass(booking.status, styles)}`}>
+                  <span className={`${styles.serviceStatusText} ${getStatusClass(booking.status)}`}>
                     {booking.status}
                   </span>
                 </div>

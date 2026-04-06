@@ -18,11 +18,11 @@
   background-color: #d0d0d0;
 }
 
-.actionButton.active {
+.active {
   background-color: #000;
   color: #fff;
 }
 
-.actionButton.active:hover {
+.active:hover {
   background-color: #1a1a1a;
 }

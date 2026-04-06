@@ -1,25 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "./TableView.module.css";
-import { MdKeyboardArrowRight, MdKeyboardArrowLeft, MdCancel, MdPending } from "react-icons/md";
+import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import OverlayBookingDetails from "../OverlayBookingDetails/OverlayBookingDetails";
-import { IoIosCheckmarkCircle, IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { FaClock } from "react-icons/fa6";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import StatusIcon from "@/presentation/components/common/StatusIcon/StatusIcon";
 
 import Booking from "@/domain/entities/Booking";
 import { SortKey, SortDirection } from "@/infrastructure/services/bookings.service";
-
-const getStatusIcon = (status: string) => {
-  const s = status.toLowerCase();
-  if (s.includes("completed") || s.includes("done") || s.includes("accepted"))
-    return <IoIosCheckmarkCircle className={styles.statusIconComplete} />;
-  if (s.includes("pending"))
-    return <MdPending className={styles.statusIconPending} />;
-  if (s.includes("progress") || s.includes("ongoing"))
-    return <FaClock className={styles.statusIconInProgress} />;
-  if (s.includes("cancelled") || s.includes("cancel"))
-    return <MdCancel className={styles.statusIconCancelled} />;
-  return null;
-};
 
 interface TableViewProps {
   bookings: Booking[];
@@ -234,7 +221,7 @@ export default function TableView({
                 <td>{booking.endDate}</td>
                 <td>
                   <div className={styles.statusCell}>
-                    {getStatusIcon(booking.status)}
+                    <StatusIcon status={booking.status} />
                     <span>{booking.status}</span>
                   </div>
                 </td>

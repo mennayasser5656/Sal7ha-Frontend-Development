@@ -8,22 +8,7 @@ import {
 } from "../../UnderlineInput";
 import { useState } from "react";
 import Booking from "@/domain/entities/Booking";
-import { IoIosCheckmarkCircle } from "react-icons/io";
-import { MdCancel, MdPending } from "react-icons/md";
-import { FaClock } from "react-icons/fa6";
-
-const getStatusIcon = (status: string) => {
-  const s = status.toLowerCase();
-  if (s.includes("completed") || s.includes("done") || s.includes("accepted"))
-    return <IoIosCheckmarkCircle className={styles.statusIconComplete} />;
-  if (s.includes("pending"))
-    return <MdPending className={styles.statusIconPending} />;
-  if (s.includes("progress") || s.includes("ongoing"))
-    return <FaClock className={styles.statusIconInProgress} />;
-  if (s.includes("cancelled") || s.includes("cancel"))
-    return <MdCancel className={styles.statusIconCancelled} />;
-  return null;
-};
+import StatusIcon from "@/presentation/components/common/StatusIcon/StatusIcon";
 
 interface OverlayBookingDetailsProps {
   booking: Booking;
@@ -46,6 +31,7 @@ export default function OverlayBookingDetails({
   const [carYear, setCarYear] = useState(booking.carYear);
   const [serviceName, setServiceName] = useState(booking.serviceName);
   const [status, setStatus] = useState(booking.status);
+  const [price, setPrice] = useState(String(booking.price));
 
   return (
     <section className={styles.overlay}>
@@ -96,7 +82,7 @@ export default function OverlayBookingDetails({
             <div className={styles.details}>
               <h2>Status</h2>
               <div className={styles.owner}>
-                {getStatusIcon(booking.status)}
+                <StatusIcon status={booking.status} />
                 <span>{booking.status}</span>
               </div>
             </div>
@@ -119,7 +105,42 @@ export default function OverlayBookingDetails({
             </div>
           </div>
           {/* Service Details */}
-          <div className={styles.sectionDetails}></div>
+          <div className={styles.sectionDetails}>
+            <h2>Services</h2>
+            <div className={styles.service}>
+              <div className={styles.owner}>
+                <img src={booking.serviceIcon} alt={booking.serviceName} />
+                <span>{booking.serviceName}</span>
+              </div>
+              <div className={styles.serviceDetails}>
+                {booking.serviceDetails.map((detail) => (
+                  <span key={detail.label}>
+                    {detail.label}: {detail.value}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className={styles.paymentDetails}>
+              <h1>Payment details</h1>
+              <div className={styles.price}>
+                <h2>Price (ex. VAT)</h2>
+                <input
+                  className={styles.priceInput}
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  placeholder={`$${booking.price}`}
+                />
+              </div>
+            </div>
+          </div>
+          <div className={`${styles.row} ${styles.actionsRow}`}>
+            <button className={`${styles.actionBtn} ${styles.decline}`}>
+              Decline
+            </button>
+            <button className={`${styles.actionBtn} ${styles.accept}`}>
+              Accept
+            </button>
+          </div>
         </div>
       </div>
     </section>

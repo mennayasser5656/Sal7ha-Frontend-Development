@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import styles from "./ActionDropdown.module.css";
 import { IoIosArrowDown } from "react-icons/io";
+import { useClickOutside } from "@/application/hooks/useClickOutside";
 
 interface ActionDropdownProps {
   count: number;
@@ -17,16 +18,7 @@ export default function ActionDropdown({
 }: ActionDropdownProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  useClickOutside(ref, useCallback(() => setOpen(false), []));
 
   if (count === 0) return null;
 

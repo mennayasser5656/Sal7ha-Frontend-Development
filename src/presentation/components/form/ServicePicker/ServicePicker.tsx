@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import styles from "./ServicePicker.module.css";
+import { useClickOutside } from "@/application/hooks/useClickOutside";
 
 export interface ServiceItem {
   id: string;
@@ -33,16 +34,7 @@ export default function ServicePicker({
 
   const filled = selected.length > 0 || query.length > 0;
 
-  // close dropdown on outside click
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
+  useClickOutside(wrapperRef, useCallback(() => setOpen(false), []));
 
   const available = services.filter(
     (s) =>
@@ -50,7 +42,6 @@ export default function ServicePicker({
       s.label.toLowerCase().includes(query.toLowerCase()),
   );
 
-  // group available services by category
   const grouped: Record<string, ServiceItem[]> = {};
   for (const s of available) {
     (grouped[s.category] ??= []).push(s);
@@ -70,25 +61,25 @@ export default function ServicePicker({
     .filter(Boolean);
 
   const wrapperClass = [
-    styles.fieldWrapper,
-    filled ? styles.filled : "",
-    error ? styles.error : "",
+    "floatField",
+    filled ? "floatFieldFilled" : "",
+    error ? "floatFieldError" : "",
   ]
     .filter(Boolean)
     .join(" ");
 
   return (
     <div ref={wrapperRef} className={styles.container}>
-      {/* Input area — same style as FormTextField */}
       <div
         className={wrapperClass}
+        style={{ cursor: "text" }}
         onClick={() => {
           wrapperRef.current?.querySelector("input")?.focus();
         }}
       >
-        <label className={styles.label}>{label}</label>
+        <label className="floatFieldLabel">{label}</label>
         <input
-          className={styles.input}
+          className="floatFieldInput"
           type="text"
           value={query}
           onChange={(e) => {
@@ -104,7 +95,6 @@ export default function ServicePicker({
         />
       </div>
 
-      {/* Dropdown */}
       {open && Object.keys(grouped).length > 0 && (
         <div className={styles.dropdown}>
           {Object.entries(grouped).map(([category, items]) => (
@@ -126,7 +116,6 @@ export default function ServicePicker({
         </div>
       )}
 
-      {/* Selected chips */}
       {selectedServices.length > 0 && (
         <div className={styles.chips}>
           {selectedServices.map((s) => (
@@ -145,7 +134,7 @@ export default function ServicePicker({
         </div>
       )}
 
-      {error && <p className={styles.errorText}>{error}</p>}
+      {error && <p className="floatFieldError">{error}</p>}
     </div>
   );
 }

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import styles from "./Dropdown.module.css";
 import { IoIosArrowDown, IoIosClose } from "react-icons/io";
+import { useClickOutside } from "@/application/hooks/useClickOutside";
 
 interface DropdownProps {
   options: string[];
@@ -19,16 +20,7 @@ export default function Dropdown({
 }: DropdownProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  useClickOutside(ref, useCallback(() => setOpen(false), []));
 
   return (
     <div className={styles.dropdown} ref={ref}>

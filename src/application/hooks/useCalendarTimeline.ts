@@ -1,18 +1,26 @@
 import { useState, useMemo, useCallback } from "react";
 import { generateMockBookings } from "@/infrastructure/services/bookings.service";
 import Booking from "@/domain/entities/Booking";
+import {
+  parseDate,
+  isSameDay,
+  getCalendarDays,
+  MONTH_NAMES,
+  SHORT_MONTHS,
+  DAY_LABELS,
+  CalendarCell,
+} from "@/infrastructure/services/date.service";
 
 export type ViewMode = "week" | "month";
 
-function parseDate(dateStr: string): Date {
-  const parts = dateStr.split("/");
-  return new Date(parseInt(parts[2]), parseInt(parts[0]) - 1, parseInt(parts[1]));
+export interface BookingWithParsedDates extends Booking {
+  start: Date;
+  end: Date;
 }
 
 function getWeekStart(date: Date): Date {
   const d = new Date(date);
-  const day = d.getDay();
-  d.setDate(d.getDate() - day);
+  d.setDate(d.getDate() - d.getDay());
   d.setHours(0, 0, 0, 0);
   return d;
 }
@@ -26,46 +34,6 @@ function getWeekDays(weekStart: Date): Date[] {
   }
   return days;
 }
-
-function isSameDay(a: Date, b: Date): boolean {
-  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
-}
-
-function getMonthDays(year: number, month: number) {
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const daysInPrevMonth = new Date(year, month, 0).getDate();
-
-  const cells: { date: Date; outside: boolean }[] = [];
-
-  for (let i = firstDay - 1; i >= 0; i--) {
-    cells.push({ date: new Date(year, month - 1, daysInPrevMonth - i), outside: true });
-  }
-  for (let d = 1; d <= daysInMonth; d++) {
-    cells.push({ date: new Date(year, month, d), outside: false });
-  }
-  const remaining = 7 - (cells.length % 7);
-  if (remaining < 7) {
-    for (let d = 1; d <= remaining; d++) {
-      cells.push({ date: new Date(year, month + 1, d), outside: true });
-    }
-  }
-  return cells;
-}
-
-export interface BookingWithParsedDates extends Booking {
-  start: Date;
-  end: Date;
-}
-
-const MONTH_NAMES = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
-];
-
-const SHORT_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const DAY_LABELS_SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const DAY_LABELS_FULL = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 export function useCalendarTimeline() {
   const [bookings] = useState(generateMockBookings);
@@ -100,7 +68,10 @@ export function useCalendarTimeline() {
   const viewMonth = currentDate.getMonth();
   const viewYear = currentDate.getFullYear();
 
-  const monthDays = useMemo(() => getMonthDays(viewYear, viewMonth), [viewYear, viewMonth]);
+  const monthDays = useMemo(
+    () => getCalendarDays(viewYear, viewMonth).map((c: CalendarCell) => ({ date: c.date, outside: c.outside })),
+    [viewYear, viewMonth],
+  );
 
   const monthBookings = useMemo(() => {
     const monthStart = new Date(viewYear, viewMonth, 1);
@@ -108,16 +79,12 @@ export function useCalendarTimeline() {
     return filteredBookings.filter((b) => b.end >= monthStart && b.start <= monthEnd);
   }, [filteredBookings, viewYear, viewMonth]);
 
-  // Get bookings for a specific day
   const getBookingsForDay = useCallback(
     (date: Date): BookingWithParsedDates[] => {
       return filteredBookings.filter((b) => {
-        const d = new Date(date);
-        d.setHours(0, 0, 0, 0);
-        const start = new Date(b.start);
-        start.setHours(0, 0, 0, 0);
-        const end = new Date(b.end);
-        end.setHours(0, 0, 0, 0);
+        const d = new Date(date); d.setHours(0, 0, 0, 0);
+        const start = new Date(b.start); start.setHours(0, 0, 0, 0);
+        const end = new Date(b.end); end.setHours(0, 0, 0, 0);
         return d >= start && d <= end;
       });
     },
@@ -125,18 +92,13 @@ export function useCalendarTimeline() {
   );
 
   // Navigation
-  const goToToday = useCallback(() => {
-    setCurrentDate(new Date(today));
-  }, []);
+  const goToToday = useCallback(() => setCurrentDate(new Date(today)), []);
 
   const goToPrev = useCallback(() => {
     setCurrentDate((prev) => {
       const d = new Date(prev);
-      if (viewMode === "week") {
-        d.setDate(d.getDate() - 7);
-      } else {
-        d.setMonth(d.getMonth() - 1);
-      }
+      if (viewMode === "week") d.setDate(d.getDate() - 7);
+      else d.setMonth(d.getMonth() - 1);
       return d;
     });
   }, [viewMode]);
@@ -144,18 +106,13 @@ export function useCalendarTimeline() {
   const goToNext = useCallback(() => {
     setCurrentDate((prev) => {
       const d = new Date(prev);
-      if (viewMode === "week") {
-        d.setDate(d.getDate() + 7);
-      } else {
-        d.setMonth(d.getMonth() + 1);
-      }
+      if (viewMode === "week") d.setDate(d.getDate() + 7);
+      else d.setMonth(d.getMonth() + 1);
       return d;
     });
   }, [viewMode]);
 
-  const goToDate = useCallback((date: Date) => {
-    setCurrentDate(new Date(date));
-  }, []);
+  const goToDate = useCallback((date: Date) => setCurrentDate(new Date(date)), []);
 
   // Header label
   const headerLabel = useMemo(() => {
@@ -178,24 +135,20 @@ export function useCalendarTimeline() {
     headerLabel,
     selectedStatus,
     setSelectedStatus,
-    // Week
     weekStart,
     weekDays,
     weekBookings,
-    // Month
     viewMonth,
     viewYear,
     monthDays,
     monthBookings,
-    // Utils
     getBookingsForDay,
     isSameDay,
     goToToday,
     goToPrev,
     goToNext,
     goToDate,
-    dayLabelsShort: DAY_LABELS_SHORT,
-    dayLabelsFull: DAY_LABELS_FULL,
+    dayLabelsShort: DAY_LABELS,
     monthNames: MONTH_NAMES,
   };
 }
