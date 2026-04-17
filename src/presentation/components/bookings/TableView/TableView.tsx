@@ -1,71 +1,69 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styles from "./TableView.module.css";
-import { MdKeyboardArrowRight } from "react-icons/md";
-import { MdKeyboardArrowLeft } from "react-icons/md";
-import { MdCheckCircle, MdAccessTime, MdCancel } from "react-icons/md";
-import SelectionToolBar from "../SelectionToolBar/SelectionToolBar";
+import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import OverlayBookingDetails from "../OverlayBookingDetails/OverlayBookingDetails";
-import { IoIosCheckmarkCircle } from "react-icons/io";
-import { MdPending } from "react-icons/md";
-import { FaClock } from "react-icons/fa6";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import StatusIcon from "@/presentation/components/common/StatusIcon/StatusIcon";
+
 import Booking from "@/domain/entities/Booking";
-
-const getOwnerImage = (index: number): string => {
-  const images = [
-    "/assets/man1.avif",
-    "/assets/man2.avif",
-    "/assets/woman1.jpg",
-    "/assets/woman2.avif",
-  ];
-  return images[index % images.length];
-};
-
-const getStatusIcon = (status: string) => {
-  const statusLower = status.toLowerCase();
-
-  if (statusLower.includes("completed") || statusLower.includes("done")) {
-    return <IoIosCheckmarkCircle className={styles.statusIconComplete} />;
-  } else if (statusLower.includes("pending")) {
-    return <MdPending className={styles.statusIconPending} />;
-  } else if (
-    statusLower.includes("progress") ||
-    statusLower.includes("ongoing")
-  ) {
-    return <FaClock className={styles.statusIconInProgress} />;
-  } else if (
-    statusLower.includes("cancelled") ||
-    statusLower.includes("cancel")
-  ) {
-    return <MdCancel className={styles.statusIconCancelled} />;
-  }
-  return null;
-};
+import { SortKey, SortDirection } from "@/infrastructure/services/bookings.service";
 
 interface TableViewProps {
   bookings: Booking[];
+  sortKey: SortKey;
+  sortDirection: SortDirection;
+  handleSort: (key: SortKey) => void;
+  currentPage: number;
+  totalPages: number;
+  itemsPerPage: number;
+  setPerPage: (value: number) => void;
+  goToPage: (page: number) => void;
+  goToPreviousPage: () => void;
+  goToNextPage: () => void;
+  selectedBookings: Set<string>;
+  setSelectedBookings: (selected: Set<string>) => void;
+  onAcceptBooking: (id: string) => void;
+  onDeclineBooking: (id: string) => void;
 }
 
-export default function TableView({ bookings }: TableViewProps) {
+export default function TableView({
+  bookings,
+  sortKey,
+  sortDirection,
+  handleSort,
+  currentPage,
+  totalPages,
+  itemsPerPage,
+  setPerPage,
+  goToPage,
+  goToPreviousPage,
+  goToNextPage,
+  selectedBookings,
+  setSelectedBookings,
+  onAcceptBooking,
+  onDeclineBooking,
+}: TableViewProps) {
   const [isChecked, setIsChecked] = useState(false);
-  const [selectedBookings, setSelectedBookings] = useState<Set<string>>(
-    new Set(),
-  );
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [goToPageInput, setGoToPageInput] = useState("");
   const [openBooking, setOpenBooking] = useState<Booking | null>(null);
+  const [openActionMenu, setOpenActionMenu] = useState<string | null>(null);
+  const actionMenuRef = useRef<HTMLDivElement>(null);
 
-  const totalItems = bookings.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentBookings = bookings.slice(indexOfFirstItem, indexOfLastItem);
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (actionMenuRef.current && !actionMenuRef.current.contains(e.target as Node)) {
+        setOpenActionMenu(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleSelectAll = () => {
     if (isChecked) {
       setSelectedBookings(new Set());
     } else {
-      setSelectedBookings(new Set(currentBookings.map((b) => b.id)));
+      setSelectedBookings(new Set(bookings.map((b) => b.id)));
     }
     setIsChecked(!isChecked);
   };
@@ -73,42 +71,23 @@ export default function TableView({ bookings }: TableViewProps) {
   const handleSelectBooking = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     const newSelected = new Set(selectedBookings);
-    if (newSelected.has(id)) {
-      newSelected.delete(id);
-    } else {
-      newSelected.add(id);
-    }
+    if (newSelected.has(id)) newSelected.delete(id);
+    else newSelected.add(id);
     setSelectedBookings(newSelected);
-    setIsChecked(newSelected.size === currentBookings.length);
+    setIsChecked(newSelected.size === bookings.length);
   };
 
   const handleActionClick = (bookingId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log("Action menu for booking:", bookingId);
-  };
-
-  const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    if (value > 0) {
-      setItemsPerPage(value);
-      setCurrentPage(1);
-    }
+    setOpenActionMenu(openActionMenu === bookingId ? null : bookingId);
   };
 
   const handleGoToPage = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      const page = parseInt(goToPageInput);
-      if (page >= 1 && page <= totalPages) {
-        setCurrentPage(page);
-        setGoToPageInput("");
-      }
+      goToPage(parseInt(goToPageInput));
+      setGoToPageInput("");
     }
   };
-
-  const goToPreviousPage = () =>
-    setCurrentPage((prev) => Math.max(prev - 1, 1));
-  const goToNextPage = () =>
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
 
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
@@ -128,6 +107,17 @@ export default function TableView({ bookings }: TableViewProps) {
     return pages;
   };
 
+  const sortIcon = (key: SortKey) => (
+    <div className={styles.sortIcons}>
+      <IoIosArrowUp
+        className={`${styles.sortIcon} ${sortKey === key && sortDirection === "asc" ? styles.sortIconActive : ""}`}
+      />
+      <IoIosArrowDown
+        className={`${styles.sortIcon} ${sortKey === key && sortDirection === "desc" ? styles.sortIconActive : ""}`}
+      />
+    </div>
+  );
+
   return (
     <>
       {openBooking && (
@@ -137,7 +127,6 @@ export default function TableView({ bookings }: TableViewProps) {
         />
       )}
 
-      {/* Table */}
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
@@ -152,17 +141,47 @@ export default function TableView({ bookings }: TableViewProps) {
                   />
                 </div>
               </th>
-              <th>Service Name</th>
-              <th>Car Owner</th>
-              <th>Brand</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-              <th>Status</th>
+              <th className={`${styles.sortableTh} ${sortKey === "serviceName" ? styles.sortedTh : ""}`} onClick={() => handleSort("serviceName")}>
+                <div className={styles.thContent}>
+                  {sortIcon("serviceName")}
+                  Service Name
+                </div>
+              </th>
+              <th className={`${styles.sortableTh} ${sortKey === "name" ? styles.sortedTh : ""}`} onClick={() => handleSort("name")}>
+                <div className={styles.thContent}>
+                  {sortIcon("name")}
+                  Car Owner
+                </div>
+              </th>
+              <th className={`${styles.sortableTh} ${sortKey === "carMake" ? styles.sortedTh : ""}`} onClick={() => handleSort("carMake")}>
+                <div className={styles.thContent}>
+                  {sortIcon("carMake")}
+                  Brand
+                </div>
+              </th>
+              <th className={`${styles.sortableTh} ${sortKey === "startDate" ? styles.sortedTh : ""}`} onClick={() => handleSort("startDate")}>
+                <div className={styles.thContent}>
+                  {sortIcon("startDate")}
+                  Start Date
+                </div>
+              </th>
+              <th className={`${styles.sortableTh} ${sortKey === "endDate" ? styles.sortedTh : ""}`} onClick={() => handleSort("endDate")}>
+                <div className={styles.thContent}>
+                  {sortIcon("endDate")}
+                  End Date
+                </div>
+              </th>
+              <th className={`${styles.sortableTh} ${sortKey === "status" ? styles.sortedTh : ""}`} onClick={() => handleSort("status")}>
+                <div className={styles.thContent}>
+                  {sortIcon("status")}
+                  Status
+                </div>
+              </th>
               <th className={styles.actionColumn}></th>
             </tr>
           </thead>
           <tbody>
-            {currentBookings.map((booking, index) => (
+            {bookings.map((booking) => (
               <tr
                 key={booking.id}
                 className={`${styles.clickableRow} ${selectedBookings.has(booking.id) ? styles.isSelected : ""}`}
@@ -190,30 +209,56 @@ export default function TableView({ bookings }: TableViewProps) {
                 <td>
                   <div className={styles.ownerInfo}>
                     <img
-                      src={getOwnerImage(index)}
+                      src={booking.ownerIcon}
                       alt={booking.name}
                       className={styles.ownerImage}
                     />
                     <span>{booking.name}</span>
                   </div>
                 </td>
-                <td>{booking.carType}</td>
+                <td>{booking.carMake} {booking.carModel} {booking.carYear}</td>
                 <td>{booking.startDate}</td>
                 <td>{booking.endDate}</td>
                 <td>
                   <div className={styles.statusCell}>
-                    {getStatusIcon(booking.status)}
+                    <StatusIcon status={booking.status} />
                     <span>{booking.status}</span>
                   </div>
                 </td>
                 <td className={styles.actionColumn}>
-                  <button
-                    className={styles.actionBtn}
-                    onClick={(e) => handleActionClick(booking.id, e)}
-                    aria-label="Row actions"
-                  >
-                    ⋯
-                  </button>
+                  <div className={styles.actionWrapper} ref={openActionMenu === booking.id ? actionMenuRef : undefined}>
+                    <button
+                      className={styles.actionBtn}
+                      onClick={(e) => handleActionClick(booking.id, e)}
+                      aria-label="Row actions"
+                    >
+                      ⋯
+                    </button>
+                    {openActionMenu === booking.id && (
+                      <div className={styles.actionMenu}>
+                        <button
+                          className={styles.actionMenuItem}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onAcceptBooking(booking.id);
+                            setOpenActionMenu(null);
+                          }}
+                        >
+                          Accept
+                        </button>
+                        <button
+                          className={styles.actionMenuItem}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDeclineBooking(booking.id);
+                            setOpenActionMenu(null);
+                          }}
+                        >
+                          Decline
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}
@@ -221,26 +266,14 @@ export default function TableView({ bookings }: TableViewProps) {
         </table>
       </div>
 
-      <SelectionToolBar
-        selectedCount={selectedBookings.size}
-        onClearSelection={() => {
-          setSelectedBookings(new Set());
-          setIsChecked(false);
-        }}
-        onDelete={() => console.log("Delete", [...selectedBookings])}
-        onChangeStatus={(status) =>
-          console.log("Change to", status, [...selectedBookings])
-        }
-      />
 
-      {/* Pagination */}
       <div className={styles.pagination}>
         <div className={styles.chooseNumber}>
           <span>Showing per page</span>
           <input
             type="number"
             value={itemsPerPage}
-            onChange={handleItemsPerPageChange}
+            onChange={(e) => setPerPage(parseInt(e.target.value))}
             min="1"
           />
         </div>
@@ -252,7 +285,7 @@ export default function TableView({ bookings }: TableViewProps) {
             <div
               key={index}
               className={`${styles.pageNumber} ${page === currentPage ? styles.activePage : ""} ${page === "..." ? styles.dots : ""}`}
-              onClick={() => typeof page === "number" && setCurrentPage(page)}
+              onClick={() => typeof page === "number" && goToPage(page)}
             >
               {page}
             </div>

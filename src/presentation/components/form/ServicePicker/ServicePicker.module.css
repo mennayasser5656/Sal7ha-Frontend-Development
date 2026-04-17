@@ -3,74 +3,7 @@
   z-index: 10;
 }
 
-/* ── Input wrapper — mirrors FormTextField ── */
-
-.fieldWrapper {
-  position: relative;
-  border: 1.5px solid var(--pale-steel-gray);
-  border-radius: 8px;
-  background: white;
-  transition: border-color 0.2s ease;
-  cursor: text;
-}
-
-.fieldWrapper:focus-within {
-  border-color: var(--selective-yellow);
-}
-
-.fieldWrapper.error {
-  border-color: #d32f2f;
-}
-
-.label {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.875rem;
-  color: var(--state-blue-gray);
-  background: transparent;
-  padding: 0 4px;
-  pointer-events: none;
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  white-space: nowrap;
-}
-
-.fieldWrapper:focus-within .label,
-.fieldWrapper.filled .label {
-  top: 0;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: var(--selective-yellow);
-  background: white;
-}
-
-.fieldWrapper.error:focus-within .label,
-.fieldWrapper.error.filled .label {
-  color: #d32f2f;
-}
-
-.input {
-  width: 100%;
-  border: none;
-  outline: none;
-  font-size: 0.875rem;
-  font-family: var(--font-inter);
-  color: var(--dark-gray);
-  background: transparent;
-  padding: 18px 14px 8px;
-  border-radius: 8px;
-}
-
-.input::placeholder {
-  opacity: 0;
-  color: var(--pale-steel-gray);
-  transition: opacity 0.15s ease;
-}
-
-.fieldWrapper:focus-within .input::placeholder {
-  opacity: 1;
-}
+/* Floating label wrapper uses global .floatField* classes */
 
 /* ── Dropdown ── */
 
@@ -172,11 +105,4 @@
   color: #d32f2f;
 }
 
-/* ── Error ── */
-
-.errorText {
-  font-size: 0.7rem;
-  color: #d32f2f;
-  margin-top: 4px;
-  padding-left: 14px;
-}
+/* Error text uses global .floatFieldError */

@@ -37,9 +37,9 @@ const FormSelectField = ({
   const filled = (value ?? "").length > 0;
 
   const wrapperClass = [
-    styles.fieldWrapper,
-    filled ? styles.filled : "",
-    error ? styles.error : "",
+    "floatField",
+    filled ? "floatFieldFilled" : "",
+    error ? "floatFieldError" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -53,7 +53,7 @@ const FormSelectField = ({
           select?.focus();
         }}
       >
-        <label className={styles.label}>
+        <label className="floatFieldLabel">
           {label}
           {required && " *"}
         </label>
@@ -77,7 +77,7 @@ const FormSelectField = ({
           ))}
         </select>
       </div>
-      {error && <p className={styles.errorText}>{error}</p>}
+      {error && <p className="floatFieldError">{error}</p>}
     </div>
   );
 };

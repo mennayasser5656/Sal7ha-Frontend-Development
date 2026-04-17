@@ -1,0 +1,112 @@
+/* ── Slide-up animation ── */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ── Overlay ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.overlayContent {
+  background: transparent;
+  padding: 0rem 2rem;
+  padding-bottom: 1rem;
+  width: 50%;
+  max-height: 100vh;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  animation: slideUp 0.4s ease;
+}
+
+.overlayContent::-webkit-scrollbar {
+  display: none;
+}
+
+.overlaySectionTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+}
+
+.overlayWidgetGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 14rem;
+  gap: 1.5rem;
+}
+
+.overlayCard {
+  position: relative;
+  border-radius: 0.5rem;
+  overflow: visible;
+}
+
+.overlayCard > div {
+  width: 100%;
+  height: 100%;
+}
+
+.overlayCircleBtn {
+  position: absolute;
+  top: -0.35rem;
+  right: -0.35rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: transform 0.15s ease;
+}
+
+.overlayCircleBtn:hover {
+  transform: scale(1.1);
+}
+
+.overlayCircleBtn svg {
+  width: 0.65rem;
+  height: 0.65rem;
+}
+
+.overlayRemoveBtn {
+  background-color: #fff;
+  color: #ef4444;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.overlayAddBtn {
+  background-color: #fff;
+  color: #10b981;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}

@@ -1,0 +1,225 @@
+.card {
+  border: 1.5px solid var(--pale-steel-gray);
+  border-radius: 10px;
+  background: white;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+  animation: cardIn 0.25s ease;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.cardExpanded {
+  border-color: var(--selective-yellow);
+}
+
+/* ── Header ── */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.9rem 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-inter);
+  transition: background 0.12s;
+}
+
+.header:hover {
+  background: rgb(from var(--selective-yellow) r g b / 0.03);
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+}
+
+.title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--dark-gray);
+}
+
+.subtitle {
+  font-size: 0.68rem;
+  color: var(--state-blue-gray);
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* ── Badges ── */
+
+.badgeSetup {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 100px;
+  background: rgb(from var(--selective-yellow) r g b / 0.12);
+  color: #b27a00;
+}
+
+.badgePartial {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 100px;
+  background: rgb(from var(--status-badge-in-progress) r g b / 0.1);
+  color: var(--status-badge-in-progress);
+}
+
+.badgeComplete {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 100px;
+  background: rgb(from var(--status-completed) r g b / 0.1);
+  color: var(--status-completed);
+}
+
+/* ── Chevron ── */
+
+.chevron {
+  color: var(--state-blue-gray);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+/* ── Body ── */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0 1rem 1.15rem;
+  border-top: 1px solid rgb(from var(--pale-steel-gray) r g b / 0.4);
+  padding-top: 1rem;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Sections ── */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.sectionLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--dark-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tagGroups {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* ── Service price list ── */
+
+.priceList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.priceRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.serviceName {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--dark-gray);
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.priceInputs {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
+.priceField {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--pale-steel-gray);
+  border-radius: 8px;
+  padding: 0.4rem 0.55rem;
+  background: white;
+  width: 5.5rem;
+  transition: border-color 0.2s ease;
+}
+
+.priceField:focus-within {
+  border-color: var(--selective-yellow);
+}
+
+.priceCurrency {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--state-blue-gray);
+  margin-right: 0.3rem;
+}
+
+.priceInput {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 0.78rem;
+  font-family: var(--font-inter);
+  color: var(--dark-gray);
+  background: transparent;
+  -moz-appearance: textfield;
+}
+
+.priceInput::-webkit-outer-spin-button,
+.priceInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.priceInput::placeholder {
+  color: var(--pale-steel-gray);
+}
+
+.priceSeparator {
+  font-size: 0.75rem;
+  color: var(--pale-steel-gray);
+  flex-shrink: 0;
+}

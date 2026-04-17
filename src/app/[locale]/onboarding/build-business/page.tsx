@@ -4,10 +4,12 @@ import { useState } from "react";
 import ServicePicker, {
   ServiceItem,
 } from "@/presentation/components/form/ServicePicker/ServicePicker";
+import CategoryConfigCard from "@/presentation/components/form/CategoryConfigCard/CategoryConfigCard";
 import GetStartedButton from "@/presentation/components/form/GetStartedButton/GetStartedButton";
 import { useOnboardingSteps } from "@/application/hooks/useOnboardingSteps";
 import { validateStep } from "@/domain/validation/validation";
 import { buildBusinessSchema } from "@/domain/validation/schema";
+import { CATEGORY_CONFIGS } from "@/domain/data/service-configs";
 import layoutStyles from "../Onboarding.module.css";
 import styles from "./BuildBusiness.module.css";
 
@@ -50,12 +52,42 @@ const ALL_SERVICES: ServiceItem[] = [
   { id: "inspection",         label: "Full Vehicle Inspection", category: "General Maintenance" },
 ];
 
+type PriceRange = { min: string; max: string };
 type Errors = Partial<Record<string, string>>;
 
 export default function BuildBusinessPage() {
   const { goToNextStep } = useOnboardingSteps();
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  /** Category → { optionKey → selected values } */
+  const [categoryInventory, setCategoryInventory] = useState<
+    Record<string, Record<string, string[]>>
+  >({});
+  /** serviceId → price range */
+  const [servicePrices, setServicePrices] = useState<Record<string, PriceRange>>({});
   const [errors, setErrors] = useState<Errors>({});
+
+  function handleServiceChange(ids: string[]) {
+    setSelectedServices(ids);
+    // Clean up prices for removed services
+    setServicePrices((prev) => {
+      const next = { ...prev };
+      for (const key of Object.keys(next)) {
+        if (!ids.includes(key)) delete next[key];
+      }
+      return next;
+    });
+  }
+
+  function handleInventoryChange(category: string, key: string, selected: string[]) {
+    setCategoryInventory((prev) => ({
+      ...prev,
+      [category]: { ...prev[category], [key]: selected },
+    }));
+  }
+
+  function handlePriceChange(serviceId: string, price: PriceRange) {
+    setServicePrices((prev) => ({ ...prev, [serviceId]: price }));
+  }
 
   function handleContinue() {
     const result = validateStep(buildBusinessSchema, {
@@ -72,6 +104,19 @@ export default function BuildBusinessPage() {
     goToNextStep();
   }
 
+  // Group selected services by category
+  const categoriesWithServices: Record<string, { id: string; label: string }[]> = {};
+  for (const id of selectedServices) {
+    const service = ALL_SERVICES.find((s) => s.id === id);
+    if (!service) continue;
+    (categoriesWithServices[service.category] ??= []).push({
+      id: service.id,
+      label: service.label,
+    });
+  }
+
+  const categoryEntries = Object.entries(categoriesWithServices);
+
   let delay = 0;
   const step = 150;
 
@@ -86,10 +131,38 @@ export default function BuildBusinessPage() {
           placeholder='Ex: "Oil Change"'
           services={ALL_SERVICES}
           selected={selectedServices}
-          onChange={setSelectedServices}
+          onChange={handleServiceChange}
           error={errors["services"]}
         />
       </div>
+
+      {/* One card per category that has selected services */}
+      {categoryEntries.length > 0 && (
+        <div
+          className={layoutStyles.animated}
+          style={{ animationDelay: `${((delay += step), delay)}ms` }}
+        >
+          <div className={styles.configSection}>
+            <span className={styles.configSectionTitle}>
+              Configure your services
+            </span>
+            <div className={styles.configCards}>
+              {categoryEntries.map(([category, services]) => (
+                <CategoryConfigCard
+                  key={category}
+                  category={category}
+                  services={services}
+                  configOptions={CATEGORY_CONFIGS[category] ?? []}
+                  inventoryValues={categoryInventory[category] ?? {}}
+                  onInventoryChange={handleInventoryChange}
+                  prices={servicePrices}
+                  onPriceChange={handlePriceChange}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       <div
         className={layoutStyles.animated}

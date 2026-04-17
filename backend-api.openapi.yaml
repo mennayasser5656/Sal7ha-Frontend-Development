@@ -1,0 +1,859 @@
+openapi: 3.0.3
+info:
+  title: Car Service Admin API
+  description: |
+    Backend API specification for the Car Service Admin platform.
+    A multi-tenant admin dashboard for car service businesses to manage
+    bookings, onboarding, services, and customers.
+  version: 1.0.0
+  contact:
+    name: Car Service Admin
+
+servers:
+  - url: http://localhost:3333
+    description: Local development
+  - url: https://api.carservice.example.com
+    description: Production
+
+tags:
+  - name: Auth
+  - name: Onboarding
+  - name: Bookings
+  - name: Dashboard
+  - name: Services
+  - name: Business
+
+security:
+  - bearerAuth: []
+
+paths:
+  # ============ AUTH ============
+  /auth/sign-in:
+    post:
+      tags: [Auth]
+      summary: Sign in (client or business)
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInDto'
+      responses:
+        '200':
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/sign-up:
+    post:
+      tags: [Auth]
+      summary: Register a business account
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BusinessSignUpDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '409':
+          description: Email already in use
+
+  /auth/me:
+    get:
+      tags: [Auth]
+      summary: Get current authenticated user
+      responses:
+        '200':
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /auth/sign-out:
+    post:
+      tags: [Auth]
+      summary: Sign out current session
+      responses:
+        '204':
+          description: Signed out
+
+  # ============ ONBOARDING ============
+  /onboarding/progress:
+    get:
+      tags: [Onboarding]
+      summary: Get current onboarding progress
+      responses:
+        '200':
+          description: Progress
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardingProgress'
+
+  /onboarding/owner-information:
+    post:
+      tags: [Onboarding]
+      summary: Submit owner information (step 1)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OwnerInformationDto'
+      responses:
+        '200':
+          description: Saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardingStepResponse'
+
+  /onboarding/business-information:
+    post:
+      tags: [Onboarding]
+      summary: Submit business information (step 2)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BusinessInformationDto'
+      responses:
+        '200':
+          description: Saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardingStepResponse'
+
+  /onboarding/build-business:
+    post:
+      tags: [Onboarding]
+      summary: Submit services, inventory, working hours, prices (step 3)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BuildBusinessDto'
+      responses:
+        '200':
+          description: Saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardingStepResponse'
+
+  /onboarding/bank-details:
+    post:
+      tags: [Onboarding]
+      summary: Submit bank details (step 4)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankDetailsDto'
+      responses:
+        '200':
+          description: Saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardingStepResponse'
+
+  /onboarding/two-factor-auth:
+    post:
+      tags: [Onboarding]
+      summary: Configure 2FA (step 5)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TwoFactorAuthDto'
+      responses:
+        '200':
+          description: Saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardingStepResponse'
+
+  # ============ BOOKINGS ============
+  /bookings:
+    get:
+      tags: [Bookings]
+      summary: List bookings with filters, search, sort, pagination
+      parameters:
+        - in: query
+          name: status
+          schema:
+            $ref: '#/components/schemas/BookingStatus'
+        - in: query
+          name: startDate
+          schema: { type: string, example: "4/14/2026", description: "M/D/YYYY" }
+        - in: query
+          name: endDate
+          schema: { type: string, example: "4/30/2026" }
+        - in: query
+          name: search
+          schema: { type: string, description: "Matches serviceName, carMake, id" }
+        - in: query
+          name: sortBy
+          schema:
+            type: string
+            enum: [serviceName, name, carMake, startDate, endDate, status, price]
+        - in: query
+          name: sortOrder
+          schema: { type: string, enum: [asc, desc], default: asc }
+        - in: query
+          name: page
+          schema: { type: integer, default: 1, minimum: 1 }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 10, minimum: 1, maximum: 100 }
+      responses:
+        '200':
+          description: Paginated booking list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBookings'
+
+    post:
+      tags: [Bookings]
+      summary: Create a booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingCreateDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+
+  /bookings/{id}:
+    get:
+      tags: [Bookings]
+      summary: Get booking by id
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '200':
+          description: Booking detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    patch:
+      tags: [Bookings]
+      summary: Update booking fields
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingUpdateDto'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+
+    delete:
+      tags: [Bookings]
+      summary: Delete booking
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '204':
+          description: Deleted
+
+  /bookings/{id}/status:
+    put:
+      tags: [Bookings]
+      summary: Update booking status
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  $ref: '#/components/schemas/BookingStatus'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+
+  /bookings/batch/status:
+    put:
+      tags: [Bookings]
+      summary: Bulk update booking statuses (accept/decline selection)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids, status]
+              properties:
+                ids:
+                  type: array
+                  items: { type: string }
+                status:
+                  $ref: '#/components/schemas/BookingStatus'
+      responses:
+        '200':
+          description: Batch result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  updated: { type: integer }
+                  failed: { type: integer }
+
+  # ============ DASHBOARD ============
+  /dashboard/summary:
+    get:
+      tags: [Dashboard]
+      summary: Status count widgets for dashboard
+      responses:
+        '200':
+          description: Summary counts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardSummary'
+
+  /dashboard/bookings/month:
+    get:
+      tags: [Dashboard]
+      summary: Bookings for a specific month (calendar widget)
+      parameters:
+        - in: query
+          name: year
+          required: true
+          schema: { type: integer, example: 2026 }
+        - in: query
+          name: month
+          required: true
+          schema: { type: integer, minimum: 0, maximum: 11, description: "0=Jan" }
+      responses:
+        '200':
+          description: Bookings in month
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  year: { type: integer }
+                  month: { type: integer }
+                  bookings:
+                    type: array
+                    items: { $ref: '#/components/schemas/Booking' }
+
+  # ============ SERVICES / CATALOG ============
+  /services/catalog:
+    get:
+      tags: [Services]
+      summary: Static catalog of categories, services, and configuration options
+      security: []
+      responses:
+        '200':
+          description: Catalog
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServiceCategory'
+
+  /business/services:
+    get:
+      tags: [Business]
+      summary: Get services offered by the current business
+      responses:
+        '200':
+          description: Business services
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/BusinessService' }
+
+    put:
+      tags: [Business]
+      summary: Replace list of offered services
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items: { $ref: '#/components/schemas/BusinessService' }
+      responses:
+        '200':
+          description: Updated
+
+  /business/profile:
+    get:
+      tags: [Business]
+      summary: Get business profile
+      responses:
+        '200':
+          description: Business profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Business'
+    patch:
+      tags: [Business]
+      summary: Update business profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Business'
+      responses:
+        '200':
+          description: Updated
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    IdPath:
+      in: path
+      name: id
+      required: true
+      schema: { type: string }
+
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        statusCode: { type: integer }
+        message: { type: string }
+        error: { type: string }
+
+    # ---------- Auth ----------
+    SignInDto:
+      type: object
+      required: [email, password, role]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, minLength: 12 }
+        role:
+          type: string
+          enum: [client, business]
+
+    AuthResponse:
+      type: object
+      properties:
+        access_token: { type: string }
+
+    User:
+      type: object
+      properties:
+        id: { type: string }
+        email: { type: string, format: email }
+        role: { type: string, enum: [client, business, admin] }
+        firstName: { type: string }
+        lastName: { type: string }
+        phoneNumber: { type: string }
+        businessId: { type: string, nullable: true }
+        onboardingCompleted: { type: boolean }
+        twoFactorEnabled: { type: boolean }
+        createdAt: { type: string, format: date-time }
+
+    BusinessSignUpDto:
+      type: object
+      required:
+        - email
+        - password
+        - name
+        - phoneNumber
+        - country
+        - city
+        - commercialRegistraionNumber
+        - taxIdentificationNumber
+        - businessOwner
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, minLength: 12 }
+        name: { type: string }
+        phoneNumber: { type: string }
+        country: { type: string }
+        city: { type: string }
+        commercialRegistraionNumber: { type: integer }
+        taxIdentificationNumber: { type: integer }
+        businessOwner:
+          type: object
+          required: [email, firstName, lastName, phoneNumber, streetAddress, country, city]
+          properties:
+            email: { type: string, format: email }
+            firstName: { type: string }
+            lastName: { type: string }
+            phoneNumber: { type: string }
+            streetAddress: { type: string }
+            country: { type: string }
+            city: { type: string }
+
+    # ---------- Onboarding ----------
+    OnboardingProgress:
+      type: object
+      properties:
+        currentStep: { type: string }
+        completedSteps:
+          type: array
+          items:
+            type: string
+            enum:
+              - owner-information
+              - business-information
+              - build-business
+              - bank-details
+              - two-factor-auth
+        percent: { type: integer, minimum: 0, maximum: 100 }
+
+    OnboardingStepResponse:
+      type: object
+      properties:
+        success: { type: boolean }
+        nextStep: { type: string, nullable: true }
+
+    Address:
+      type: object
+      required: [country, streetAddress, city, state, zipCode]
+      properties:
+        country: { type: string, example: SA }
+        streetAddress: { type: string }
+        city: { type: string }
+        state: { type: string }
+        zipCode: { type: string }
+
+    OwnerInformationDto:
+      type: object
+      required: [firstName, lastName, email, location]
+      properties:
+        firstName: { type: string }
+        lastName: { type: string }
+        email: { type: string, format: email }
+        location: { $ref: '#/components/schemas/Address' }
+
+    BusinessInformationDto:
+      type: object
+      required: [businessName, businessType, employeeCount, location]
+      properties:
+        businessName: { type: string }
+        businessType:
+          type: string
+          enum: [general-repair, specialized, body-paint, quick-service]
+        employeeCount:
+          type: string
+          enum: [small, medium, large]
+        location: { $ref: '#/components/schemas/Address' }
+
+    WorkingHours:
+      type: object
+      properties:
+        open: { type: string, example: "09:00" }
+        close: { type: string, example: "18:00" }
+
+    PriceRange:
+      type: object
+      properties:
+        min: { type: string }
+        max: { type: string }
+
+    BuildBusinessDto:
+      type: object
+      required: [services, workingHours]
+      properties:
+        services:
+          type: array
+          items: { type: string }
+          description: Array of service ids
+          minItems: 1
+        workingHours: { $ref: '#/components/schemas/WorkingHours' }
+        categoryInventory:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+              type: array
+              items: { type: string }
+          description: "categoryName -> configKey -> selected options"
+        servicePrices:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/PriceRange'
+
+    BankDetailsDto:
+      type: object
+      required: [bankName, accountHolder, iban]
+      properties:
+        bankName: { type: string }
+        accountHolder: { type: string }
+        iban:
+          type: string
+          pattern: '^[A-Z]{2}\d{2}[A-Za-z0-9]{4,30}$'
+
+    TwoFactorAuthDto:
+      type: object
+      required: [method]
+      properties:
+        method:
+          type: string
+          enum: [sms, authenticator]
+        phone: { type: string, nullable: true }
+
+    # ---------- Bookings ----------
+    BookingStatus:
+      type: string
+      enum: [In-Progress, Completed, Pending, Cancelled, Accepted]
+
+    ServiceDetail:
+      type: object
+      properties:
+        label: { type: string }
+        value: { type: string }
+
+    Booking:
+      type: object
+      properties:
+        id: { type: string }
+        serviceName: { type: string }
+        serviceIcon: { type: string }
+        ownerIcon: { type: string }
+        name: { type: string, description: Customer name }
+        carMake: { type: string }
+        carModel: { type: string }
+        carYear: { type: string }
+        startDate: { type: string, example: "4/14/2026" }
+        endDate: { type: string, example: "4/16/2026" }
+        status: { $ref: '#/components/schemas/BookingStatus' }
+        price: { type: number, format: float }
+        serviceDetails:
+          type: array
+          items: { $ref: '#/components/schemas/ServiceDetail' }
+
+    BookingCreateDto:
+      type: object
+      required: [serviceId, customerId, carMake, carModel, carYear, startDate, endDate]
+      properties:
+        serviceId: { type: string }
+        customerId: { type: string }
+        carMake: { type: string }
+        carModel: { type: string }
+        carYear: { type: string }
+        startDate: { type: string }
+        endDate: { type: string }
+        price: { type: number }
+        serviceDetails:
+          type: array
+          items: { $ref: '#/components/schemas/ServiceDetail' }
+
+    BookingUpdateDto:
+      type: object
+      properties:
+        status: { $ref: '#/components/schemas/BookingStatus' }
+        startDate: { type: string }
+        endDate: { type: string }
+        price: { type: number }
+        serviceDetails:
+          type: array
+          items: { $ref: '#/components/schemas/ServiceDetail' }
+
+    Pagination:
+      type: object
+      properties:
+        total: { type: integer }
+        page: { type: integer }
+        limit: { type: integer }
+        pages: { type: integer }
+
+    PaginatedBookings:
+      type: object
+      properties:
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/Booking' }
+        pagination: { $ref: '#/components/schemas/Pagination' }
+
+    # ---------- Dashboard ----------
+    DashboardSummary:
+      type: object
+      properties:
+        totalBookings: { type: integer }
+        inProgress: { type: integer }
+        completed: { type: integer }
+        pending: { type: integer }
+        cancelled: { type: integer }
+        accepted: { type: integer }
+
+    # ---------- Services Catalog ----------
+    ServiceCategory:
+      type: object
+      properties:
+        id: { type: string, example: wheel-services }
+        name: { type: string, example: Wheel Services }
+        services:
+          type: array
+          items: { $ref: '#/components/schemas/CatalogService' }
+        configOptions:
+          type: object
+          additionalProperties:
+            type: array
+            items: { type: string }
+          description: configKey -> list of allowed values
+
+    CatalogService:
+      type: object
+      properties:
+        id: { type: string, example: tire-rotation }
+        name: { type: string, example: Tire Rotation }
+        categoryId: { type: string }
+        icon: { type: string }
+
+    BusinessService:
+      type: object
+      properties:
+        serviceId: { type: string }
+        priceMin: { type: number }
+        priceMax: { type: number }
+        enabled: { type: boolean }
+
+    # ---------- Business ----------
+    Business:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        phoneNumber: { type: string }
+        email: { type: string, format: email }
+        commercialRegistraionNumber: { type: integer }
+        taxIdentificationNumber: { type: integer }
+        businessType:
+          type: string
+          enum: [general-repair, specialized, body-paint, quick-service]
+        employeeCount:
+          type: string
+          enum: [small, medium, large]
+        location: { $ref: '#/components/schemas/Address' }
+        workingHours: { $ref: '#/components/schemas/WorkingHours' }
+        onboardingCompleted: { type: boolean }
+        createdAt: { type: string, format: date-time }
+
+# ============================================================
+# DATABASE SCHEMA (informational — not part of OpenAPI runtime)
+# ============================================================
+# Tables the backend should provide:
+#
+# users
+#   id PK, email UNIQUE, password_hash, role ENUM(client,business,admin),
+#   first_name, last_name, phone_number, business_id FK->businesses.id NULL,
+#   two_factor_enabled BOOL, two_factor_method ENUM(sms,authenticator) NULL,
+#   onboarding_completed BOOL DEFAULT false,
+#   created_at, updated_at
+#
+# businesses
+#   id PK, name, email, phone_number,
+#   commercial_registration_number, tax_identification_number,
+#   business_type ENUM, employee_count ENUM,
+#   country, street_address, city, state, zip_code,
+#   working_hours_open TIME, working_hours_close TIME,
+#   onboarding_completed BOOL,
+#   created_at, updated_at
+#
+# bank_details
+#   id PK, business_id FK UNIQUE, bank_name, account_holder, iban,
+#   created_at, updated_at
+#
+# service_categories (seeded)
+#   id PK, name
+#
+# services (seeded catalog)
+#   id PK, category_id FK, name, icon
+#
+# service_config_options (seeded; e.g. tire brands, oil types)
+#   id PK, category_id FK, config_key, value
+#
+# business_services (what a business offers)
+#   id PK, business_id FK, service_id FK,
+#   price_min DECIMAL, price_max DECIMAL, enabled BOOL,
+#   UNIQUE(business_id, service_id)
+#
+# business_inventory (selected config options per category)
+#   id PK, business_id FK, category_id FK, config_key, value
+#
+# customers
+#   id PK, business_id FK, first_name, last_name, email, phone_number,
+#   avatar_url, created_at
+#
+# cars
+#   id PK, customer_id FK, make, model, year, plate, created_at
+#
+# bookings
+#   id PK (string), business_id FK, customer_id FK, car_id FK, service_id FK,
+#   status ENUM(In-Progress, Completed, Pending, Cancelled, Accepted),
+#   start_date DATE, end_date DATE, price DECIMAL,
+#   created_at, updated_at
+#
+# booking_service_details
+#   id PK, booking_id FK, label, value
+#
+# sessions / refresh_tokens (auth)
+#   id PK, user_id FK, token_hash, expires_at, created_at

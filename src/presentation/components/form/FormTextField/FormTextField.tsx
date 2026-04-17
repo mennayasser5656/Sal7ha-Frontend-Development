@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import styles from "./FormTextField.module.css";
 
 interface FormTextFieldProps {
   label: string;
@@ -32,15 +31,15 @@ const FormTextField = ({
   const filled = (value ?? "").length > 0;
 
   const wrapperClass = [
-    styles.fieldWrapper,
-    filled ? styles.filled : "",
-    error ? styles.error : "",
+    "floatField",
+    filled ? "floatFieldFilled" : "",
+    error ? "floatFieldError" : "",
   ]
     .filter(Boolean)
     .join(" ");
 
   return (
-    <div style={{ gridColumn: `span ${span}` }}>
+    <div style={{ gridColumn: `span ${span}`, cursor: "text" }}>
       <div
         className={wrapperClass}
         onClick={(e) => {
@@ -48,12 +47,12 @@ const FormTextField = ({
           input?.focus();
         }}
       >
-        <label className={styles.label}>
+        <label className="floatFieldLabel">
           {label}
           {required && " *"}
         </label>
         <input
-          className={styles.input}
+          className="floatFieldInput"
           type={type}
           name={name}
           value={value}
@@ -65,7 +64,7 @@ const FormTextField = ({
           required={required}
         />
       </div>
-      {error && <p className={styles.errorText}>{error}</p>}
+      {error && <p className="floatFieldError">{error}</p>}
     </div>
   );
 };

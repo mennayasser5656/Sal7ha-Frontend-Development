@@ -189,7 +189,7 @@ export default function ListView({ bookings }: ListViewProps) {
                       <p>{booking.serviceName}</p>
                     </div>
                   </td>
-                  <td>{booking.carType}</td>
+                  <td>{booking.carMake} {booking.carModel} {booking.carYear}</td>
                   <td>{booking.startDate}</td>
                   <td>{booking.endDate}</td>
                   <td>{renderStatusComponent(booking.status)}</td>

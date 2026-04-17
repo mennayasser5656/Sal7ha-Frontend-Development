@@ -1,0 +1,65 @@
+.container {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideDown 0.3s ease;
+  white-space: nowrap;
+}
+
+.accepted {
+  background-color: #10b981;
+}
+
+.declined {
+  background-color: #ef4444;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0.8;
+  transition: opacity 0.15s ease;
+}
+
+.closeBtn:hover {
+  opacity: 1;
+}
+
+.closeBtn svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
