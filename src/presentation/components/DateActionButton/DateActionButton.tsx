@@ -70,7 +70,7 @@ export default function DateActionButton({ range, onRangeChange }: DateActionBut
     <div className={styles.wrapper} ref={ref}>
       <button className={styles.trigger} onClick={() => setOpen(!open)}>
         <span>Date</span>
-        <FiCalendar className={styles.calendarIcon} />
+        <FiCalendar style={{ width: "0.85rem", height: "0.85rem", flexShrink: 0 }} />
       </button>
 
       {open && (
