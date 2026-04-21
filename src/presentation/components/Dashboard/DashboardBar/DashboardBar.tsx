@@ -89,8 +89,8 @@ export default function DashboardBar() {
               icon={<FiArchive />}
               hoveredIcon={<FaArchive />}
               text="Storage"
-              isSelected={isActive("/storage")}
-              onClick={() => handleNavigation("/en/storage")}
+              isSelected={isActive("/overview") || isActive("/inventory")}
+              onClick={() => handleNavigation("/en/overview")}
             />
             <DashboardItem
               icon={<RiNotification3Line />}
