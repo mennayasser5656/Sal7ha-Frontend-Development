@@ -149,3 +149,52 @@
   background-color: var(--selective-yellow);
 }
 
+/* ── Table cell renderers ── */
+.serviceName {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.serviceName img {
+  border-radius: 0.3rem;
+}
+
+.ownerInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ownerImage {
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.statusCell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rowMenuItem {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  color: #333;
+}
+
+.rowMenuItem:hover {
+  background-color: #f5f5f5;
+}
+

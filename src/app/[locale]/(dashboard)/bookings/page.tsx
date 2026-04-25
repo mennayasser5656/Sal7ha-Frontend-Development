@@ -3,14 +3,62 @@
 import { useState } from "react";
 import styles from "./bookings.module.css";
 import { RiSearch2Line } from "react-icons/ri";
-import TableView from "@/presentation/components/bookings/TableView/TableView";
+import TableView, { ColumnDef } from "@/presentation/components/TableView/TableView";
+import OverlayBookingDetails from "@/presentation/components/bookings/OverlayBookingDetails/OverlayBookingDetails";
+import StatusIcon from "@/presentation/components/common/StatusIcon/StatusIcon";
 import Dropdown from "@/presentation/components/Dropdown/Dropdown";
 import ActionDropdown from "@/presentation/components/ActionDropdown/ActionDropdown";
 import DateActionButton from "@/presentation/components/DateActionButton/DateActionButton";
 import ToastContainer from "@/presentation/components/Toast/Toast";
 import { useBookings } from "@/application/hooks/useBookings";
+import Booking from "@/domain/entities/Booking";
+import { SortKey } from "@/infrastructure/services/bookings.service";
 
 const STATUS_FILTERS = ["In-Progress", "Completed", "Pending", "Cancelled", "Accepted"];
+
+const COLUMNS: ColumnDef<Booking>[] = [
+  {
+    key: "serviceName",
+    label: "Service Name",
+    sortable: true,
+    render: (b) => (
+      <div className={styles.serviceName}>
+        <img src={b.serviceIcon} alt="" />
+        <p>{b.serviceName}</p>
+      </div>
+    ),
+  },
+  {
+    key: "name",
+    label: "Car Owner",
+    sortable: true,
+    render: (b) => (
+      <div className={styles.ownerInfo}>
+        <img src={b.ownerIcon} alt={b.name} className={styles.ownerImage} />
+        <span>{b.name}</span>
+      </div>
+    ),
+  },
+  {
+    key: "carMake",
+    label: "Brand",
+    sortable: true,
+    render: (b) => `${b.carMake} ${b.carModel} ${b.carYear}`,
+  },
+  { key: "startDate", label: "Start Date", sortable: true, render: (b) => b.startDate },
+  { key: "endDate", label: "End Date", sortable: true, render: (b) => b.endDate },
+  {
+    key: "status",
+    label: "Status",
+    sortable: true,
+    render: (b) => (
+      <div className={styles.statusCell}>
+        <StatusIcon status={b.status} />
+        <span>{b.status}</span>
+      </div>
+    ),
+  },
+];
 
 export default function BookingsView() {
   const {
@@ -27,10 +75,20 @@ export default function BookingsView() {
     declineBookings,
     notifications,
     dismissNotification,
-    ...tableProps
+    sortKey,
+    sortDirection,
+    handleSort,
+    currentPage,
+    totalPages,
+    itemsPerPage,
+    setPerPage,
+    goToPage,
+    goToPreviousPage,
+    goToNextPage,
   } = useBookings();
 
   const [selectedBookings, setSelectedBookings] = useState<Set<string>>(new Set());
+  const [openBooking, setOpenBooking] = useState<Booking | null>(null);
 
   const dateRange = dateRangeStart ? { start: dateRangeStart, end: dateRangeEnd } : null;
 
@@ -61,10 +119,7 @@ export default function BookingsView() {
             onSelect={setSelectedStatus}
             label="Status"
           />
-          <DateActionButton
-            range={dateRange}
-            onRangeChange={handleRangeChange}
-          />
+          <DateActionButton range={dateRange} onRangeChange={handleRangeChange} />
           <div className={styles.searchBar}>
             <RiSearch2Line />
             <input
@@ -84,13 +139,52 @@ export default function BookingsView() {
           />
         </div>
       </div>
+
+      {openBooking && (
+        <OverlayBookingDetails booking={openBooking} onClose={() => setOpenBooking(null)} />
+      )}
+
       <TableView
-        bookings={bookings}
-        {...tableProps}
-        selectedBookings={selectedBookings}
-        setSelectedBookings={setSelectedBookings}
-        onAcceptBooking={(id) => acceptBookings(new Set([id]))}
-        onDeclineBooking={(id) => declineBookings(new Set([id]))}
+        columns={COLUMNS}
+        data={bookings}
+        getRowId={(b) => b.id}
+        selectedRows={selectedBookings}
+        setSelectedRows={setSelectedBookings}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        itemsPerPage={itemsPerPage}
+        setPerPage={setPerPage}
+        goToPage={goToPage}
+        goToPreviousPage={goToPreviousPage}
+        goToNextPage={goToNextPage}
+        sortKey={sortKey ?? undefined}
+        sortDirection={sortDirection}
+        onSort={(key) => handleSort(key as SortKey)}
+        onRowClick={setOpenBooking}
+        rowActions={(booking, close) => (
+          <>
+            <button
+              className={styles.rowMenuItem}
+              onClick={(e) => {
+                e.stopPropagation();
+                acceptBookings(new Set([booking.id]));
+                close();
+              }}
+            >
+              Accept
+            </button>
+            <button
+              className={styles.rowMenuItem}
+              onClick={(e) => {
+                e.stopPropagation();
+                declineBookings(new Set([booking.id]));
+                close();
+              }}
+            >
+              Decline
+            </button>
+          </>
+        )}
       />
     </div>
   );

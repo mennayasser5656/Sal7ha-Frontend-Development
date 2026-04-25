@@ -236,3 +236,122 @@
 .exportBtn:hover {
   background-color: #333;
 }
+
+/* ── Table cell renderers ── */
+.paymentId {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #555;
+}
+
+.customerName {
+  color: #111;
+  font-weight: 500;
+}
+
+.serviceName {
+  color: #111;
+  font-weight: 500;
+}
+
+.methodCell {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+}
+
+.methodIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  font-size: 0.9rem;
+}
+
+.methodIconVisa {
+  color: #1a1f71;
+}
+
+.methodIconMada {
+  color: #e07b00;
+}
+
+.methodIconBank {
+  color: #555;
+}
+
+.cashDot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background-color: #22c55e;
+  flex-shrink: 0;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 2rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.statusDot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.statusPaid {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+.statusPaid .statusDot {
+  background-color: #16a34a;
+}
+
+.statusPending {
+  background-color: #fff7ed;
+  color: #ea580c;
+}
+.statusPending .statusDot {
+  background-color: #ea580c;
+}
+
+.statusRefunded {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+.statusRefunded .statusDot {
+  background-color: #2563eb;
+}
+
+.statusFailed {
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+.statusFailed .statusDot {
+  background-color: #dc2626;
+}
+
+.rowMenuItem {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  color: #333;
+}
+
+.rowMenuItem:hover {
+  background-color: #f5f5f5;
+}
