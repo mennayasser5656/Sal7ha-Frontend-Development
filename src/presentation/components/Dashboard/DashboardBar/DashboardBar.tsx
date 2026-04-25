@@ -118,7 +118,7 @@ export default function DashboardBar() {
               hoveredIcon={<FaReceipt />}
               text="Payments"
               isSelected={isActive("/payments")}
-              onClick={() => handleNavigation("payments")}
+              onClick={() => handleNavigation("/en/payments")}
             />
           </div>
           <hr className={styles.dashedDivider} />

@@ -63,7 +63,7 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 2rem;
+  gap: 5rem;
 }
 
 @media (max-width: 1200px) {
@@ -112,17 +112,16 @@
 }
 
 .details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+  row-gap: 0.2rem;
   font-size: 0.75rem;
   color: #555;
 }
 
 .detailRow {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
+  display: contents;
 }
 
 .detailLabel {
@@ -132,15 +131,15 @@
 .detailValue {
   color: #222;
   font-weight: 500;
-  text-align: right;
+  text-align: start;
 }
 
 .actions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: auto;
   justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: auto;
 }
 
 .actionsRight {

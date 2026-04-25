@@ -1,0 +1,238 @@
+.section {
+  display: flex;
+  align-items: start;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: -0.1rem;
+  padding: 1rem;
+  width: 100%;
+  border-bottom: 1px solid lightgray;
+  padding-bottom: 2rem;
+}
+
+/* ── Summary Cards ── */
+.cards {
+  display: flex;
+  gap: 1rem;
+  padding: 0 1rem;
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 1.1rem 1.5rem 1.2rem;
+  border-radius: 0.75rem;
+  background-color: #f5f5f3;
+  flex: 1;
+}
+
+.cardDark {
+  background-color: #111;
+  color: white;
+}
+
+.cardLabel {
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: #888;
+  letter-spacing: 0.04rem;
+  text-transform: uppercase;
+}
+
+.cardDark .cardLabel {
+  color: #aaa;
+}
+
+.cardAmount {
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.06rem;
+  line-height: 1.1;
+}
+
+.cardSub {
+  font-size: 0.7rem;
+  color: #888;
+  margin-top: 0.1rem;
+}
+
+.cardDark .cardSub {
+  color: #aaa;
+}
+
+/* ── Tools Bar ── */
+.tools {
+  display: flex;
+  width: 100%;
+  padding: 0 1rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.toolsLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  background-color: #e5e5e5;
+  padding: 0.3rem 0.6rem;
+  gap: 0.3rem;
+  border-radius: 2rem;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #333;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.searchBar:focus-within {
+  background-color: #000;
+  color: #fff;
+}
+
+.searchBar input {
+  outline: none;
+  border: none;
+  background: transparent;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: black;
+  width: 6ch;
+  transition: all 0.3s ease;
+}
+
+.searchBar:focus-within input {
+  width: 16ch;
+  color: #fff;
+}
+
+.searchBar input::placeholder {
+  color: black;
+}
+
+.searchBar svg {
+  flex-shrink: 0;
+}
+
+.tools svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.toolsRight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ── Payment Actions Dropdown ── */
+.actionsWrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.actionsBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.7rem;
+  background-color: #f3f3f3;
+  border: 1px solid #ddd;
+  border-radius: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #333;
+}
+
+.actionsBtn:hover {
+  background-color: #e8e8e8;
+}
+
+.actionsBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  background-color: #000;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 0.6rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.actionsArrow {
+  width: 0.6rem;
+  height: 0.6rem;
+  transition: transform 0.2s ease;
+}
+
+.actionsArrowOpen {
+  transform: rotate(180deg);
+}
+
+.actionsMenu {
+  position: absolute;
+  top: calc(100% + 0.3rem);
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 0.4rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  min-width: 10rem;
+  overflow: hidden;
+}
+
+.actionsMenuItem {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 400;
+  cursor: pointer;
+  color: #333;
+  transition: background-color 0.15s ease;
+}
+
+.actionsMenuItem:hover {
+  background-color: #f5f5f5;
+}
+
+.exportBtn {
+  background-color: #111;
+  color: white;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.45rem 1.1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.exportBtn:hover {
+  background-color: #333;
+}
