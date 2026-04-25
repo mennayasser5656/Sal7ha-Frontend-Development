@@ -4,11 +4,23 @@ import { useState, useMemo, useRef, useCallback } from "react";
 import styles from "./payments.module.css";
 import { RiSearch2Line } from "react-icons/ri";
 import { IoIosArrowDown } from "react-icons/io";
+import { BsCreditCard2Front, BsBank } from "react-icons/bs";
 import Dropdown from "@/presentation/components/Dropdown/Dropdown";
-import PaymentsTableView, { Payment } from "@/presentation/components/payments/PaymentsTableView/PaymentsTableView";
+import TableView, { ColumnDef } from "@/presentation/components/TableView/TableView";
 import { useClickOutside } from "@/application/hooks/useClickOutside";
 
 const STATUS_FILTERS = ["Paid", "Pending", "Refunded", "Failed"];
+
+interface Payment {
+  id: string;
+  customer: string;
+  service: string;
+  method: "visa" | "mada" | "bank" | "cash";
+  methodDetail: string;
+  date: string;
+  amount: number;
+  status: "Paid" | "Pending" | "Refunded" | "Failed";
+}
 
 const MOCK_PAYMENTS: Payment[] = [
   { id: "PAY-8821", customer: "Ali Hassan", service: "Wheel alignment", method: "visa", methodDetail: "4242", date: "Apr 24, 2026", amount: 65, status: "Paid" },
@@ -19,6 +31,73 @@ const MOCK_PAYMENTS: Payment[] = [
   { id: "PAY-8816", customer: "Sara Al-Zahra", service: "Oil change", method: "mada", methodDetail: "3301", date: "Apr 18, 2026", amount: 50, status: "Failed" },
   { id: "PAY-8815", customer: "Hassan Mohamed", service: "Wheel alignment", method: "cash", methodDetail: "", date: "Apr 17, 2026", amount: 65, status: "Paid" },
   { id: "PAY-8814", customer: "Menna Yasser", service: "Engine diagnostics", method: "bank", methodDetail: "", date: "Apr 16, 2026", amount: 120, status: "Pending" },
+];
+
+const STATUS_CLASS: Record<Payment["status"], string> = {
+  Paid: styles.statusPaid,
+  Pending: styles.statusPending,
+  Refunded: styles.statusRefunded,
+  Failed: styles.statusFailed,
+};
+
+function MethodCell({ method, detail }: { method: Payment["method"]; detail: string }) {
+  if (method === "visa") {
+    return (
+      <div className={styles.methodCell}>
+        <span className={`${styles.methodIcon} ${styles.methodIconVisa}`}>
+          <BsCreditCard2Front />
+        </span>
+        <span>Visa {detail && `•••• ${detail}`}</span>
+      </div>
+    );
+  }
+  if (method === "mada") {
+    return (
+      <div className={styles.methodCell}>
+        <span className={`${styles.methodIcon} ${styles.methodIconMada}`}>
+          <BsCreditCard2Front />
+        </span>
+        <span>Mada {detail && `•••• ${detail}`}</span>
+      </div>
+    );
+  }
+  if (method === "bank") {
+    return (
+      <div className={styles.methodCell}>
+        <span className={`${styles.methodIcon} ${styles.methodIconBank}`}>
+          <BsBank />
+        </span>
+        <span>Bank Transfer</span>
+      </div>
+    );
+  }
+  return (
+    <div className={styles.methodCell}>
+      <span className={styles.cashDot} />
+      <span>Cash</span>
+    </div>
+  );
+}
+
+function StatusBadge({ status }: { status: Payment["status"] }) {
+  return (
+    <span className={`${styles.statusBadge} ${STATUS_CLASS[status]}`}>
+      <span className={styles.statusDot} />
+      {status}
+    </span>
+  );
+}
+
+type PaymentSortKey = "id" | "customer" | "service" | "method" | "date" | "amount" | "status";
+
+const COLUMNS: ColumnDef<Payment>[] = [
+  { key: "id", label: "PAYMENT ID", sortable: true, render: (p) => <span className={styles.paymentId}>{p.id}</span> },
+  { key: "customer", label: "CUSTOMER", sortable: true, render: (p) => <span className={styles.customerName}>{p.customer}</span> },
+  { key: "service", label: "SERVICE", sortable: true, render: (p) => <span className={styles.serviceName}>{p.service}</span> },
+  { key: "method", label: "METHOD", sortable: true, render: (p) => <MethodCell method={p.method} detail={p.methodDetail} /> },
+  { key: "date", label: "DATE", sortable: true, render: (p) => p.date },
+  { key: "amount", label: "AMOUNT", sortable: true, render: (p) => `$${p.amount}` },
+  { key: "status", label: "STATUS", sortable: true, render: (p) => <StatusBadge status={p.status} /> },
 ];
 
 function PaymentActionsDropdown({ count, onRefund, onMarkPaid }: { count: number; onRefund: () => void; onMarkPaid: () => void }) {
@@ -51,6 +130,17 @@ export default function PaymentsPage() {
   const [selectedPayments, setSelectedPayments] = useState<Set<string>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [sortKey, setSortKey] = useState<PaymentSortKey | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+
+  const handleSort = (key: PaymentSortKey) => {
+    if (sortKey === key) {
+      setSortDirection((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDirection("asc");
+    }
+  };
 
   const filteredPayments = useMemo(() => {
     return MOCK_PAYMENTS.filter((p) => {
@@ -72,8 +162,19 @@ export default function PaymentsPage() {
   const pending = MOCK_PAYMENTS.filter((p) => p.status === "Pending").reduce((sum, p) => sum + p.amount, 0);
   const revenue = MOCK_PAYMENTS.reduce((sum, p) => sum + p.amount, 0);
 
-  const totalPages = Math.max(1, Math.ceil(filteredPayments.length / itemsPerPage));
-  const paginatedPayments = filteredPayments.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const sortedPayments = useMemo(() => {
+    if (!sortKey) return filteredPayments;
+    const sorted = [...filteredPayments].sort((a, b) => {
+      const av = a[sortKey];
+      const bv = b[sortKey];
+      if (typeof av === "number" && typeof bv === "number") return av - bv;
+      return String(av).localeCompare(String(bv));
+    });
+    return sortDirection === "asc" ? sorted : sorted.reverse();
+  }, [filteredPayments, sortKey, sortDirection]);
+
+  const totalPages = Math.max(1, Math.ceil(sortedPayments.length / itemsPerPage));
+  const paginatedPayments = sortedPayments.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleSetPerPage = (v: number) => {
     setItemsPerPage(v);
@@ -130,10 +231,12 @@ export default function PaymentsPage() {
         </div>
       </div>
 
-      <PaymentsTableView
-        payments={paginatedPayments}
-        selectedPayments={selectedPayments}
-        setSelectedPayments={setSelectedPayments}
+      <TableView
+        columns={COLUMNS}
+        data={paginatedPayments}
+        getRowId={(p) => p.id}
+        selectedRows={selectedPayments}
+        setSelectedRows={setSelectedPayments}
         currentPage={currentPage}
         totalPages={totalPages}
         itemsPerPage={itemsPerPage}
@@ -141,6 +244,25 @@ export default function PaymentsPage() {
         goToPage={setCurrentPage}
         goToPreviousPage={() => setCurrentPage((p) => Math.max(1, p - 1))}
         goToNextPage={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+        sortKey={sortKey ?? undefined}
+        sortDirection={sortDirection}
+        onSort={(key) => handleSort(key as PaymentSortKey)}
+        rowActions={(_payment, close) => (
+          <>
+            <button
+              className={styles.rowMenuItem}
+              onClick={(e) => { e.stopPropagation(); close(); }}
+            >
+              View Details
+            </button>
+            <button
+              className={styles.rowMenuItem}
+              onClick={(e) => { e.stopPropagation(); close(); }}
+            >
+              Refund
+            </button>
+          </>
+        )}
       />
     </div>
   );

@@ -8,6 +8,15 @@
   border-bottom: 1px solid lightgray;
 }
 
+.tableWrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.tableWrapper {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .table {
   min-width: 60rem;
   width: 100%;
@@ -22,22 +31,6 @@
   z-index: 1;
 }
 
-.idColumn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.table th {
-  border-bottom: 1px solid lightgray;
-  background-color: white;
-  color: gray;
-  font-size: 0.7rem;
-  font-weight: 400;
-  vertical-align: middle;
-  cursor: default;
-}
-
 .table th,
 .table td {
   text-align: start;
@@ -47,6 +40,17 @@
 
 .table th {
   border-bottom: 1px solid lightgray;
+  background-color: white;
+  color: gray;
+  font-size: 0.7rem;
+  font-weight: 400;
+  vertical-align: middle;
+}
+
+.table td {
+  font-size: 0.75rem;
+  font-weight: 400;
+  vertical-align: middle;
 }
 
 .table th:nth-child(1),
@@ -57,47 +61,10 @@
   padding-right: 1rem;
 }
 
-.table th:nth-child(2),
-.table td:nth-child(2) {
-  width: 10%;
-}
-
-.table th:nth-child(3),
-.table td:nth-child(3) {
-  width: 15%;
-}
-
-.table th:nth-child(4),
-.table td:nth-child(4) {
-  width: 15%;
-}
-
-.table th:nth-child(5),
-.table td:nth-child(5) {
-  width: 18%;
-}
-
-.table th:nth-child(6),
-.table td:nth-child(6) {
-  width: 12%;
-}
-
-.table th:nth-child(7),
-.table td:nth-child(7) {
-  width: 8%;
-}
-
-.table th:nth-child(8),
-.table td:nth-child(8) {
-  width: 10%;
-}
-
-.actionColumn {
-  width: 1%;
-  white-space: nowrap;
-  text-align: center;
-  padding-left: 1rem;
-  padding-right: 1rem;
+.idColumn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .checkBox[type="checkbox"] {
@@ -106,20 +73,36 @@
   accent-color: var(--selective-yellow);
 }
 
-.table td {
-  font-size: 0.75rem;
-  font-weight: 400;
+.sortableTh {
   cursor: pointer;
-  vertical-align: middle;
 }
 
-.tableWrapper::-webkit-scrollbar {
-  display: none;
+.thContent {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
-.tableWrapper {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.sortedTh,
+.sortedTh .sortIcon {
+  color: black;
+}
+
+.sortIcons {
+  display: flex;
+  flex-direction: column;
+}
+
+.sortIcon {
+  font-size: 0.5rem;
+}
+
+.sortIconActive {
+  color: black;
+}
+
+.clickableRow {
+  cursor: pointer;
 }
 
 .clickableRow:hover {
@@ -131,109 +114,14 @@
   background-color: rgb(from var(--selective-yellow) r g b / 0.1);
 }
 
-.paymentId {
-  font-size: 0.72rem;
-  font-weight: 500;
-  color: #555;
-}
-
-.customerName {
-  color: #111;
-  font-weight: 500;
-}
-
-.serviceName {
-  color: #111;
-  font-weight: 500;
-}
-
-/* ── Method Cell ── */
-.methodCell {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.72rem;
-}
-
-.methodIcon {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  font-size: 0.9rem;
-}
-
-.methodIconVisa {
-  color: #1a1f71;
-}
-
-.methodIconMada {
-  color: #e07b00;
-}
-
-.methodIconBank {
-  color: #555;
-}
-
-.cashDot {
-  width: 0.55rem;
-  height: 0.55rem;
-  border-radius: 50%;
-  background-color: #22c55e;
-  flex-shrink: 0;
-}
-
-/* ── Status Badge ── */
-.statusBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.25rem 0.6rem;
-  border-radius: 2rem;
-  font-size: 0.7rem;
-  font-weight: 500;
+.actionColumn {
+  width: 1%;
   white-space: nowrap;
+  text-align: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
-.statusDot {
-  width: 0.45rem;
-  height: 0.45rem;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.statusPaid {
-  background-color: #dcfce7;
-  color: #16a34a;
-}
-.statusPaid .statusDot {
-  background-color: #16a34a;
-}
-
-.statusPending {
-  background-color: #fff7ed;
-  color: #ea580c;
-}
-.statusPending .statusDot {
-  background-color: #ea580c;
-}
-
-.statusRefunded {
-  background-color: #eff6ff;
-  color: #2563eb;
-}
-.statusRefunded .statusDot {
-  background-color: #2563eb;
-}
-
-.statusFailed {
-  background-color: #fef2f2;
-  color: #dc2626;
-}
-.statusFailed .statusDot {
-  background-color: #dc2626;
-}
-
-/* ── 3-dot action button ── */
 .actionBtn {
   background: #f1f0f0;
   border: 1px solid transparent;
