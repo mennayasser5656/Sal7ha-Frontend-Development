@@ -20,8 +20,6 @@ import {
   MdSpaceDashboard,
   MdBook,
   MdArchive,
-  MdOutlineFeedback,
-  MdFeedback,
 } from "react-icons/md";
 import { FiBook } from "react-icons/fi";
 import { RiNotification3Line, RiNotification3Fill } from "react-icons/ri";
@@ -37,9 +35,14 @@ import { IoRocketOutline } from "react-icons/io5";
 export default function DashboardBar() {
   const router = useRouter();
   const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
 
   const handleNavigation = (path: string) => {
     router.push(path);
+  };
+
+  const openStandalone = (path: string) => {
+    window.open(path, "_blank", "noopener,noreferrer");
   };
 
   const isActive = (path: string) => pathname.endsWith(path);
@@ -129,22 +132,14 @@ export default function DashboardBar() {
               hoveredIcon={<IoIosHelpCircle />}
               text="Help Center"
               isSelected={isActive("/helpCenter") || isActive("/help")}
-              onClick={() => handleNavigation("/en/helpCenter")}
-            />
-
-            <DashboardItem
-              icon={<MdOutlineFeedback />}
-              hoveredIcon={<MdFeedback />}
-              text="Feedback"
-              isSelected={isActive("/feedback")}
-              onClick={() => handleNavigation("/en/feedback")}
+              onClick={() => openStandalone(`/${locale}/helpCenter`)}
             />
             <DashboardItem
               icon={<IoSettingsOutline />}
               hoveredIcon={<IoSettings />}
               text="Settings"
-              isSelected={isActive("/settings")}
-              onClick={() => handleNavigation("/en/settings")}
+              isSelected={pathname.includes("/settings")}
+              onClick={() => handleNavigation("/en/settings/personal")}
             />
           </div>
         </div>
