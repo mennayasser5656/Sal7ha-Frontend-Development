@@ -1,0 +1,74 @@
+.section {
+  display: flex;
+  align-items: start;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.header {
+  width: 100%;
+  padding: 1rem 1rem 0 1rem;
+  border-bottom: 1px solid lightgray;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: -0.1rem;
+  padding-bottom: 1.5rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.tab {
+  position: relative;
+  display: inline-block;
+  background: none;
+  border: none;
+  padding: 0.6rem 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #666;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.tab:hover {
+  color: #000;
+}
+
+.tabActive {
+  color: #000;
+  font-weight: 500;
+}
+
+.tabActive::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background-color: #000;
+}
+
+@media (max-width: 640px) {
+  .header {
+    padding-inline: 0.75rem;
+  }
+
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .tabs {
+    gap: 0.85rem;
+  }
+}

@@ -1,0 +1,229 @@
+.screen {
+  position: relative;
+  min-height: 100vh;
+  background: #fff;
+  color: var(--dark-gray);
+  overflow: hidden;
+}
+
+.progress {
+  position: relative;
+  width: min(76rem, calc(100% - 14rem));
+  margin: 2.35rem auto 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+}
+
+.progressTrack {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 1.3rem;
+  height: 1px;
+  background: #eeeeee;
+}
+
+.step {
+  position: relative;
+  min-height: 1.7rem;
+  color: #b9b9b9;
+}
+
+.stepLabel {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.stepDot {
+  position: absolute;
+  left: 0;
+  top: 1.19rem;
+  width: 0.26rem;
+  height: 0.26rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.stepActive {
+  color: #262626;
+  font-weight: 700;
+}
+
+.stepActive .stepDot {
+  width: 0.36rem;
+  height: 0.36rem;
+  background: var(--selective-yellow);
+}
+
+.backButton,
+.closeButton {
+  position: absolute;
+  top: 2.55rem;
+  display: inline-flex;
+  width: 2.2rem;
+  height: 2.2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #f5f5f5;
+  color: #555;
+  text-decoration: none;
+  box-shadow: 0 0.6rem 1.4rem rgb(0 0 0 / 0.06);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.backButton {
+  left: 2.2rem;
+}
+
+.closeButton {
+  right: 2.2rem;
+}
+
+.backButton:hover,
+.closeButton:hover {
+  background: #ededed;
+  color: #111;
+}
+
+.backButton svg,
+.closeButton svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.content {
+  width: min(47rem, calc(100% - 2rem));
+  margin: 5rem auto 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(20rem, 24rem);
+  gap: 4rem;
+  align-items: start;
+}
+
+.copy h1 {
+  margin: 0 0 1.1rem;
+  font-size: 1.75rem;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.copy p {
+  margin: 0 0 0.8rem;
+  color: #4d4d4d;
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.detailGrid {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #eeeeee;
+}
+
+.detailRow {
+  display: grid;
+  grid-template-columns: minmax(7rem, 9rem) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: center;
+  min-height: 2.6rem;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.detailLabel {
+  color: #9b9b9b;
+  font-size: 0.66rem;
+  font-weight: 600;
+}
+
+.detailValue {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #333;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.totalRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: #262626;
+  font-size: 0.82rem;
+}
+
+.totalRow span {
+  font-weight: 700;
+}
+
+.totalRow strong {
+  font-size: 0.78rem;
+}
+
+.primaryButton {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.35rem;
+  border-radius: 6px;
+  background: #ffc455;
+  color: #262626;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.primaryButton:hover {
+  background: var(--selective-yellow);
+}
+
+@media (max-width: 760px) {
+  .screen {
+    overflow: visible;
+  }
+
+  .progress {
+    width: calc(100% - 2rem);
+    margin-top: 1.25rem;
+    overflow-x: auto;
+    grid-template-columns: repeat(4, minmax(9rem, 1fr));
+    padding-bottom: 0.5rem;
+  }
+
+  .backButton,
+  .closeButton {
+    top: 4.3rem;
+  }
+
+  .backButton {
+    left: 1rem;
+  }
+
+  .closeButton {
+    right: 1rem;
+  }
+
+  .content {
+    margin-top: 5.5rem;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .detailRow {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+    padding: 0.7rem 0;
+  }
+}

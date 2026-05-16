@@ -1,0 +1,277 @@
+.screen {
+  position: relative;
+  min-height: 100vh;
+  background: #fff;
+  color: var(--dark-gray);
+  overflow: hidden;
+}
+
+.progress {
+  position: relative;
+  width: min(76rem, calc(100% - 14rem));
+  margin: 2.35rem auto 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+}
+
+.progressTrack {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 1.3rem;
+  height: 1px;
+  background: #eeeeee;
+}
+
+.step {
+  position: relative;
+  min-height: 1.7rem;
+  color: #b9b9b9;
+}
+
+.stepLabel {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.stepDot {
+  position: absolute;
+  left: 0;
+  top: 1.19rem;
+  width: 0.26rem;
+  height: 0.26rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.stepActive {
+  color: #262626;
+  font-weight: 700;
+}
+
+.stepActive .stepDot {
+  width: 0.36rem;
+  height: 0.36rem;
+  background: var(--selective-yellow);
+}
+
+.closeButton {
+  position: absolute;
+  top: 2.55rem;
+  right: 2.2rem;
+  display: inline-flex;
+  width: 2.2rem;
+  height: 2.2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #f5f5f5;
+  color: #555;
+  text-decoration: none;
+  box-shadow: 0 0.6rem 1.4rem rgb(0 0 0 / 0.06);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.closeButton:hover {
+  background: #ededed;
+  color: #111;
+}
+
+.closeButton svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.content {
+  width: min(47rem, calc(100% - 2rem));
+  margin: 2.4rem auto 0;
+}
+
+.content h1 {
+  margin: 0 0 2rem;
+  text-align: center;
+  font-size: 1.95rem;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.bankGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 2rem;
+  row-gap: 0;
+}
+
+.bankOption {
+  min-height: 4.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid #eeeeee;
+  color: #2f2f2f;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.bankOption:hover {
+  background: #fbfbfb;
+}
+
+.bankIdentity {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.logoFrame {
+  width: 2.4rem;
+  height: 2.4rem;
+  flex: 0 0 2.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bankLogo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.bankText {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+.bankName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.86rem;
+  font-weight: 500;
+}
+
+.bankMeta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #9b9b9b;
+  font-size: 0.66rem;
+  font-weight: 500;
+}
+
+.radioControl {
+  position: relative;
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: 0 0 1.15rem;
+  display: inline-flex;
+}
+
+.radioInput {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.radioVisual {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #cfcfcf;
+  border-radius: 50%;
+  background: #fff;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.radioDot {
+  width: 0.68rem;
+  height: 0.68rem;
+  border-radius: 50%;
+  background: var(--selective-yellow);
+  opacity: 0;
+}
+
+.radioInput:checked + .radioVisual .radioDot {
+  opacity: 1;
+}
+
+.radioInput:focus-visible + .radioVisual {
+  outline: 2px solid rgb(from var(--selective-yellow) r g b / 0.35);
+  outline-offset: 2px;
+}
+
+.actions {
+  width: min(18rem, 100%);
+  margin: 2rem auto 0;
+}
+
+.primaryButton {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.35rem;
+  border-radius: 6px;
+  background: #ffc455;
+  color: #262626;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.primaryButton:hover {
+  background: var(--selective-yellow);
+}
+
+.primaryButtonDisabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+@media (max-width: 760px) {
+  .screen {
+    overflow: visible;
+  }
+
+  .progress {
+    width: calc(100% - 2rem);
+    margin-top: 1.25rem;
+    overflow-x: auto;
+    grid-template-columns: repeat(4, minmax(9rem, 1fr));
+    padding-bottom: 0.5rem;
+  }
+
+  .closeButton {
+    top: 4.3rem;
+    right: 1rem;
+  }
+
+  .content {
+    margin-top: 5.5rem;
+  }
+
+  .content h1 {
+    margin-bottom: 1.25rem;
+    font-size: 1.45rem;
+    text-align: left;
+  }
+
+  .bankGrid {
+    grid-template-columns: 1fr;
+  }
+}

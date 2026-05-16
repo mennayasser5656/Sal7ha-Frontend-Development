@@ -1,0 +1,94 @@
+.section {
+  width: 100%;
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.4rem 1rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.editButton {
+  --edit-btn-size: 1.5rem;
+  --edit-btn-icon-size: 0.7rem;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--edit-btn-size);
+  height: var(--edit-btn-size);
+  flex: 0 0 var(--edit-btn-size);
+  border: 1px solid lightgray;
+  border-radius: 6px;
+  background: lightgray;
+  color: #444;
+  font-size: var(--edit-btn-icon-size);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.editButton:hover {
+  border-color: #cfcfcf;
+  background: #f7f7f7;
+  color: #000;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(9rem, 14rem) minmax(0, 1fr);
+  gap: 0;
+  align-items: center;
+  padding: 0.4rem 1rem;
+}
+
+.rowLabel {
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.rowValue {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.rowLink {
+  width: fit-content;
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--selective-yellow);
+  cursor: pointer;
+}
+
+.rowLink:hover {
+  color: #d99b00;
+}
+
+@media (max-width: 640px) {
+  .row {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+}
