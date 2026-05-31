@@ -10,6 +10,7 @@ import { RiSearch2Line } from "react-icons/ri";
 import { useClickOutside } from "@/application/hooks/useClickOutside";
 import { usePayments } from "@/application/hooks/usePayments";
 import type { Payment, PaymentSortKey } from "@/domain/entities/Payment";
+import DateActionButton from "@/presentation/components/DateActionButton/DateActionButton";
 import Dropdown from "@/presentation/components/Dropdown/Dropdown";
 import TableView, {
   ColumnDef,
@@ -155,6 +156,9 @@ export default function PaymentsPage() {
   const payments = usePayments();
   const params = useParams<{ locale: string }>();
   const exportHref = `/${params.locale}/payments/export`;
+  const dateRange = payments.dateRangeStart
+    ? { start: payments.dateRangeStart, end: payments.dateRangeEnd }
+    : null;
 
   return (
     <div className={styles.section}>
@@ -167,6 +171,10 @@ export default function PaymentsPage() {
             selected={payments.selectedMethod}
             onSelect={payments.setSelectedMethod}
             label="Method"
+          />
+          <DateActionButton
+            range={dateRange}
+            onRangeChange={payments.setDateRange}
           />
           <div className={styles.searchBar}>
             <RiSearch2Line />

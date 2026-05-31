@@ -139,28 +139,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/OnboardingStepResponse'
 
-  /onboarding/build-business:
-    post:
-      tags: [Onboarding]
-      summary: Submit services, inventory, working hours, prices (step 3)
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BuildBusinessDto'
-      responses:
-        '200':
-          description: Saved
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OnboardingStepResponse'
-
   /onboarding/bank-details:
     post:
       tags: [Onboarding]
-      summary: Submit bank details (step 4)
+      summary: Submit bank details
       requestBody:
         required: true
         content:
@@ -178,7 +160,7 @@ paths:
   /onboarding/two-factor-auth:
     post:
       tags: [Onboarding]
-      summary: Configure 2FA (step 5)
+      summary: Configure 2FA
       requestBody:
         required: true
         content:
@@ -563,7 +545,6 @@ components:
             enum:
               - owner-information
               - business-information
-              - build-business
               - bank-details
               - two-factor-auth
         percent: { type: integer, minimum: 0, maximum: 100 }
@@ -611,35 +592,6 @@ components:
       properties:
         open: { type: string, example: "09:00" }
         close: { type: string, example: "18:00" }
-
-    PriceRange:
-      type: object
-      properties:
-        min: { type: string }
-        max: { type: string }
-
-    BuildBusinessDto:
-      type: object
-      required: [services, workingHours]
-      properties:
-        services:
-          type: array
-          items: { type: string }
-          description: Array of service ids
-          minItems: 1
-        workingHours: { $ref: '#/components/schemas/WorkingHours' }
-        categoryInventory:
-          type: object
-          additionalProperties:
-            type: object
-            additionalProperties:
-              type: array
-              items: { type: string }
-          description: "categoryName -> configKey -> selected options"
-        servicePrices:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/PriceRange'
 
     BankDetailsDto:
       type: object

@@ -13,6 +13,8 @@ import {
 export function usePayments() {
   const [payments] = useState(getPaymentHistory);
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
+  const [dateRangeStart, setDateRangeStart] = useState<Date | null>(null);
+  const [dateRangeEnd, setDateRangeEnd] = useState<Date | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [showCards, setShowCards] = useState(true);
   const [selectedPayments, setSelectedPayments] = useState<Set<string>>(
@@ -31,8 +33,10 @@ export function usePayments() {
         payments,
         method: selectedMethod,
         query: searchQuery,
+        rangeStart: dateRangeStart,
+        rangeEnd: dateRangeEnd,
       }),
-    [payments, searchQuery, selectedMethod],
+    [dateRangeEnd, dateRangeStart, payments, searchQuery, selectedMethod],
   );
 
   const sortedPayments = useMemo(
@@ -82,6 +86,12 @@ export function usePayments() {
     setCurrentPage(1);
   }
 
+  function handleDateRangeChange(range: { start: Date; end: Date | null } | null) {
+    setDateRangeStart(range?.start ?? null);
+    setDateRangeEnd(range?.end ?? null);
+    setCurrentPage(1);
+  }
+
   function handleSearchQueryChange(query: string) {
     setSearchQuery(query);
     setCurrentPage(1);
@@ -95,6 +105,9 @@ export function usePayments() {
     methodFilters: PAYMENT_METHOD_FILTERS,
     selectedMethod,
     setSelectedMethod: handleSelectMethod,
+    dateRangeStart,
+    dateRangeEnd,
+    setDateRange: handleDateRangeChange,
     searchQuery,
     setSearchQuery: handleSearchQueryChange,
     showCards,

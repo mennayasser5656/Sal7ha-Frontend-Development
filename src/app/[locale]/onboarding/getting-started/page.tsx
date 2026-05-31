@@ -7,14 +7,13 @@ import Task from "@/presentation/components/form/Task/Task";
 import GetStartedButton from "@/presentation/components/form/GetStartedButton/GetStartedButton";
 import { useOnboardingSteps } from "@/application/hooks/useOnboardingSteps";
 
-const summaryCards = [
-  { title: "Progress", value: "0%" },
-  { title: "Pending", value: "5 Tasks" },
-  { title: "Completed", value: "0 Tasks" },
-];
-
 export default function GettingStartedView() {
   const { steps, startOnboarding } = useOnboardingSteps();
+  const summaryCards = [
+    { title: "Progress", value: "0%" },
+    { title: "Pending", value: `${steps.length} Tasks` },
+    { title: "Completed", value: "0 Tasks" },
+  ];
   let delay = 0;
   const step = 150;
 

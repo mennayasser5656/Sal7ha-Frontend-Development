@@ -15,6 +15,7 @@ type InventoryItem = {
   company: string;
   specification: string;
   capacity: string;
+  price: string;
   details: string;
 };
 
@@ -131,6 +132,7 @@ const INITIAL_ITEMS: InventoryItem[] = [
     company: "Shell",
     specification: "5W-30",
     capacity: "4L",
+    price: "$38",
     details: "Helix HX8",
   },
   {
@@ -140,6 +142,7 @@ const INITIAL_ITEMS: InventoryItem[] = [
     company: "Mobil",
     specification: "10W-40",
     capacity: "4L",
+    price: "$32",
     details: "Super 2000",
   },
   {
@@ -149,6 +152,7 @@ const INITIAL_ITEMS: InventoryItem[] = [
     company: "Michelin",
     specification: "205/55 R16",
     capacity: "Single tire",
+    price: "$115",
     details: "Primacy series",
   },
   {
@@ -158,6 +162,7 @@ const INITIAL_ITEMS: InventoryItem[] = [
     company: "Bosch",
     specification: "70Ah",
     capacity: "12V",
+    price: "$140",
     details: "Start-stop compatible",
   },
   {
@@ -167,6 +172,7 @@ const INITIAL_ITEMS: InventoryItem[] = [
     company: "Mann-Filter",
     specification: "HU 816 x",
     capacity: "Single unit",
+    price: "$18",
     details: "Engine oil filter",
   },
   {
@@ -176,6 +182,7 @@ const INITIAL_ITEMS: InventoryItem[] = [
     company: "Brembo",
     specification: "Ceramic",
     capacity: "Front axle set",
+    price: "$95",
     details: "Low dust compound",
   },
   {
@@ -185,6 +192,7 @@ const INITIAL_ITEMS: InventoryItem[] = [
     company: "Prestone",
     specification: "Ready to use",
     capacity: "4L",
+    price: "$24",
     details: "All vehicles",
   },
   {
@@ -194,6 +202,7 @@ const INITIAL_ITEMS: InventoryItem[] = [
     company: "Bosch",
     specification: "24 inch",
     capacity: "Single blade",
+    price: "$20",
     details: "Hybrid blade",
   },
 ];
@@ -209,6 +218,7 @@ type ItemFieldKey =
   | "company"
   | "specification"
   | "capacity"
+  | "price"
   | "details";
 
 const ITEM_FIELDS: SettingsEditField<ItemFieldKey>[] = [
@@ -266,6 +276,11 @@ const ITEM_FIELDS: SettingsEditField<ItemFieldKey>[] = [
       })),
   },
   {
+    key: "price",
+    label: "Price",
+    placeholder: 'Ex: "$25"',
+  },
+  {
     key: "details",
     label: "Details",
     placeholder: "Select related details",
@@ -284,6 +299,7 @@ const EMPTY_ITEM: Record<ItemFieldKey, string> = {
   company: "",
   specification: "",
   capacity: "",
+  price: "",
   details: "",
 };
 
@@ -308,6 +324,7 @@ export default function ItemsSettingsPage() {
         company: editingItem.company,
         specification: editingItem.specification,
         capacity: editingItem.capacity,
+        price: editingItem.price,
         details: editingItem.details,
       }
     : EMPTY_ITEM;
@@ -320,6 +337,7 @@ export default function ItemsSettingsPage() {
     const company = values.company ?? "";
     const specification = values.specification ?? "";
     const capacity = values.capacity ?? "";
+    const price = values.price ?? "";
     const details = values.details ?? "";
 
     if (!category || !name) return;
@@ -335,6 +353,7 @@ export default function ItemsSettingsPage() {
                 company,
                 specification,
                 capacity,
+                price,
                 details,
               }
             : item,
@@ -350,6 +369,7 @@ export default function ItemsSettingsPage() {
           company,
           specification,
           capacity,
+          price,
           details,
         },
       ]);
@@ -391,6 +411,9 @@ export default function ItemsSettingsPage() {
                     )}
                     {item.capacity && (
                       <span className={styles.serviceMeta}>{item.capacity}</span>
+                    )}
+                    {item.price && (
+                      <span className={styles.serviceMeta}>{item.price}</span>
                     )}
                     <button
                       type="button"

@@ -22,27 +22,6 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
       "Tell us about your car service business — name, type, and registration details.",
     route: "/onboarding/business-information",
   },
-  {
-    id: "build-business",
-    title: "Build Your Business",
-    description:
-      "Set up the services you offer, your working hours, and pricing to get your workshop ready.",
-    route: "/onboarding/build-business",
-  },
-  {
-    id: "bank-details",
-    title: "Bank Details",
-    description:
-      "Add your bank account information so you can receive payments from your customers.",
-    route: "/onboarding/bank-details",
-  },
-  {
-    id: "two-factor-auth",
-    title: "Two Factor Authentication",
-    description:
-      "Secure your account by enabling two-factor authentication for an extra layer of protection.",
-    route: "/onboarding/two-factor-auth",
-  },
 ];
 
 // ── Step helpers ──

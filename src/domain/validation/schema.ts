@@ -83,22 +83,6 @@ export const businessInformationSchema = z.object({
 
 export type BusinessInformationData = z.infer<typeof businessInformationSchema>;
 
-// ── Step 3: Build Your Business ──
-
-export const buildBusinessSchema = z.object({
-  services: z
-    .array(z.string())
-    .min(1, "Please select at least one service."),
-  workingHours: z.object({
-    open: z.string().min(1, "Opening time is required."),
-    close: z.string().min(1, "Closing time is required."),
-  }),
-});
-
-export type BuildBusinessData = z.infer<typeof buildBusinessSchema>;
-
-// ── Step 4: Bank Details ──
-
 export const bankDetailsSchema = z.object({
   bankName: z.string().min(1, "Bank name is required."),
   accountHolder: isTextOnlySchema(true).min(
@@ -112,8 +96,6 @@ export const bankDetailsSchema = z.object({
 });
 
 export type BankDetailsData = z.infer<typeof bankDetailsSchema>;
-
-// ── Step 5: Two Factor Authentication ──
 
 export const twoFactorSchema = z.object({
   method: z.enum(["sms", "authenticator"], {
@@ -129,9 +111,6 @@ export type TwoFactorData = z.infer<typeof twoFactorSchema>;
 export const onboardingSchema = z.object({
   ownerInformation: ownerInformationSchema,
   businessInformation: businessInformationSchema,
-  buildBusiness: buildBusinessSchema,
-  bankDetails: bankDetailsSchema,
-  twoFactor: twoFactorSchema,
 });
 
 export type OnboardingData = z.infer<typeof onboardingSchema>;

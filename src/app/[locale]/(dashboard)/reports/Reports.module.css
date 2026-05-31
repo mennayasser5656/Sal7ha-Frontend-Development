@@ -1,0 +1,25 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: -0.1rem;
+  padding: 1rem;
+  width: 100%;
+  border-bottom: 1px solid lightgray;
+  padding-bottom: 2rem;
+  flex-shrink: 0;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1.5rem;
+  padding: 0 1rem 1.5rem;
+}
