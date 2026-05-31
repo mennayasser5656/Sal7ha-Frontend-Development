@@ -1,0 +1,348 @@
+.card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0.5rem;
+  background-color: #ffffff;
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.titleGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.titleIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background-color: #111;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.03rem;
+  color: #111;
+}
+
+.range {
+  font-size: 0.7rem;
+  color: #9a9a9a;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.controlsSeparator {
+  width: 1px;
+  align-self: stretch;
+  min-height: 1.6rem;
+  background-color: #e5e5e5;
+}
+
+.periodToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.2rem;
+  background-color: #f4f4f3;
+  border-radius: 0.6rem;
+}
+
+.periodBtn {
+  border: none;
+  background: none;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #777;
+  border-radius: 0.45rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.periodBtn:hover {
+  color: #111;
+}
+
+.periodBtnActive {
+  background-color: #111;
+  color: #fff;
+}
+
+.periodBtnActive:hover {
+  color: #fff;
+}
+
+/* ── Stat cards ── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid #ededed;
+  border-radius: 0.85rem;
+  background-color: #fff;
+  min-width: 0;
+}
+
+.statValueRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.statValue {
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: -0.04rem;
+  color: #111;
+  line-height: 1.1;
+}
+
+.statDelta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.statDeltaArrow {
+  font-size: 0.8rem;
+}
+
+.statDeltaUp {
+  color: #16a34a;
+}
+
+.statDeltaDown {
+  color: #dc2626;
+}
+
+.statLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  color: #8a8a8a;
+}
+
+.statIcon {
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #b0b0b0;
+}
+
+/* ── Chart panel ── */
+.chartPanel {
+  border: 1px solid #ededed;
+  border-radius: 0.85rem;
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.total {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.2;
+}
+
+.totalValue {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.totalLabel {
+  font-size: 0.7rem;
+  color: #b5b5b5;
+}
+
+/* ── Chart ── */
+.chart {
+  display: flex;
+  gap: 0.75rem;
+  height: 16rem;
+}
+
+.yAxis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 1.4rem;
+  font-size: 0.7rem;
+  color: #c0c0c0;
+  text-align: right;
+}
+
+.yTick {
+  line-height: 1;
+}
+
+.plot {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.grid {
+  position: absolute;
+  inset: 0 0 1.4rem 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.gridLine {
+  border-top: 1px dashed #efefef;
+}
+
+.bars {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 0.5rem;
+}
+
+.barColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+  height: 100%;
+  min-width: 0;
+}
+
+.bar {
+  position: relative;
+  width: 100%;
+  max-width: 0.9rem;
+  border-radius: 0.5rem;
+  background: linear-gradient(
+    180deg,
+    var(--selective-yellow) 0%,
+    #ffd166 55%,
+    rgba(255, 183, 0, 0.15) 100%
+  );
+  transition: height 0.4s ease;
+}
+
+/* Black money popup anchored above each column while hovering. */
+.barTooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-50%, -0.4rem);
+  padding: 0.25rem 0.5rem;
+  background-color: #111;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 0.4rem;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 4;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.barTooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 0.3rem solid transparent;
+  border-top-color: #111;
+}
+
+/* Horizontal crosshair line following the cursor's height. */
+.crosshair {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed rgba(17, 17, 17, 0.35);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.crosshairValue {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translateY(-50%);
+  padding: 0.1rem 0.35rem;
+  background-color: #111;
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 600;
+  border-radius: 0.3rem;
+  white-space: nowrap;
+}
+
+.barLabel {
+  margin-top: 0.5rem;
+  height: 0.9rem;
+  font-size: 0.65rem;
+  color: #b5b5b5;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}

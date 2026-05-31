@@ -10,8 +10,6 @@ import { FaCalendar } from "react-icons/fa";
 import { TbPremiumRights } from "react-icons/tb";
 import { IoTrophySharp } from "react-icons/io5";
 import { IoTrophyOutline } from "react-icons/io5";
-import { HiNewspaper } from "react-icons/hi2";
-import { RiNewspaperLine } from "react-icons/ri";
 import { FaReceipt } from "react-icons/fa";
 
 
@@ -105,13 +103,6 @@ export default function DashboardBar() {
             <DashboardItem
               icon={<IoTrophyOutline />}
               hoveredIcon={<IoTrophySharp />}
-              text="Reports"
-              isSelected={isActive("/growth")}
-              onClick={() => handleNavigation("/en/growth")}
-            />
-            <DashboardItem
-              icon={<RiNewspaperLine />}
-              hoveredIcon={<HiNewspaper />}
               text="Growth"
               isSelected={isActive("/reports")}
               onClick={() => handleNavigation("/en/reports")}

@@ -111,15 +111,23 @@ export function filterPayments({
   payments,
   method,
   query,
+  rangeStart,
+  rangeEnd,
 }: {
   payments: Payment[];
   method: string | null;
   query: string;
+  rangeStart?: Date | null;
+  rangeEnd?: Date | null;
 }): Payment[] {
   const normalizedQuery = query.trim().toLowerCase();
 
   return payments.filter((payment) => {
     if (method && payment.method !== method) {
+      return false;
+    }
+
+    if (rangeStart && !isPaymentWithinDateRange(payment, rangeStart, rangeEnd)) {
       return false;
     }
 
@@ -134,6 +142,25 @@ export function filterPayments({
       payment.method.toLowerCase().includes(normalizedQuery)
     );
   });
+}
+
+function isPaymentWithinDateRange(
+  payment: Payment,
+  rangeStart: Date,
+  rangeEnd: Date | null | undefined,
+) {
+  const paymentDate = parsePaymentDate(payment.date);
+  if (!paymentDate) {
+    return true;
+  }
+
+  const start = new Date(rangeStart);
+  start.setHours(0, 0, 0, 0);
+
+  const end = rangeEnd ? new Date(rangeEnd) : new Date(rangeStart);
+  end.setHours(23, 59, 59, 999);
+
+  return paymentDate >= start && paymentDate <= end;
 }
 
 export function sortPayments({
