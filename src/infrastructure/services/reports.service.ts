@@ -3,6 +3,7 @@ import type {
   ReportPeriod,
   ReportSellable,
   ReportStat,
+  ReportStatIcon,
 } from "@/domain/entities/Report";
 
 export const REPORT_PERIODS: { key: ReportPeriod; label: string }[] = [
@@ -118,26 +119,60 @@ const ITEM_CATALOG: { key: string; label: string; dailyAvg: number }[] = [
   { key: "air-filter", label: "Air filter", dailyAvg: 40 },
 ];
 
-const STATS_BY_PERIOD: Record<ReportPeriod, ReportStat[]> = {
+/**
+ * Headline KPIs expressed per single bucket (one week/month/year). The actual
+ * card values scale with how many buckets the picked range spans.
+ */
+const STAT_TEMPLATES: Record<
+  ReportPeriod,
+  { key: string; label: string; icon: ReportStatIcon; perBucket: number }[]
+> = {
   week: [
-    { key: "items", label: "Items sold", value: 1236, icon: "customers", delta: 5.1 },
-    { key: "bookings", label: "Bookings made", value: 345, icon: "bookings", delta: 3.5 },
-    { key: "revenue", label: "Revenue", value: 16345, icon: "revenue", delta: 8.2 },
-    { key: "cars", label: "Cars serviced", value: 268, icon: "cars", delta: -1.4 },
+    { key: "items", label: "Items sold", icon: "customers", perBucket: 1236 },
+    { key: "bookings", label: "Bookings made", icon: "bookings", perBucket: 345 },
+    { key: "revenue", label: "Revenue", icon: "revenue", perBucket: 16345 },
+    { key: "cars", label: "Cars serviced", icon: "cars", perBucket: 268 },
   ],
   month: [
-    { key: "items", label: "Items sold", value: 4820, icon: "customers", delta: 9.4 },
-    { key: "bookings", label: "Bookings made", value: 1432, icon: "bookings", delta: 6.8 },
-    { key: "revenue", label: "Revenue", value: 68210, icon: "revenue", delta: 12.6 },
-    { key: "cars", label: "Cars serviced", value: 1104, icon: "cars", delta: -2.1 },
+    { key: "items", label: "Items sold", icon: "customers", perBucket: 4820 },
+    { key: "bookings", label: "Bookings made", icon: "bookings", perBucket: 1432 },
+    { key: "revenue", label: "Revenue", icon: "revenue", perBucket: 68210 },
+    { key: "cars", label: "Cars serviced", icon: "cars", perBucket: 1104 },
   ],
   year: [
-    { key: "items", label: "Items sold", value: 15236, icon: "customers", delta: -3.7 },
-    { key: "bookings", label: "Bookings made", value: 18420, icon: "bookings", delta: 11.2 },
-    { key: "revenue", label: "Revenue", value: 824600, icon: "revenue", delta: 18.9 },
-    { key: "cars", label: "Cars serviced", value: 13280, icon: "cars", delta: 4.3 },
+    { key: "items", label: "Items sold", icon: "customers", perBucket: 15236 },
+    { key: "bookings", label: "Bookings made", icon: "bookings", perBucket: 18420 },
+    { key: "revenue", label: "Revenue", icon: "revenue", perBucket: 824600 },
+    { key: "cars", label: "Cars serviced", icon: "cars", perBucket: 13280 },
   ],
 };
+
+/**
+ * Builds the stat cards for the selected unit and range. Values are the
+ * per-bucket figure × the number of buckets, with a small deterministic wobble
+ * so different ranges read distinctly; the delta is a stable ±15% vs. the
+ * previous span of the same length.
+ */
+function buildStats(
+  unit: ReportPeriod,
+  buckets: number,
+  seed: string,
+): ReportStat[] {
+  return STAT_TEMPLATES[unit].map((template) => {
+    const wobble = 0.92 + seededRandom(`${template.key}-${seed}-v`) * 0.16;
+    const value = Math.round(template.perBucket * buckets * wobble);
+    const delta = Number(
+      (seededRandom(`${template.key}-${seed}-d`) * 30 - 15).toFixed(1),
+    );
+    return {
+      key: template.key,
+      label: template.label,
+      icon: template.icon,
+      value,
+      delta,
+    };
+  });
+}
 
 /**
  * Builds the card data for a bucket `unit` (week/month/year) spanning the
@@ -164,7 +199,7 @@ export function getApplicationStats(
     period: unit,
     rangeLabel: `${formatFull(start)} - ${formatFull(end)}`,
     axisLabels,
-    stats: STATS_BY_PERIOD[unit],
+    stats: buildStats(unit, bucketCount, seed),
     services: SERVICE_CATALOG.map((entry) =>
       buildSellable(entry, unit, seed, bucketCount),
     ),
