@@ -1,0 +1,185 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.titleGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.titleIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background-color: #111;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.03rem;
+  color: #111;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid lightgray;
+  border-radius: 0.5rem;
+}
+
+.tableWrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.tableWrapper {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.table {
+  width: 100%;
+  min-width: 42rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  display: table;
+}
+
+.table th,
+.table td {
+  text-align: start;
+  padding: 0.8rem;
+  border-bottom: 1px solid #f3f3f3;
+}
+
+.table th {
+  border-bottom: 1px solid lightgray;
+  background-color: white;
+  color: gray;
+  font-size: 0.7rem;
+  font-weight: 400;
+  vertical-align: middle;
+}
+
+.table td {
+  font-size: 0.75rem;
+  font-weight: 400;
+  vertical-align: middle;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fb;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.sortableTh {
+  cursor: pointer;
+  user-select: none;
+}
+
+.thContent {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.sortedTh,
+.sortedTh .sortIcon {
+  color: black;
+}
+
+.sortIcons {
+  display: flex;
+  flex-direction: column;
+}
+
+.sortIcon {
+  font-size: 0.5rem;
+}
+
+.sortIconActive {
+  color: black;
+}
+
+.nameCell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.nameCell span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.typeBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-width: 3.4rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 0.4rem;
+  background-color: #f5f5f5;
+  color: #777;
+  font-size: 0.65rem;
+  font-weight: 500;
+}
+
+.revenueCell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.deltaArrow {
+  font-size: 0.8rem;
+}
+
+.deltaUp {
+  color: #16a34a;
+}
+
+.deltaDown {
+  color: #dc2626;
+}

@@ -24,11 +24,13 @@
   white-space: nowrap;
 }
 
-.accepted {
+.accepted,
+.success {
   background-color: #10b981;
 }
 
-.declined {
+.declined,
+.error {
   background-color: #ef4444;
 }
 

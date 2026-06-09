@@ -2,7 +2,7 @@
 
 import styles from "./Toast.module.css";
 import { IoIosClose } from "react-icons/io";
-import { Notification } from "@/application/hooks/useBookings";
+import type { Notification } from "@/domain/entities/Notification";
 
 interface ToastContainerProps {
   notifications: Notification[];

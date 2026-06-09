@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from "react";
 import Booking from "@/domain/entities/Booking";
+import { useToastNotifications } from "@/application/hooks/useToastNotifications";
 import {
   searchBookings,
   generateMockBookings,
@@ -12,15 +13,10 @@ import {
   SortDirection,
 } from "@/infrastructure/services/bookings.service";
 
-export interface Notification {
-  id: string;
-  message: string;
-  type: "accepted" | "declined";
-}
-
 export function useBookings() {
   const [bookings, setBookings] = useState<Booking[]>(generateMockBookings);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const { notifications, dismissNotification, showNotification } =
+    useToastNotifications();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [sortKey, setSortKey] = useState<SortKey>(null);
@@ -71,33 +67,27 @@ export function useBookings() {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   }
 
-  const dismissNotification = useCallback((id: string) => {
-    setNotifications((prev) => prev.filter((n) => n.id !== id));
-  }, []);
-
   const acceptBookings = useCallback((ids: Set<string>) => {
     setBookings((prev) => updateBookingStatuses(prev, ids, "Accepted"));
     ids.forEach((id) => {
-      const notifId = `${id}-${Date.now()}`;
-      setNotifications((prev) => [
-        ...prev,
-        { id: notifId, message: `Service "${id}" Has Been Accepted`, type: "accepted" },
-      ]);
-      setTimeout(() => dismissNotification(notifId), 3000);
+      showNotification(
+        `Service "${id}" Has Been Accepted`,
+        "accepted",
+        "bookingAccepted",
+      );
     });
-  }, [dismissNotification]);
+  }, [showNotification]);
 
   const declineBookings = useCallback((ids: Set<string>) => {
     setBookings((prev) => updateBookingStatuses(prev, ids, "Cancelled"));
     ids.forEach((id) => {
-      const notifId = `${id}-${Date.now()}`;
-      setNotifications((prev) => [
-        ...prev,
-        { id: notifId, message: `Service "${id}" Has Been Declined`, type: "declined" },
-      ]);
-      setTimeout(() => dismissNotification(notifId), 3000);
+      showNotification(
+        `Service "${id}" Has Been Declined`,
+        "declined",
+        "bookingDeclined",
+      );
     });
-  }, [dismissNotification]);
+  }, [showNotification]);
 
   return {
     bookings: currentBookings,

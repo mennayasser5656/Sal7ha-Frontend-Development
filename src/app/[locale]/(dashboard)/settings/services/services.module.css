@@ -45,10 +45,11 @@
 
 .serviceRow {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) repeat(5, auto);
-  align-items: center;
-  gap: 0.75rem;
+  grid-template-columns: minmax(8rem, 12rem) minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 0.55rem 0.75rem;
   min-height: 2.5rem;
+  padding: 0.25rem 0;
 }
 
 .serviceName {
@@ -67,7 +68,27 @@
   color: #666;
 }
 
+.priceMeta {
+  background: #e8f7ee;
+  color: #16803a;
+  font-weight: 600;
+}
+
+.metaList {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+.serviceMeta {
+  white-space: nowrap;
+}
+
 .statusBadge {
+  width: fit-content;
+  white-space: nowrap;
   padding: 0.25rem 0.45rem;
   border-radius: 6px;
   font-size: 0.75rem;
@@ -94,6 +115,7 @@
   justify-content: center;
   width: var(--edit-btn-size);
   height: var(--edit-btn-size);
+  align-self: start;
   border: 1px solid lightgray;
   border-radius: 6px;
   background: lightgray;
@@ -156,7 +178,12 @@
   }
 
   .serviceRow {
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.5rem;
+  }
+
+  .metaList {
+    grid-column: 1 / -1;
   }
 
   .serviceMeta {

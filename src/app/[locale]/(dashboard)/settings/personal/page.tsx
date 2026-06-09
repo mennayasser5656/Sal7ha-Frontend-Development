@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useToastNotifications } from "@/application/hooks/useToastNotifications";
 import {
   SettingsInfoRow,
   SettingsInfoSection,
@@ -9,6 +10,7 @@ import {
   SettingsEditOverlay,
   type SettingsEditField,
 } from "@/presentation/components/settings/SettingsEditOverlay";
+import ToastContainer from "@/presentation/components/Toast/Toast";
 import styles from "./personal.module.css";
 
 type PersonalInfo = {
@@ -67,6 +69,8 @@ const SECTIONS = {
 
 export default function PersonalInformationPage() {
   const [personal, setPersonal] = useState(INITIAL_PERSONAL);
+  const { notifications, dismissNotification, showNotification } =
+    useToastNotifications();
   const [editingSection, setEditingSection] = useState<keyof typeof SECTIONS | null>(
     null,
   );
@@ -74,9 +78,15 @@ export default function PersonalInformationPage() {
 
   return (
     <>
+      <ToastContainer
+        notifications={notifications}
+        onDismiss={dismissNotification}
+      />
       <div className={styles.content}>
         <SettingsInfoSection
           title="Name & Birth Date"
+          setupStatus={!personal.birthDate ? "warning" : undefined}
+          setupLabel="Birth date is not set"
           onEdit={() => setEditingSection("name")}
         >
           <SettingsInfoRow label="First Name" value={personal.firstName} />
@@ -106,12 +116,17 @@ export default function PersonalInformationPage() {
           fields={activeSection.fields}
           values={personal}
           onClose={() => setEditingSection(null)}
-          onSave={(values) =>
+          onSave={(values) => {
             setPersonal((currentPersonal) => ({
               ...currentPersonal,
               ...values,
-            }))
-          }
+            }));
+            showNotification(
+              `${activeSection.title} updated successfully.`,
+              "success",
+              "settingsSaved",
+            );
+          }}
         />
       )}
     </>

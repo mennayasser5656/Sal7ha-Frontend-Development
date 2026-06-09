@@ -2,6 +2,10 @@
 
 import type { ReactNode } from "react";
 import { FiEdit2 } from "react-icons/fi";
+import {
+  SetupStatusIndicator,
+  type SetupStatus,
+} from "@/presentation/components/settings/SetupStatusIndicator";
 import styles from "./SettingsInfoSection.module.css";
 
 export function SettingsInfoSection({
@@ -9,16 +13,25 @@ export function SettingsInfoSection({
   children,
   editLabel,
   onEdit,
+  setupStatus,
+  setupLabel,
 }: {
   title: string;
   children: ReactNode;
   editLabel?: string;
   onEdit?: () => void;
+  setupStatus?: SetupStatus;
+  setupLabel?: string;
 }) {
   return (
     <div className={styles.section}>
       <div className={styles.header}>
-        <h2 className={styles.title}>{title}</h2>
+        <h2 className={styles.title}>
+          {title}
+          {setupStatus && (
+            <SetupStatusIndicator status={setupStatus} label={setupLabel} />
+          )}
+        </h2>
         {onEdit && (
           <button
             type="button"

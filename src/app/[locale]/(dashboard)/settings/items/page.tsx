@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { FiEdit2 } from "react-icons/fi";
+import { useToastNotifications } from "@/application/hooks/useToastNotifications";
 import {
   SettingsEditOverlay,
   type SettingsEditField,
 } from "@/presentation/components/settings/SettingsEditOverlay";
+import ToastContainer from "@/presentation/components/Toast/Toast";
 import styles from "../services/services.module.css";
 
 type InventoryItem = {
@@ -17,6 +19,7 @@ type InventoryItem = {
   capacity: string;
   price: string;
   details: string;
+  usedInServices: string;
 };
 
 const CATEGORY_ORDER = [
@@ -84,6 +87,29 @@ const ITEM_CATALOG: Record<string, string[]> = {
   ],
 };
 
+const SERVICE_USAGE_CATALOG: Record<string, string[]> = {
+  Oil: ["Oil Change", "Engine Tune-Up", "Full Vehicle Inspection"],
+  Tires: [
+    "Tire Replacement",
+    "Tire Rotation",
+    "Wheel Alignment",
+    "Flat Tire Repair",
+  ],
+  Batteries: [
+    "Battery Replacement",
+    "Wiring Diagnostics",
+    "Full Vehicle Inspection",
+  ],
+  Filters: ["Oil Change", "Filter Replacement", "Full Vehicle Inspection"],
+  "Brake Products": [
+    "Brake Pad Replacement",
+    "Brake Fluid Flush",
+    "Disc Resurfacing",
+  ],
+  Coolants: ["Fluid Top-Up", "Engine Tune-Up", "Full Vehicle Inspection"],
+  Wipers: ["Full Vehicle Inspection", "Car Wash & Detailing"],
+};
+
 const COMPANY_CATALOG: Record<string, string[]> = {
   Oil: ["Shell", "Mobil", "Total", "Castrol"],
   Tires: ["Michelin", "Bridgestone", "Pirelli", "Goodyear"],
@@ -134,6 +160,7 @@ const INITIAL_ITEMS: InventoryItem[] = [
     capacity: "4L",
     price: "$38",
     details: "Helix HX8",
+    usedInServices: "Oil Change, Engine Tune-Up",
   },
   {
     id: "mobil-super-2000",
@@ -144,6 +171,7 @@ const INITIAL_ITEMS: InventoryItem[] = [
     capacity: "4L",
     price: "$32",
     details: "Super 2000",
+    usedInServices: "Oil Change, Full Vehicle Inspection",
   },
   {
     id: "michelin-primacy",
@@ -154,6 +182,7 @@ const INITIAL_ITEMS: InventoryItem[] = [
     capacity: "Single tire",
     price: "$115",
     details: "Primacy series",
+    usedInServices: "Tire Replacement, Tire Rotation",
   },
   {
     id: "bosch-agm",
@@ -164,6 +193,7 @@ const INITIAL_ITEMS: InventoryItem[] = [
     capacity: "12V",
     price: "$140",
     details: "Start-stop compatible",
+    usedInServices: "Battery Replacement, Wiring Diagnostics",
   },
   {
     id: "mann-oil-filter",
@@ -174,6 +204,7 @@ const INITIAL_ITEMS: InventoryItem[] = [
     capacity: "Single unit",
     price: "$18",
     details: "Engine oil filter",
+    usedInServices: "Oil Change, Filter Replacement",
   },
   {
     id: "brembo-brake-pads",
@@ -184,6 +215,7 @@ const INITIAL_ITEMS: InventoryItem[] = [
     capacity: "Front axle set",
     price: "$95",
     details: "Low dust compound",
+    usedInServices: "Brake Pad Replacement, Disc Resurfacing",
   },
   {
     id: "prestone-coolant",
@@ -194,6 +226,7 @@ const INITIAL_ITEMS: InventoryItem[] = [
     capacity: "4L",
     price: "$24",
     details: "All vehicles",
+    usedInServices: "Fluid Top-Up, Engine Tune-Up",
   },
   {
     id: "bosch-wiper",
@@ -204,6 +237,7 @@ const INITIAL_ITEMS: InventoryItem[] = [
     capacity: "Single blade",
     price: "$20",
     details: "Hybrid blade",
+    usedInServices: "Full Vehicle Inspection, Car Wash & Detailing",
   },
 ];
 
@@ -219,7 +253,8 @@ type ItemFieldKey =
   | "specification"
   | "capacity"
   | "price"
-  | "details";
+  | "details"
+  | "usedInServices";
 
 const ITEM_FIELDS: SettingsEditField<ItemFieldKey>[] = [
   {
@@ -228,7 +263,14 @@ const ITEM_FIELDS: SettingsEditField<ItemFieldKey>[] = [
     placeholder: "Select a category",
     type: "dropdown",
     options: CATEGORY_OPTIONS,
-    clearsFields: ["name", "company", "specification", "capacity", "details"],
+    clearsFields: [
+      "name",
+      "company",
+      "specification",
+      "capacity",
+      "details",
+      "usedInServices",
+    ],
   },
   {
     key: "name",
@@ -241,6 +283,17 @@ const ITEM_FIELDS: SettingsEditField<ItemFieldKey>[] = [
         label: name,
       })),
     clearsFields: ["company", "specification", "capacity", "details"],
+  },
+  {
+    key: "usedInServices",
+    label: "Used in services",
+    placeholder: "Select services",
+    type: "multiDropdown",
+    options: (draft) =>
+      (SERVICE_USAGE_CATALOG[draft.category ?? ""] ?? []).map((service) => ({
+        value: service,
+        label: service,
+      })),
   },
   {
     key: "company",
@@ -301,6 +354,7 @@ const EMPTY_ITEM: Record<ItemFieldKey, string> = {
   capacity: "",
   price: "",
   details: "",
+  usedInServices: "",
 };
 
 type EditingState =
@@ -310,6 +364,8 @@ type EditingState =
 
 export default function ItemsSettingsPage() {
   const [items, setItems] = useState<InventoryItem[]>(INITIAL_ITEMS);
+  const { notifications, dismissNotification, showNotification } =
+    useToastNotifications();
   const [editing, setEditing] = useState<EditingState>(null);
 
   const editingItem =
@@ -326,6 +382,7 @@ export default function ItemsSettingsPage() {
         capacity: editingItem.capacity,
         price: editingItem.price,
         details: editingItem.details,
+        usedInServices: editingItem.usedInServices,
       }
     : EMPTY_ITEM;
 
@@ -339,6 +396,7 @@ export default function ItemsSettingsPage() {
     const capacity = values.capacity ?? "";
     const price = values.price ?? "";
     const details = values.details ?? "";
+    const usedInServices = values.usedInServices ?? "";
 
     if (!category || !name) return;
 
@@ -355,9 +413,15 @@ export default function ItemsSettingsPage() {
                 capacity,
                 price,
                 details,
+                usedInServices,
               }
             : item,
         ),
+      );
+      showNotification(
+        "Item updated successfully.",
+        "success",
+        "settingsSaved",
       );
     } else {
       setItems((current) => [
@@ -371,8 +435,14 @@ export default function ItemsSettingsPage() {
           capacity,
           price,
           details,
+          usedInServices,
         },
       ]);
+      showNotification(
+        "Item created successfully.",
+        "success",
+        "settingsSaved",
+      );
     }
   }
 
@@ -383,6 +453,10 @@ export default function ItemsSettingsPage() {
 
   return (
     <>
+      <ToastContainer
+        notifications={notifications}
+        onDismiss={dismissNotification}
+      />
       <div className={styles.content}>
         <div className={styles.serviceGroups}>
           {itemsByCategory.map(({ category, items: rows }) => (
@@ -401,20 +475,33 @@ export default function ItemsSettingsPage() {
                 {rows.map((item) => (
                   <div className={styles.serviceRow} key={item.id}>
                     <span className={styles.serviceName}>{item.name}</span>
-                    {item.company && (
-                      <span className={styles.serviceMeta}>{item.company}</span>
-                    )}
-                    {item.specification && (
-                      <span className={styles.serviceMeta}>
-                        {item.specification}
+                    <div className={styles.metaList}>
+                      {item.company && (
+                        <span className={styles.serviceMeta}>{item.company}</span>
+                      )}
+                      {item.specification && (
+                        <span className={styles.serviceMeta}>
+                          {item.specification}
+                        </span>
+                      )}
+                      {item.capacity && (
+                        <span className={styles.serviceMeta}>{item.capacity}</span>
+                      )}
+                      {item.usedInServices
+                        .split(",")
+                        .map((service) => service.trim())
+                        .filter(Boolean)
+                        .map((service) => (
+                          <span key={service} className={styles.serviceMeta}>
+                            {service}
+                          </span>
+                      ))}
+                    {item.price && (
+                      <span className={`${styles.serviceMeta} ${styles.priceMeta}`}>
+                        {item.price}
                       </span>
                     )}
-                    {item.capacity && (
-                      <span className={styles.serviceMeta}>{item.capacity}</span>
-                    )}
-                    {item.price && (
-                      <span className={styles.serviceMeta}>{item.price}</span>
-                    )}
+                    </div>
                     <button
                       type="button"
                       className={styles.editButton}

@@ -224,7 +224,18 @@ function buildSellable(
     return Math.round((perBucket * variation) / 5) * 5;
   });
 
-  return { key: entry.key, label: entry.label, profit };
+  // Purchases / services done: a deterministic count that scales with the
+  // money made, with its own wobble so it doesn't track profit exactly.
+  const total = profit.reduce((sum, value) => sum + value, 0);
+  const avgPrice = 25 + seededRandom(`${entry.key}-${seed}-price`) * 95;
+  const units = Math.max(1, Math.round(total / avgPrice));
+
+  // Stable ±20% trend vs. the previous span of the same length.
+  const delta = Number(
+    (seededRandom(`${entry.key}-${seed}-trend`) * 40 - 20).toFixed(1),
+  );
+
+  return { key: entry.key, label: entry.label, profit, units, delta };
 }
 
 /** Small deterministic hash → [0, 1) so mock data never shifts between renders. */

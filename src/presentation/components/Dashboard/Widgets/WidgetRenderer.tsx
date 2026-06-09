@@ -1,11 +1,15 @@
 "use client";
 
-import { WidgetDefinition } from "@/infrastructure/services/dashboard.service";
+import {
+  SETUP_WARNINGS,
+  WidgetDefinition,
+} from "@/infrastructure/services/dashboard.service";
 import { StatusCounts } from "@/infrastructure/services/dashboard.service";
 import Booking from "@/domain/entities/Booking";
 import ProfileWidget from "./ProfileWidget/ProfileWidget";
 import CalendarWidget from "./CalendarWidget/CalendarWidget";
 import StatusWidget from "./StatusWidget/StatusWidget";
+import SetupWarningsWidget from "./SetupWarningsWidget/SetupWarningsWidget";
 
 interface WidgetRendererProps {
   widget: WidgetDefinition;
@@ -31,6 +35,8 @@ export default function WidgetRenderer({ widget, statusCounts, calendarProps }: 
       return <ProfileWidget key={widget.id} />;
     case "calendar":
       return <CalendarWidget key={widget.id} {...calendarProps} />;
+    case "setupWarnings":
+      return <SetupWarningsWidget key={widget.id} warnings={SETUP_WARNINGS} />;
     case "status":
       return (
         <StatusWidget

@@ -1,9 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useParams, useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useState, type FormEvent } from "react";
 import { ArrowLeft, X } from "lucide-react";
+import {
+  bankDetailsSchema,
+  type BankDetailsData,
+} from "@/domain/validation/schema";
+import { validateStep } from "@/domain/validation/validation";
 import { UnderlineTextInput } from "@/presentation/components/UnderlineInput";
 import styles from "./details.module.css";
 
@@ -54,6 +59,7 @@ const FIELDS = [
 ] as const;
 
 type FieldKey = (typeof FIELDS)[number]["key"];
+type Errors = Partial<Record<string, string>>;
 
 const EMPTY_DETAILS: Record<FieldKey, string> = {
   accountHolder: "",
@@ -66,31 +72,57 @@ const EMPTY_DETAILS: Record<FieldKey, string> = {
 
 export default function BankDetailsPage() {
   const params = useParams<{ locale: string }>();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const locale = params.locale;
   const bank = searchParams.get("bank") ?? "";
   const [details, setDetails] = useState<Record<FieldKey, string>>(EMPTY_DETAILS);
+  const [errors, setErrors] = useState<Errors>({});
 
   const billingHref = `/${locale}/settings/billing`;
   const bankHref = `/${locale}/settings/billing/account/bank`;
 
-  const reviewHref = useMemo(() => {
+  function buildReviewHref(validDetails: BankDetailsData) {
     const query = new URLSearchParams();
-    if (bank) {
-      query.set("bank", bank);
-    }
-
-    FIELDS.forEach((field) => {
-      if (details[field.key]) {
-        query.set(field.key, details[field.key]);
-      }
-    });
+    query.set("bank", validDetails.bankName);
+    query.set("accountHolder", validDetails.accountHolder);
+    query.set("accountNumber", validDetails.accountNumber);
+    query.set("iban", validDetails.iban);
+    query.set("swift", validDetails.swift);
+    query.set("branch", validDetails.branch);
+    query.set("billingEmail", validDetails.billingEmail);
 
     return `/${locale}/settings/billing/account/review?${query.toString()}`;
-  }, [bank, details, locale]);
+  }
 
   function setField(key: FieldKey, value: string) {
     setDetails((currentDetails) => ({ ...currentDetails, [key]: value }));
+    setErrors((currentErrors) => {
+      if (!currentErrors[key]) {
+        return currentErrors;
+      }
+
+      const nextErrors = { ...currentErrors };
+      delete nextErrors[key];
+      return nextErrors;
+    });
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const result = validateStep(bankDetailsSchema, {
+      bankName: bank,
+      ...details,
+    });
+
+    if (!result.success) {
+      setErrors(result.errors as Errors);
+      return;
+    }
+
+    setErrors({});
+    router.push(buildReviewHref(result.data));
   }
 
   return (
@@ -141,9 +173,12 @@ export default function BankDetailsPage() {
               Selected bank: <strong>{bank}</strong>
             </p>
           )}
+          {errors["bankName"] && (
+            <p className={styles.bankError}>{errors["bankName"]}</p>
+          )}
         </div>
 
-        <form className={styles.form}>
+        <form className={styles.form} onSubmit={handleSubmit} noValidate>
           {FIELDS.map((field) => (
             <UnderlineTextInput
               key={field.key}
@@ -152,12 +187,13 @@ export default function BankDetailsPage() {
               type={field.type}
               value={details[field.key]}
               onChange={(value) => setField(field.key, value)}
+              error={errors[field.key]}
             />
           ))}
 
-          <Link href={reviewHref} className={styles.primaryButton}>
+          <button type="submit" className={styles.primaryButton}>
             Review details
-          </Link>
+          </button>
         </form>
       </section>
     </main>

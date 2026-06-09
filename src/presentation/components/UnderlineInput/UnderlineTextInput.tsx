@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId } from "react";
 import styles from "./UnderlineInput.module.css";
 import { IoClose } from "react-icons/io5";
 
@@ -11,6 +11,7 @@ interface UnderlineTextInputProps {
   onChange: (value: string) => void;
   type?: string;
   span?: number;
+  error?: string;
 }
 
 export default function UnderlineTextInput({
@@ -20,17 +21,22 @@ export default function UnderlineTextInput({
   onChange,
   type = "text",
   span,
+  error,
 }: UnderlineTextInputProps) {
+  const errorId = useId();
+
   return (
     <div className={styles.wrapper} style={span ? { gridColumn: `span ${span}` } : undefined}>
       <span className={styles.label}>{label}</span>
-      <div className={styles.inputRow}>
+      <div className={`${styles.inputRow} ${error ? styles.inputRowError : ""}`}>
         <input
           className={styles.input}
           type={type}
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? errorId : undefined}
         />
         {value && (
           <button
@@ -42,6 +48,11 @@ export default function UnderlineTextInput({
           </button>
         )}
       </div>
+      {error && (
+        <p id={errorId} className={styles.error}>
+          {error}
+        </p>
+      )}
     </div>
   );
 }
