@@ -2,17 +2,41 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  SetupStatusIndicator,
+  type SetupStatus,
+} from "@/presentation/components/settings/SetupStatusIndicator";
 import styles from "./settings.module.css";
 
 const TABS = [
-  { label: "Personal Information", segment: "personal" },
+  {
+    label: "Personal Information",
+    segment: "personal",
+    setupStatus: "warning",
+    setupLabel: "Birth date is not set",
+  },
   { label: "Business Information", segment: "business" },
   { label: "Items", segment: "items" },
   { label: "Services", segment: "services" },
   { label: "Notifications", segment: "notifications" },
-  { label: "Security", segment: "security" },
-  { label: "Billing", segment: "billing" },
-];
+  {
+    label: "Security",
+    segment: "security",
+    setupStatus: "warning",
+    setupLabel: "Multi-factor authentication is not set",
+  },
+  {
+    label: "Billing",
+    segment: "billing",
+    setupStatus: "critical",
+    setupLabel: "Billing setup is required",
+  },
+] satisfies {
+  label: string;
+  segment: string;
+  setupStatus?: SetupStatus;
+  setupLabel?: string;
+}[];
 
 export default function SettingsLayout({
   children,
@@ -39,7 +63,13 @@ export default function SettingsLayout({
                 href={href}
                 className={`${styles.tab} ${isActive ? styles.tabActive : ""}`}
               >
-                {tab.label}
+                <span>{tab.label}</span>
+                {tab.setupStatus && (
+                  <SetupStatusIndicator
+                    status={tab.setupStatus}
+                    label={tab.setupLabel}
+                  />
+                )}
               </Link>
             );
           })}

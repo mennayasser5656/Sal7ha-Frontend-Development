@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { ArrowLeft, X } from "lucide-react";
 import { IoIosArrowDown } from "react-icons/io";
 import { useClickOutside } from "@/application/hooks/useClickOutside";
+import { useToastNotifications } from "@/application/hooks/useToastNotifications";
 import type { PaymentExportCategory } from "@/domain/entities/Payment";
 import {
   UnderlineDateInput,
@@ -16,6 +17,7 @@ import {
   PAYMENT_EXPORT_CATEGORY_OPTIONS,
   usePaymentExportFlow,
 } from "@/application/hooks/usePaymentExportFlow";
+import ToastContainer from "@/presentation/components/Toast/Toast";
 import styles from "./details.module.css";
 
 const STEPS = ["Export", "Details"];
@@ -126,9 +128,24 @@ export default function PaymentExportDetailsPage() {
   const paymentsHref = `/${locale}/payments`;
   const exportHref = `/${locale}/payments/export`;
   const exportFlow = usePaymentExportFlow();
+  const { notifications, dismissNotification, showNotification } =
+    useToastNotifications();
+
+  function handleGenerateExport() {
+    exportFlow.generateExport();
+    showNotification(
+      "Export generated successfully.",
+      "success",
+      "exportGenerated",
+    );
+  }
 
   return (
     <main className={styles.screen}>
+      <ToastContainer
+        notifications={notifications}
+        onDismiss={dismissNotification}
+      />
       <Link
         href={exportHref}
         className={styles.backButton}
@@ -222,7 +239,7 @@ export default function PaymentExportDetailsPage() {
           <button
             type="button"
             className={styles.primaryButton}
-            onClick={exportFlow.generateExport}
+            onClick={handleGenerateExport}
           >
             Generate export
           </button>

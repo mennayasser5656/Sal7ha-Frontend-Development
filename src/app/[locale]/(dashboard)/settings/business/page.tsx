@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useToastNotifications } from "@/application/hooks/useToastNotifications";
 import {
   SettingsInfoRow,
   SettingsInfoSection,
@@ -9,6 +10,7 @@ import {
   SettingsEditOverlay,
   type SettingsEditField,
 } from "@/presentation/components/settings/SettingsEditOverlay";
+import ToastContainer from "@/presentation/components/Toast/Toast";
 import styles from "./business.module.css";
 
 type BusinessInfo = {
@@ -114,6 +116,8 @@ const SECTIONS = {
 
 export default function BusinessInformationPage() {
   const [business, setBusiness] = useState(INITIAL_BUSINESS);
+  const { notifications, dismissNotification, showNotification } =
+    useToastNotifications();
   const [editingSection, setEditingSection] = useState<keyof typeof SECTIONS | null>(
     null,
   );
@@ -121,6 +125,10 @@ export default function BusinessInformationPage() {
 
   return (
     <>
+      <ToastContainer
+        notifications={notifications}
+        onDismiss={dismissNotification}
+      />
       <div className={styles.content}>
         <SettingsInfoSection
           title="Business Details"
@@ -155,12 +163,17 @@ export default function BusinessInformationPage() {
           fields={activeSection.fields}
           values={business}
           onClose={() => setEditingSection(null)}
-          onSave={(values) =>
+          onSave={(values) => {
             setBusiness((currentBusiness) => ({
               ...currentBusiness,
               ...values,
-            }))
-          }
+            }));
+            showNotification(
+              `${activeSection.title} updated successfully.`,
+              "success",
+              "settingsSaved",
+            );
+          }}
         />
       )}
     </>

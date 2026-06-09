@@ -34,6 +34,8 @@ export const isNumericOnlySchema = z
   .string()
   .regex(/^[0-9]+$/, "Please enter a number.");
 
+const requiredTextSchema = (message: string) => z.string().trim().min(1, message);
+
 // ── Auth schemas ──
 
 export const authSchema = z.object({
@@ -84,25 +86,79 @@ export const businessInformationSchema = z.object({
 export type BusinessInformationData = z.infer<typeof businessInformationSchema>;
 
 export const bankDetailsSchema = z.object({
-  bankName: z.string().min(1, "Bank name is required."),
-  accountHolder: isTextOnlySchema(true).min(
-    1,
-    "Account holder name is required."
+  bankName: requiredTextSchema("Please choose a bank."),
+  accountHolder: requiredTextSchema("Account holder name is required.").regex(
+    /^[A-Za-z\s]+$/,
+    "Account holder name must contain only letters and spaces."
   ),
+  accountNumber: requiredTextSchema("Account number is required.")
+    .regex(/^[0-9]+$/, "Account number must contain digits only.")
+    .min(6, "Account number must be at least 6 digits.")
+    .max(34, "Account number must be 34 digits or fewer."),
   iban: z
     .string()
+    .trim()
     .min(1, "IBAN is required.")
-    .regex(/^[A-Z]{2}\d{2}[A-Za-z0-9]{4,30}$/, "Please enter a valid IBAN."),
+    .transform((value) => value.replace(/\s+/g, "").toUpperCase())
+    .pipe(
+      z
+        .string()
+        .regex(
+          /^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/,
+          "Please enter a valid IBAN."
+        )
+    ),
+  swift: z
+    .string()
+    .trim()
+    .min(1, "SWIFT / BIC is required.")
+    .transform((value) => value.toUpperCase())
+    .pipe(
+      z
+        .string()
+        .regex(
+          /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/,
+          "Please enter a valid SWIFT / BIC."
+        )
+    ),
+  branch: requiredTextSchema("Branch name is required.").regex(
+    /^[A-Za-z0-9\s.'&-]+$/,
+    "Branch name contains unsupported characters."
+  ),
+  billingEmail: emailSchema,
 });
 
 export type BankDetailsData = z.infer<typeof bankDetailsSchema>;
 
-export const twoFactorSchema = z.object({
-  method: z.enum(["sms", "authenticator"], {
-    message: "Please choose a 2FA method.",
-  }),
-  phone: z.string().optional(),
-});
+export const twoFactorSchema = z
+  .object({
+    method: z.enum(["sms", "authenticator"], {
+      message: "Please choose a MFA method.",
+    }),
+    phone: z.string().trim().optional(),
+  })
+  .superRefine((data, context) => {
+    if (data.method !== "sms") {
+      return;
+    }
+
+    if (!data.phone) {
+      context.addIssue({
+        code: "custom",
+        path: ["phone"],
+        message: "Phone number is required for SMS MFA.",
+      });
+      return;
+    }
+
+    if (!/^\+?[0-9\s()-]{8,20}$/.test(data.phone)) {
+      context.addIssue({
+        code: "custom",
+        path: ["phone"],
+        message: "Please enter a valid phone number.",
+      });
+    }
+  });
 
 export type TwoFactorData = z.infer<typeof twoFactorSchema>;
 

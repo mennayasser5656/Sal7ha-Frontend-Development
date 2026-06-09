@@ -25,6 +25,13 @@ export interface ReportSellable {
   key: string;
   label: string;
   profit: number[];
+  /** Total purchases (items) or services done over the active range. */
+  units: number;
+  /**
+   * Percentage change in money made vs. the previous span of the same length.
+   * Positive = up/green, negative = down/red.
+   */
+  delta: number;
 }
 
 /** Everything the Application stats card needs for a given period. */

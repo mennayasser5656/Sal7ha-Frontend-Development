@@ -230,9 +230,15 @@
   min-width: 0;
 }
 
-.grid {
+/* Drawable area above the x-axis label strip. */
+.plotArea {
   position: absolute;
   inset: 0 0 1.4rem 0;
+}
+
+.grid {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -242,45 +248,52 @@
   border-top: 1px dashed #efefef;
 }
 
-.bars {
+/* SVG line + area fill, stretched to fill the plot area. */
+.lineChart {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-around;
-  gap: 0.5rem;
-}
-
-.barColumn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  flex: 1;
-  height: 100%;
-  min-width: 0;
-}
-
-.bar {
-  position: relative;
   width: 100%;
-  max-width: 0.9rem;
-  border-radius: 0.5rem;
-  background: linear-gradient(
-    180deg,
-    var(--selective-yellow) 0%,
-    #ffd166 55%,
-    rgba(255, 183, 0, 0.15) 100%
-  );
-  transition: height 0.4s ease;
+  height: 100%;
+  overflow: visible;
 }
 
-/* Black money popup anchored above each column while hovering. */
-.barTooltip {
+.lineStroke {
+  stroke: var(--selective-yellow);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Vertical dashed guide dropped from the hovered point. */
+.pointGuide {
   position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translate(-50%, -0.4rem);
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px dashed rgba(17, 17, 17, 0.25);
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Marker dot sitting on the line at the hovered point. */
+.point {
+  position: absolute;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 2px solid var(--selective-yellow);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 3;
+  box-shadow: 0 0 0 3px rgba(255, 183, 0, 0.18);
+}
+
+/* Black money popup anchored above the hovered point. */
+.pointTooltip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 0.7rem));
   padding: 0.25rem 0.5rem;
   background-color: #111;
   color: #fff;
@@ -293,7 +306,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.barTooltip::after {
+.pointTooltip::after {
   content: "";
   position: absolute;
   top: 100%;
@@ -303,33 +316,21 @@
   border-top-color: #111;
 }
 
-/* Horizontal crosshair line following the cursor's height. */
-.crosshair {
+/* X-axis label strip below the plot area. */
+.xLabels {
   position: absolute;
   left: 0;
   right: 0;
-  border-top: 1px dashed rgba(17, 17, 17, 0.35);
-  pointer-events: none;
-  z-index: 3;
+  bottom: 0;
+  height: 1.4rem;
+  display: flex;
+  align-items: center;
 }
 
-.crosshairValue {
-  position: absolute;
-  left: 0;
-  top: 0;
-  transform: translateY(-50%);
-  padding: 0.1rem 0.35rem;
-  background-color: #111;
-  color: #fff;
-  font-size: 0.6rem;
-  font-weight: 600;
-  border-radius: 0.3rem;
-  white-space: nowrap;
-}
-
-.barLabel {
-  margin-top: 0.5rem;
-  height: 0.9rem;
+.xLabel {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
   font-size: 0.65rem;
   color: #b5b5b5;
 }

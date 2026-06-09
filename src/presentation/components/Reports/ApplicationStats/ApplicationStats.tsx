@@ -15,6 +15,7 @@ import DateActionButton from "@/presentation/components/DateActionButton/DateAct
 import MultiSelectDropdown, {
   MultiSelectOption,
 } from "@/presentation/components/MultiSelectDropdown/MultiSelectDropdown";
+import SellablesTable from "@/presentation/components/Reports/SellablesTable/SellablesTable";
 import styles from "./ApplicationStats.module.css";
 
 const STAT_ICONS: Record<ReportStatIcon, React.ReactNode> = {
@@ -32,8 +33,37 @@ const PERIOD_COMPARISON: Record<ReportPeriod, string> = {
 
 const numberFormatter = new Intl.NumberFormat("en-US");
 
-/** Height of the x-axis label strip below the bars (matches `.barLabel` in CSS). */
-const X_LABEL_AREA_PX = 22;
+/** A plotted point in the chart's 0–100 coordinate space. */
+type ChartPoint = { x: number; y: number };
+
+/**
+ * Builds a smooth (Catmull-Rom → cubic bézier) path through the points so the
+ * line curves gently between values instead of zig-zagging.
+ */
+function buildSmoothPath(points: ChartPoint[]): string {
+  if (points.length === 0) {
+    return "";
+  }
+  if (points.length === 1) {
+    return `M ${points[0].x} ${points[0].y}`;
+  }
+
+  let d = `M ${points[0].x} ${points[0].y}`;
+  for (let i = 0; i < points.length - 1; i += 1) {
+    const p0 = points[i - 1] ?? points[i];
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    const p3 = points[i + 2] ?? p2;
+
+    const cp1x = p1.x + (p2.x - p0.x) / 6;
+    const cp1y = p1.y + (p2.y - p0.y) / 6;
+    const cp2x = p2.x - (p3.x - p1.x) / 6;
+    const cp2y = p2.y - (p3.y - p1.y) / 6;
+
+    d += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`;
+  }
+  return d;
+}
 
 /** Compact money for axis ticks, e.g. $1.2k. */
 function formatMoneyShort(value: number): string {
@@ -104,34 +134,44 @@ export default function ApplicationStats() {
     [profitSeries],
   );
 
+  // Project each value into the chart's 0–100 space. Points sit at the centre
+  // of their column so they line up with the x-axis labels below.
+  const points = useMemo<ChartPoint[]>(() => {
+    const count = profitSeries.length;
+    return profitSeries.map((value, index) => ({
+      x: count > 0 ? ((index + 0.5) / count) * 100 : 0,
+      y: axisMax > 0 ? (1 - value / axisMax) * 100 : 100,
+    }));
+  }, [profitSeries, axisMax]);
+
+  const linePath = useMemo(() => buildSmoothPath(points), [points]);
+  const areaPath = useMemo(() => {
+    if (points.length === 0) {
+      return "";
+    }
+    const first = points[0];
+    const last = points[points.length - 1];
+    return `${linePath} L ${last.x} 100 L ${first.x} 100 Z`;
+  }, [linePath, points]);
+
   const plotRef = useRef<HTMLDivElement>(null);
-  const [hover, setHover] = useState<{ y: number; value: number } | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   function handlePlotMove(event: React.MouseEvent<HTMLDivElement>) {
     const rect = plotRef.current?.getBoundingClientRect();
-    if (!rect) {
+    if (!rect || profitSeries.length === 0) {
       return;
     }
-    // Free-moving crosshair: track the cursor's height and read off its value.
-    // The bottom strip is reserved for the x-axis labels, so bars rise above it.
-    const chartHeight = rect.height - X_LABEL_AREA_PX;
-    const y = Math.max(0, Math.min(event.clientY - rect.top, chartHeight));
-    const value = axisMax * (1 - y / chartHeight);
-
-    // Which column the cursor is currently over (for that column's own label).
+    // Snap to whichever point the cursor is nearest, then show its marker.
     const x = event.clientX - rect.left;
     const index = Math.min(
       profitSeries.length - 1,
       Math.max(0, Math.floor((x / rect.width) * profitSeries.length)),
     );
-
-    setHover({ y, value });
     setHoveredIndex(index);
   }
 
   function handlePlotLeave() {
-    setHover(null);
     setHoveredIndex(null);
   }
 
@@ -243,40 +283,80 @@ export default function ApplicationStats() {
             onMouseMove={handlePlotMove}
             onMouseLeave={handlePlotLeave}
           >
-            <div className={styles.grid} aria-hidden="true">
-              {ticks.map((tick) => (
-                <span key={tick} className={styles.gridLine} />
-              ))}
+            <div className={styles.plotArea}>
+              <div className={styles.grid} aria-hidden="true">
+                {ticks.map((tick) => (
+                  <span key={tick} className={styles.gridLine} />
+                ))}
+              </div>
+
+              <svg
+                className={styles.lineChart}
+                viewBox="0 0 100 100"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <defs>
+                  <linearGradient id="profitArea" x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="0%"
+                      stopColor="var(--selective-yellow)"
+                      stopOpacity="0.28"
+                    />
+                    <stop
+                      offset="100%"
+                      stopColor="var(--selective-yellow)"
+                      stopOpacity="0"
+                    />
+                  </linearGradient>
+                </defs>
+                <path d={areaPath} fill="url(#profitArea)" />
+                <path
+                  d={linePath}
+                  className={styles.lineStroke}
+                  fill="none"
+                  vectorEffect="non-scaling-stroke"
+                />
+              </svg>
+
+              {hoveredIndex !== null && points[hoveredIndex] && (
+                <>
+                  <span
+                    className={styles.pointGuide}
+                    style={{ left: `${points[hoveredIndex].x}%` }}
+                  />
+                  <span
+                    className={styles.point}
+                    style={{
+                      left: `${points[hoveredIndex].x}%`,
+                      top: `${points[hoveredIndex].y}%`,
+                    }}
+                  />
+                  <span
+                    className={styles.pointTooltip}
+                    style={{
+                      left: `${points[hoveredIndex].x}%`,
+                      top: `${points[hoveredIndex].y}%`,
+                    }}
+                  >
+                    {formatMoney(profitSeries[hoveredIndex])}
+                  </span>
+                </>
+              )}
             </div>
 
-            {hover && (
-              <div className={styles.crosshair} style={{ top: hover.y }}>
-                <span className={styles.crosshairValue}>
-                  {formatMoney(hover.value)}
+            <div className={styles.xLabels} aria-hidden="true">
+              {profitSeries.map((_, index) => (
+                <span key={stats.axisLabels[index]} className={styles.xLabel}>
+                  {stats.axisLabels[index]}
                 </span>
-              </div>
-            )}
-
-            <div className={styles.bars}>
-              {profitSeries.map((value, index) => (
-                <div key={stats.axisLabels[index]} className={styles.barColumn}>
-                  <div
-                    className={styles.bar}
-                    style={{ height: `${(value / axisMax) * 100}%` }}
-                  >
-                    {hoveredIndex === index && (
-                      <span className={styles.barTooltip}>
-                        {formatMoney(value)}
-                      </span>
-                    )}
-                  </div>
-                  <span className={styles.barLabel}>{stats.axisLabels[index]}</span>
-                </div>
               ))}
             </div>
           </div>
         </div>
       </div>
+
+      <SellablesTable services={services} items={items} />
     </section>
   );
 }

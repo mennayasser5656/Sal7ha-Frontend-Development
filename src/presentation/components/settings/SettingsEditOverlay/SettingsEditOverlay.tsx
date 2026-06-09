@@ -18,7 +18,7 @@ export type SettingsEditField<TKey extends string = string> = {
   key: TKey;
   label: string;
   placeholder?: string;
-  type?: "text" | "date" | "dropdown";
+  type?: "text" | "date" | "dropdown" | "multiDropdown";
   options?:
     | DropdownOption[]
     | ((draft: Partial<Record<TKey, string>>) => DropdownOption[]);
@@ -112,6 +112,67 @@ export function SettingsEditOverlay<TKey extends string>({
                       })
                     }
                   />
+                );
+              }
+
+              if (field.type === "multiDropdown") {
+                const dropdownOptions =
+                  typeof field.options === "function"
+                    ? field.options(draft)
+                    : field.options ?? [];
+                const selectedValues = value
+                  .split(",")
+                  .map((selectedValue) => selectedValue.trim())
+                  .filter(Boolean);
+
+                return (
+                  <div key={field.key} className={styles.multiField}>
+                    <span className={styles.multiLabel}>{field.label}</span>
+                    <div className={styles.multiOptions}>
+                      {dropdownOptions.length === 0 ? (
+                        <span className={styles.multiEmpty}>
+                          {field.placeholder ?? "Select another field first"}
+                        </span>
+                      ) : (
+                        dropdownOptions.map((option) => {
+                          const selected = selectedValues.includes(option.value);
+
+                          return (
+                            <button
+                              key={option.value}
+                              type="button"
+                              className={`${styles.multiOption} ${
+                                selected ? styles.multiOptionSelected : ""
+                              }`}
+                              aria-pressed={selected}
+                              onClick={() =>
+                                setDraft((currentDraft) => {
+                                  const currentValue = currentDraft[field.key] ?? "";
+                                  const currentValues = currentValue
+                                    .split(",")
+                                    .map((selectedValue) => selectedValue.trim())
+                                    .filter(Boolean);
+                                  const nextValues = currentValues.includes(option.value)
+                                    ? currentValues.filter(
+                                        (selectedValue) =>
+                                          selectedValue !== option.value,
+                                      )
+                                    : [...currentValues, option.value];
+
+                                  return {
+                                    ...currentDraft,
+                                    [field.key]: nextValues.join(", "),
+                                  };
+                                })
+                              }
+                            >
+                              {option.label}
+                            </button>
+                          );
+                        })
+                      )}
+                    </div>
+                  </div>
                 );
               }
 

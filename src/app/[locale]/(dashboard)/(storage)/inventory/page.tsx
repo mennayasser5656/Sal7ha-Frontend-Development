@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { RiSearch2Line } from "react-icons/ri";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
+import { useToastNotifications } from "@/application/hooks/useToastNotifications";
 import Dropdown from "@/presentation/components/Dropdown/Dropdown";
+import ToastContainer from "@/presentation/components/Toast/Toast";
 import styles from "./inventory.module.css";
 
 interface Product {
@@ -108,6 +110,8 @@ const PRODUCTS: Product[] = [
 ];
 
 export default function StorageInventoryView() {
+  const { notifications, dismissNotification, showNotification } =
+    useToastNotifications();
   const [brand, setBrand] = useState<string | null>(null);
   const [type, setType] = useState<string | null>(null);
   const [viscosity, setViscosity] = useState<string | null>(null);
@@ -117,6 +121,10 @@ export default function StorageInventoryView() {
 
   return (
     <div className={styles.wrapper}>
+      <ToastContainer
+        notifications={notifications}
+        onDismiss={dismissNotification}
+      />
       <div className={styles.filters}>
         <Dropdown
           options={BRANDS}
@@ -161,14 +169,30 @@ export default function StorageInventoryView() {
 
       <div className={styles.grid}>
         {PRODUCTS.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard
+            key={product.id}
+            product={product}
+            onSell={() =>
+              showNotification(
+                `${product.name} sold successfully.`,
+                "success",
+                "storageItemSold",
+              )
+            }
+          />
         ))}
       </div>
     </div>
   );
 }
 
-function ProductCard({ product }: { product: Product }) {
+function ProductCard({
+  product,
+  onSell,
+}: {
+  product: Product;
+  onSell: () => void;
+}) {
   return (
     <div className={styles.card}>
       <div className={styles.imageWrap}>
@@ -186,7 +210,9 @@ function ProductCard({ product }: { product: Product }) {
         <DetailRow label="Delivery time" value={product.deliveryTime} />
       </div>
       <div className={styles.actions}>
-        <button className={styles.sellBtn}>Sell Product</button>
+        <button className={styles.sellBtn} onClick={onSell}>
+          Sell Product
+        </button>
         <div className={styles.actionsRight}>
           <button className={styles.iconBtn} aria-label="Edit product">
             <FiEdit2 />

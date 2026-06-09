@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { FiEdit2 } from "react-icons/fi";
+import { useToastNotifications } from "@/application/hooks/useToastNotifications";
 import {
   SettingsEditOverlay,
   type SettingsEditField,
 } from "@/presentation/components/settings/SettingsEditOverlay";
+import ToastContainer from "@/presentation/components/Toast/Toast";
 import styles from "./services.module.css";
 
 type ServiceItem = {
@@ -164,6 +166,8 @@ type EditingState =
 
 export default function ServicesSettingsPage() {
   const [services, setServices] = useState<ServiceItem[]>(INITIAL_SERVICES);
+  const { notifications, dismissNotification, showNotification } =
+    useToastNotifications();
   const [editing, setEditing] = useState<EditingState>(null);
 
   const editingService =
@@ -199,11 +203,21 @@ export default function ServicesSettingsPage() {
             : service,
         ),
       );
+      showNotification(
+        "Service updated successfully.",
+        "success",
+        "settingsSaved",
+      );
     } else {
       setServices((current) => [
         ...current,
         { id: crypto.randomUUID(), category, name, price, status },
       ]);
+      showNotification(
+        "Service created successfully.",
+        "success",
+        "settingsSaved",
+      );
     }
   }
 
@@ -214,6 +228,10 @@ export default function ServicesSettingsPage() {
 
   return (
     <>
+      <ToastContainer
+        notifications={notifications}
+        onDismiss={dismissNotification}
+      />
       <div className={styles.content}>
         <div className={styles.serviceGroups}>
           {servicesByCategory.map(({ category, services: rows }) => (
@@ -232,18 +250,22 @@ export default function ServicesSettingsPage() {
                 {rows.map((service) => (
                   <div className={styles.serviceRow} key={service.id}>
                     <span className={styles.serviceName}>{service.name}</span>
-                    {service.price && (
-                      <span className={styles.serviceMeta}>{service.price}</span>
-                    )}
-                    <span
-                      className={`${styles.statusBadge} ${
-                        service.status === "active"
-                          ? styles.statusActive
-                          : styles.statusInactive
-                      }`}
-                    >
-                      {service.status === "active" ? "Active" : "Inactive"}
-                    </span>
+                    <div className={styles.metaList}>
+                      {service.price && (
+                        <span className={`${styles.serviceMeta} ${styles.priceMeta}`}>
+                          {service.price}
+                        </span>
+                      )}
+                      <span
+                        className={`${styles.statusBadge} ${
+                          service.status === "active"
+                            ? styles.statusActive
+                            : styles.statusInactive
+                        }`}
+                      >
+                        {service.status === "active" ? "Active" : "Inactive"}
+                      </span>
+                    </div>
                     <button
                       type="button"
                       className={styles.editButton}

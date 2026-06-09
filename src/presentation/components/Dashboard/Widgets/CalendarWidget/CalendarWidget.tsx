@@ -1,9 +1,11 @@
 "use client";
 
 import styles from "./CalendarWidget.module.css";
+import { useState } from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import Booking from "@/domain/entities/Booking";
 import { normalizeStatus } from "@/infrastructure/services/status.service";
+import OverlayBookingDetails from "@/presentation/components/bookings/OverlayBookingDetails/OverlayBookingDetails";
 
 const STATUS_CLASS_MAP: Record<string, string> = {
   inProgress: styles.statusInProgress,
@@ -44,77 +46,93 @@ export default function CalendarWidget({
   formatBookingDateRange,
   getClientImage,
 }: CalendarWidgetProps) {
+  const [openBooking, setOpenBooking] = useState<Booking | null>(null);
+
   return (
-    <div className={styles.mainCard}>
-      <div className={styles.calendarSide}>
-        <div className={styles.calendarTop}>
-          <span className={styles.calendarLabel}>Calendar</span>
-          <div className={styles.calendarHeader}>
-            <span className={styles.calendarMonthYear}>
-              {monthName} {viewYear}
-            </span>
-            <div className={styles.calendarNav}>
-              <button className={styles.calendarNavBtn} onClick={prevMonth}>
-                <IoIosArrowBack />
-              </button>
-              <button className={styles.calendarNavBtn} onClick={nextMonth}>
-                <IoIosArrowForward />
-              </button>
+    <>
+      {openBooking && (
+        <OverlayBookingDetails
+          booking={openBooking}
+          onClose={() => setOpenBooking(null)}
+        />
+      )}
+
+      <div className={styles.mainCard}>
+        <div className={styles.calendarSide}>
+          <div className={styles.calendarTop}>
+            <span className={styles.calendarLabel}>Calendar</span>
+            <div className={styles.calendarHeader}>
+              <span className={styles.calendarMonthYear}>
+                {monthName} {viewYear}
+              </span>
+              <div className={styles.calendarNav}>
+                <button className={styles.calendarNavBtn} onClick={prevMonth}>
+                  <IoIosArrowBack />
+                </button>
+                <button className={styles.calendarNavBtn} onClick={nextMonth}>
+                  <IoIosArrowForward />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-        <div className={styles.dayLabels}>
-          {dayLabels.map((d) => (
-            <span key={d} className={styles.dayLabel}>{d}</span>
-          ))}
-        </div>
-        <div className={styles.days}>
-          {calendarDays.map((cell, i) => {
-            const isToday =
-              !cell.outside &&
-              cell.day === today.getDate() &&
-              viewMonth === today.getMonth() &&
-              viewYear === today.getFullYear();
-            return (
-              <div
-                key={i}
-                className={`${styles.day} ${cell.outside ? styles.dayOutside : ""} ${isToday ? styles.dayToday : ""}`}
-              >
-                {cell.day}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      <div className={styles.servicesSide}>
-        <span className={styles.servicesTitle}>Upcoming</span>
-        {monthBookings.length === 0 ? (
-          <span className={styles.emptyServices}>No services this month</span>
-        ) : (
-          <div className={styles.servicesList}>
-            {monthBookings.map((booking, i) => (
-              <div key={booking.id} className={styles.serviceItem}>
-                <img
-                  className={styles.serviceClientImg}
-                  src={getClientImage(i)}
-                  alt={booking.name}
-                />
-                <div className={styles.serviceInfo}>
-                  <span className={styles.serviceNameText}>{booking.serviceName}</span>
-                  <span className={styles.dot} />
-                  <span className={styles.serviceDateText}>
-                    {formatBookingDateRange(booking.startDate, booking.endDate)}
-                  </span>
-                  <span className={styles.dot} />
-                  <span className={`${styles.serviceStatusText} ${getStatusClass(booking.status)}`}>
-                    {booking.status}
-                  </span>
-                </div>
-              </div>
+          <div className={styles.dayLabels}>
+            {dayLabels.map((d) => (
+              <span key={d} className={styles.dayLabel}>{d}</span>
             ))}
           </div>
-        )}
+          <div className={styles.days}>
+            {calendarDays.map((cell, i) => {
+              const isToday =
+                !cell.outside &&
+                cell.day === today.getDate() &&
+                viewMonth === today.getMonth() &&
+                viewYear === today.getFullYear();
+              return (
+                <div
+                  key={i}
+                  className={`${styles.day} ${cell.outside ? styles.dayOutside : ""} ${isToday ? styles.dayToday : ""}`}
+                >
+                  {cell.day}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <div className={styles.servicesSide}>
+          <span className={styles.servicesTitle}>Upcoming</span>
+          {monthBookings.length === 0 ? (
+            <span className={styles.emptyServices}>No services this month</span>
+          ) : (
+            <div className={styles.servicesList}>
+              {monthBookings.map((booking, i) => (
+                <button
+                  key={booking.id}
+                  type="button"
+                  className={styles.serviceItem}
+                  onClick={() => setOpenBooking(booking)}
+                >
+                  <img
+                    className={styles.serviceClientImg}
+                    src={getClientImage(i)}
+                    alt={booking.name}
+                  />
+                  <div className={styles.serviceInfo}>
+                    <span className={styles.serviceNameText}>{booking.serviceName}</span>
+                    <span className={styles.dot} />
+                    <span className={styles.serviceDateText}>
+                      {formatBookingDateRange(booking.startDate, booking.endDate)}
+                    </span>
+                    <span className={styles.dot} />
+                    <span className={`${styles.serviceStatusText} ${getStatusClass(booking.status)}`}>
+                      {booking.status}
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
