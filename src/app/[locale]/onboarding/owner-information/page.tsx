@@ -8,6 +8,8 @@ import GetStartedButton from "@/presentation/components/form/GetStartedButton/Ge
 import { useOnboardingSteps } from "@/application/hooks/useOnboardingSteps";
 import { validateStep } from "@/domain/validation/validation";
 import { ownerInformationSchema } from "@/domain/validation/schema";
+import { useBusinessSignUp } from "@/application/context/business-signup.context";
+import { DEMO_BUSINESS_ACCOUNT } from "@/application/config/demo-business-account";
 import layoutStyles from "../Onboarding.module.css";
 import styles from "./OwnerInformation.module.css";
 
@@ -28,15 +30,35 @@ type Errors = Partial<Record<string, string>>;
 
 export default function OwnerInformationPage() {
   const { goToNextStep } = useOnboardingSteps();
+  const { data, setData } = useBusinessSignUp();
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [country, setCountry] = useState("");
-  const [streetAddress, setStreetAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [zipCode, setZipCode] = useState("");
+  const [firstName, setFirstName] = useState(
+    data.owner?.firstName ?? DEMO_BUSINESS_ACCOUNT.owner.firstName,
+  );
+  const [lastName, setLastName] = useState(
+    data.owner?.lastName ?? DEMO_BUSINESS_ACCOUNT.owner.lastName,
+  );
+  const [email, setEmail] = useState(
+    data.owner?.email ?? data.email ?? DEMO_BUSINESS_ACCOUNT.email,
+  );
+  const [phoneNumber, setPhoneNumber] = useState(
+    data.owner?.phoneNumber ?? DEMO_BUSINESS_ACCOUNT.owner.phoneNumber,
+  );
+  const [country, setCountry] = useState(
+    data.owner?.country ?? DEMO_BUSINESS_ACCOUNT.owner.country,
+  );
+  const [streetAddress, setStreetAddress] = useState(
+    data.owner?.streetAddress ?? DEMO_BUSINESS_ACCOUNT.owner.streetAddress,
+  );
+  const [city, setCity] = useState(
+    data.owner?.city ?? DEMO_BUSINESS_ACCOUNT.owner.city,
+  );
+  const [state, setState] = useState(
+    data.owner?.state ?? DEMO_BUSINESS_ACCOUNT.owner.state,
+  );
+  const [zipCode, setZipCode] = useState(
+    data.owner?.zipCode ?? DEMO_BUSINESS_ACCOUNT.owner.zipCode,
+  );
   const [errors, setErrors] = useState<Errors>({});
 
   function handleContinue() {
@@ -44,6 +66,7 @@ export default function OwnerInformationPage() {
       firstName,
       lastName,
       email,
+      phoneNumber,
       location: { country, streetAddress, city, state, zipCode },
     });
 
@@ -53,6 +76,19 @@ export default function OwnerInformationPage() {
     }
 
     setErrors({});
+    setData({
+      owner: {
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        streetAddress,
+        country,
+        city,
+        state,
+        zipCode,
+      },
+    });
     goToNextStep();
   }
 
@@ -100,6 +136,15 @@ export default function OwnerInformationPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             error={errors["email"]}
+            required
+          />
+          <FormTextField
+            label="Phone Number"
+            placeholder="Ex: +201001234567"
+            span={12}
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            error={errors["phoneNumber"]}
             required
           />
         </FormRow>

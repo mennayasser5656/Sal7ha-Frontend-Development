@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, type ComponentType } from "react";
+import { useEffect, useState, type ComponentType } from "react";
+import { useParams } from "next/navigation";
 import {
   BookOpen,
   ChevronDown,
@@ -15,6 +16,7 @@ import {
   TerminalSquare,
   Webhook,
 } from "lucide-react";
+import { getHelpCenter } from "@/infrastructure/services/support.service";
 import styles from "./helpCenter.module.css";
 
 type HelpPage =
@@ -226,14 +228,38 @@ const articles: Partial<Record<HelpPage, Article>> = {
 };
 
 export default function HelpCenterClient() {
+  const params = useParams<{ locale: string }>();
   const [currentPage, setCurrentPage] = useState<HelpPage>("introduction");
   const [activeNavKey, setActiveNavKey] = useState("primary:introduction");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     introduction: true,
   });
+  const [backendOverview, setBackendOverview] = useState<Article | null>(null);
+
+  useEffect(() => {
+    async function loadHelpCenter() {
+      const response = await getHelpCenter(params.locale);
+      if (response.categories.length === 0) return;
+
+      setBackendOverview({
+        title: "Help Center",
+        intro: response.categories.map((category) => category.title),
+        sections: response.categories.flatMap((category) =>
+          category.articles.map((article) => ({
+            id: article.id,
+            title: article.title,
+            paragraphs: [article.body],
+          })),
+        ),
+      });
+    }
+
+    void loadHelpCenter();
+  }, [params.locale]);
 
   const activeArticle =
+    (currentPage === "introduction" ? backendOverview : null) ??
     articles[currentPage] ??
     fallbackArticle(sidebarItems.find((item) => item.id === currentPage)?.label ?? "Documentation");
 

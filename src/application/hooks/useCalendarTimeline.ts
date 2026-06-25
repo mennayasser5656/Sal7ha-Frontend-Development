@@ -1,5 +1,5 @@
-import { useState, useMemo, useCallback } from "react";
-import { generateMockBookings } from "@/infrastructure/services/bookings.service";
+import { useState, useMemo, useCallback, useEffect } from "react";
+import { listBookings } from "@/infrastructure/services/bookings.service";
 import Booking from "@/domain/entities/Booking";
 import {
   parseDate,
@@ -36,13 +36,30 @@ function getWeekDays(weekStart: Date): Date[] {
 }
 
 export function useCalendarTimeline() {
-  const [bookings] = useState(generateMockBookings);
+  const [bookings, setBookings] = useState<Booking[]>([]);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
   const [viewMode, setViewMode] = useState<ViewMode>("week");
   const [currentDate, setCurrentDate] = useState(new Date(today));
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadBookings() {
+      const response = await listBookings({ page: 1, limit: 100 });
+      if (!ignore) {
+        setBookings(response.data);
+      }
+    }
+
+    void loadBookings();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const parsedBookings: BookingWithParsedDates[] = useMemo(
     () => bookings.map((b) => ({ ...b, start: parseDate(b.startDate), end: parseDate(b.endDate) })),

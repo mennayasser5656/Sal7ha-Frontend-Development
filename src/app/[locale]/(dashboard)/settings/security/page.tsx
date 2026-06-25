@@ -1,12 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useToastNotifications } from "@/application/hooks/useToastNotifications";
 import { validateStep } from "@/domain/validation/validation";
 import { twoFactorSchema } from "@/domain/validation/schema";
 import { UnderlineTextInput } from "@/presentation/components/UnderlineInput";
 import { SetupStatusIndicator } from "@/presentation/components/settings/SetupStatusIndicator";
 import ToastContainer from "@/presentation/components/Toast/Toast";
+import {
+  getAccountSecurity,
+  updateAccountMfa,
+  updateAccountSecurity,
+} from "@/infrastructure/services/account.service";
 import styles from "./security.module.css";
 
 type MfaMethod = "sms" | "authenticator";
@@ -72,11 +77,38 @@ export default function SecuritySettingsPage() {
   const [savedPhone, setSavedPhone] = useState("");
   const [errors, setErrors] = useState<Errors>({});
 
-  function toggleSecurityPreference(key: SecurityPreferenceKey) {
+  useEffect(() => {
+    async function loadSecurity() {
+      const response = await getAccountSecurity();
+      setSecurity(
+        response.preferences.reduce<SecurityPreferences>(
+          (next, preference) => ({
+            ...next,
+            [preference.key as SecurityPreferenceKey]: preference.enabled,
+          }),
+          INITIAL_SECURITY,
+        ),
+      );
+      setMfaEnabled(response.mfa.enabled);
+      setMfaMethod(response.mfa.method ?? "authenticator");
+      setSavedMfaMethod(response.mfa.method ?? "authenticator");
+      setPhone(response.mfa.phone ?? "");
+      setSavedPhone(response.mfa.phone ?? "");
+    }
+
+    void loadSecurity();
+  }, []);
+
+  async function toggleSecurityPreference(key: SecurityPreferenceKey) {
+    const next = {
+      ...security,
+      [key]: !security[key],
+    };
     setSecurity((current) => ({
       ...current,
       [key]: !current[key],
     }));
+    await updateAccountSecurity(next);
     showNotification(
       "Security setting updated successfully.",
       "success",
@@ -84,8 +116,9 @@ export default function SecuritySettingsPage() {
     );
   }
 
-  function handleMfaToggle() {
+  async function handleMfaToggle() {
     if (mfaEnabled) {
+      await updateAccountMfa({ enabled: false });
       setMfaEnabled(false);
       setErrors({});
       showNotification("MFA disabled successfully.", "success", "mfaUpdated");
@@ -95,7 +128,7 @@ export default function SecuritySettingsPage() {
     setMfaEnabled(true);
   }
 
-  function handleSaveMfa() {
+  async function handleSaveMfa() {
     if (!mfaEnabled) {
       return;
     }
@@ -111,8 +144,13 @@ export default function SecuritySettingsPage() {
     }
 
     setErrors({});
+    const mfa = await updateAccountMfa({
+      enabled: true,
+      method: result.data.method,
+      phone: result.data.phone ?? null,
+    });
     setSavedMfaMethod(result.data.method);
-    setSavedPhone(result.data.phone ?? "");
+    setSavedPhone(mfa.phone ?? result.data.phone ?? "");
     showNotification(
       "MFA settings saved successfully.",
       "success",

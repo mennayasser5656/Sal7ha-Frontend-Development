@@ -1,17 +1,22 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { PaymentSortKey } from "@/domain/entities/Payment";
 import {
-  filterPayments,
-  getPaymentHistory,
-  getPaymentSummary,
-  getTotalPaymentPages,
-  paginatePayments,
+  batchRefundPayments,
+  listPayments,
   PAYMENT_METHOD_FILTERS,
-  sortPayments,
 } from "@/infrastructure/services/payments.service";
+import { useToastNotifications } from "./useToastNotifications";
+import type { Payment, PaymentSummary } from "@/domain/entities/Payment";
 
 export function usePayments() {
-  const [payments] = useState(getPaymentHistory);
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [summary, setSummary] = useState<PaymentSummary>({
+    monthlyPayments: 0,
+    yearlyPayments: 0,
+    itemsSold: 0,
+    servicesDone: 0,
+  });
+  const { showNotification } = useToastNotifications();
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [dateRangeStart, setDateRangeStart] = useState<Date | null>(null);
   const [dateRangeEnd, setDateRangeEnd] = useState<Date | null>(null);
@@ -24,45 +29,48 @@ export function usePayments() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [sortKey, setSortKey] = useState<PaymentSortKey | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const summary = useMemo(() => getPaymentSummary(payments), [payments]);
-
-  const filteredPayments = useMemo(
-    () =>
-      filterPayments({
-        payments,
+  const loadPayments = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const response = await listPayments({
         method: selectedMethod,
-        query: searchQuery,
-        rangeStart: dateRangeStart,
-        rangeEnd: dateRangeEnd,
-      }),
-    [dateRangeEnd, dateRangeStart, payments, searchQuery, selectedMethod],
-  );
-
-  const sortedPayments = useMemo(
-    () =>
-      sortPayments({
-        payments: filteredPayments,
-        sortKey,
-        direction: sortDirection,
-      }),
-    [filteredPayments, sortDirection, sortKey],
-  );
-
-  const totalPages = useMemo(
-    () => getTotalPaymentPages(sortedPayments.length, itemsPerPage),
-    [itemsPerPage, sortedPayments.length],
-  );
-
-  const paginatedPayments = useMemo(
-    () =>
-      paginatePayments({
-        payments: sortedPayments,
+        search: searchQuery,
+        startDate: dateRangeStart,
+        endDate: dateRangeEnd,
+        sortBy: sortKey,
+        sortOrder: sortDirection,
         page: currentPage,
-        itemsPerPage,
-      }),
-    [currentPage, itemsPerPage, sortedPayments],
-  );
+        limit: itemsPerPage,
+      });
+      setPayments(response.data);
+      setSummary(response.summary);
+      setTotalPages(Math.max(1, response.pagination.pages));
+    } catch (error) {
+      showNotification(
+        error instanceof Error ? error.message : "Could not load payments.",
+        "error",
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }, [
+    currentPage,
+    dateRangeEnd,
+    dateRangeStart,
+    itemsPerPage,
+    searchQuery,
+    selectedMethod,
+    showNotification,
+    sortDirection,
+    sortKey,
+  ]);
+
+  useEffect(() => {
+    void loadPayments();
+  }, [loadPayments]);
 
   function handleSort(key: PaymentSortKey) {
     if (sortKey === key) {
@@ -101,8 +109,25 @@ export function usePayments() {
     setSelectedPayments(new Set());
   }
 
+  async function refundSelectedPayments() {
+    if (selectedPayments.size === 0) return;
+
+    try {
+      await batchRefundPayments(selectedPayments);
+      clearSelectedPayments();
+      showNotification("Payments refunded successfully.", "success");
+      void loadPayments();
+    } catch (error) {
+      showNotification(
+        error instanceof Error ? error.message : "Could not refund payments.",
+        "error",
+      );
+    }
+  }
+
   return {
     methodFilters: PAYMENT_METHOD_FILTERS,
+    isLoading,
     selectedMethod,
     setSelectedMethod: handleSelectMethod,
     dateRangeStart,
@@ -120,11 +145,12 @@ export function usePayments() {
     sortKey,
     sortDirection,
     summary,
-    sortedPayments,
-    paginatedPayments,
+    sortedPayments: payments,
+    paginatedPayments: payments,
     totalPages,
     setCurrentPage,
     handleSetPerPage,
     handleSort,
+    refundSelectedPayments,
   };
 }

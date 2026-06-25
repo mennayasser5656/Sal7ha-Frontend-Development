@@ -1,4 +1,5 @@
 import Booking from "@/domain/entities/Booking";
+import { apiClient } from "@/infrastructure/api/client";
 import {
   parseDate,
   getCalendarDays as getCalendarDaysRaw,
@@ -140,7 +141,60 @@ export interface StatusCounts {
   completed: number;
   pending: number;
   cancelled: number;
+  accepted: number;
   total: number;
+}
+
+export interface DashboardSummaryResponse {
+  totalBookings: number;
+  inProgress: number;
+  completed: number;
+  pending: number;
+  cancelled: number;
+  accepted: number;
+}
+
+export interface DashboardWidgetsResponse {
+  activeWidgets: WidgetDefinition[];
+  inactiveWidgets: WidgetDefinition[];
+}
+
+export interface BusinessProfileResponse {
+  id: string;
+  name: string;
+  email?: string | null;
+  phoneNumber?: string | null;
+  onboardingCompleted?: boolean;
+}
+
+export function getDashboardSummary() {
+  return apiClient<DashboardSummaryResponse>("/dashboard/summary");
+}
+
+export function getDashboardMonthBookings(year: number, month: number) {
+  return apiClient<{ year: number; month: number; bookings: Booking[] }>(
+    "/dashboard/bookings/month",
+    { query: { year, month } },
+  );
+}
+
+export function getDashboardWidgets() {
+  return apiClient<DashboardWidgetsResponse>("/dashboard/widgets");
+}
+
+export function updateDashboardWidgets(activeWidgetIds: string[]) {
+  return apiClient<DashboardWidgetsResponse>("/dashboard/widgets", {
+    method: "PUT",
+    body: { activeWidgetIds },
+  });
+}
+
+export function getBusinessProfile() {
+  return apiClient<BusinessProfileResponse>("/business/profile");
+}
+
+export function getBusinessSetupWarnings() {
+  return apiClient<SetupWarning[]>("/business/setup-warnings");
 }
 
 export function getStatusCounts(bookings: Booking[]): StatusCounts {
@@ -149,12 +203,14 @@ export function getStatusCounts(bookings: Booking[]): StatusCounts {
     completed: 0,
     pending: 0,
     cancelled: 0,
+    accepted: 0,
     total: bookings.length,
   };
   for (const b of bookings) {
     const s = b.status.toLowerCase();
     if (s.includes("progress")) counts.inProgress++;
-    else if (s.includes("completed") || s.includes("accepted")) counts.completed++;
+    else if (s.includes("completed")) counts.completed++;
+    else if (s.includes("accepted")) counts.accepted++;
     else if (s.includes("pending")) counts.pending++;
     else if (s.includes("cancelled") || s.includes("cancel")) counts.cancelled++;
   }

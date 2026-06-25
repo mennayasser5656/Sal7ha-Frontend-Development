@@ -1,11 +1,13 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   SettingsInfoRow,
   SettingsInfoSection,
 } from "@/presentation/components/settings/SettingsInfoSection";
+import { listBillingAccounts } from "@/infrastructure/services/billing.service";
 import styles from "./billing.module.css";
 
 type BankAccount = {
@@ -17,25 +19,33 @@ type BankAccount = {
   swift: string;
 };
 
-const INITIAL_ACCOUNTS: BankAccount[] = [
-  {
-    id: "acc-1",
-    bankName: "Al Rajhi Bank",
-    accountOwner: "John Doe",
-    accountNumber: "608010167519",
-    iban: "SA03 8000 0000 6080 1016 7519",
-    swift: "RJHISARIXXX",
-  },
-];
-
 export default function BillingSettingsPage() {
   const pathname = usePathname();
   const billingAccountHref = `${pathname.replace(/\/$/, "")}/account`;
+  const [accounts, setAccounts] = useState<BankAccount[]>([]);
+
+  useEffect(() => {
+    async function loadAccounts() {
+      const rows = await listBillingAccounts();
+      setAccounts(
+        rows.map((account) => ({
+          id: account.id,
+          bankName: account.bankName,
+          accountOwner: account.accountHolder,
+          accountNumber: account.accountNumber,
+          iban: account.iban,
+          swift: account.swift,
+        })),
+      );
+    }
+
+    void loadAccounts();
+  }, []);
 
   return (
     <div className={styles.content}>
       <div className={styles.section}>
-        {INITIAL_ACCOUNTS.map((account) => (
+        {accounts.map((account) => (
           <SettingsInfoSection
             key={account.id}
             title={account.bankName || "Bank Account"}

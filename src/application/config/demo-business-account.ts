@@ -1,0 +1,27 @@
+export const DEMO_BUSINESS_ACCOUNT = {
+  email: "demo.business@example.com",
+  password: "CarService123!",
+  owner: {
+    firstName: "Maro",
+    lastName: "Workshop",
+    phoneNumber: "+201001234567",
+    streetAddress: "12 Nile Corniche",
+    country: "eg",
+    city: "Cairo",
+    state: "Cairo",
+    zipCode: "11511",
+  },
+  business: {
+    name: "Demo Auto Service",
+    phoneNumber: "+201009876543",
+    commercialRegistrationNumber: "123456789",
+    taxIdentificationNumber: "987654321",
+    businessType: "general-repair",
+    employeeCount: "medium",
+    country: "eg",
+    streetAddress: "45 Service Road",
+    city: "Cairo",
+    state: "Cairo",
+    zipCode: "11511",
+  },
+};

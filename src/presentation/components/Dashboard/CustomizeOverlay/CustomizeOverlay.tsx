@@ -2,8 +2,12 @@
 
 import styles from "./CustomizeOverlay.module.css";
 import { FiPlus, FiMinus } from "react-icons/fi";
-import { WidgetDefinition } from "@/infrastructure/services/dashboard.service";
-import { StatusCounts } from "@/infrastructure/services/dashboard.service";
+import {
+  BusinessProfileResponse,
+  SetupWarning,
+  StatusCounts,
+  WidgetDefinition,
+} from "@/infrastructure/services/dashboard.service";
 import Booking from "@/domain/entities/Booking";
 import WidgetRenderer from "../Widgets/WidgetRenderer";
 
@@ -14,6 +18,8 @@ interface CustomizeOverlayProps {
   removeWidget: (id: string) => void;
   onClose: () => void;
   statusCounts: StatusCounts;
+  setupWarnings: SetupWarning[];
+  businessProfile: BusinessProfileResponse | null;
   calendarProps: {
     today: Date;
     viewMonth: number;
@@ -36,6 +42,8 @@ export default function CustomizeOverlay({
   removeWidget,
   onClose,
   statusCounts,
+  setupWarnings,
+  businessProfile,
   calendarProps,
 }: CustomizeOverlayProps) {
   return (
@@ -59,6 +67,8 @@ export default function CustomizeOverlay({
                 <WidgetRenderer
                   widget={w}
                   statusCounts={statusCounts}
+                  setupWarnings={setupWarnings}
+                  businessProfile={businessProfile}
                   calendarProps={calendarProps}
                 />
               </div>
@@ -85,6 +95,8 @@ export default function CustomizeOverlay({
                   <WidgetRenderer
                     widget={w}
                     statusCounts={statusCounts}
+                    setupWarnings={setupWarnings}
+                    businessProfile={businessProfile}
                     calendarProps={calendarProps}
                   />
                 </div>

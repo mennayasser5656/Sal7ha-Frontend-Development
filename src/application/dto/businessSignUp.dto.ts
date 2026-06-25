@@ -15,6 +15,8 @@ export type BusinessSignUpDto = {
     streetAddress: string;
     country: string;
     city: string;
+    state: string;
+    zipCode: string;
   };
 };
 

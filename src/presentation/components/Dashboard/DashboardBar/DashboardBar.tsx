@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import styles from "./DashboardBar.module.css";
 import DashboardItem from "../DashboardItem/DashboardItem";
@@ -29,11 +30,22 @@ import { FaArchive } from "react-icons/fa";
 
 import { IoIosHelpCircleOutline, IoIosHelpCircle } from "react-icons/io";
 import { IoRocketOutline } from "react-icons/io5";
+import { getBusinessProfile } from "@/infrastructure/services/dashboard.service";
 
 export default function DashboardBar() {
   const router = useRouter();
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
+  const [businessName, setBusinessName] = useState("Repair Shop");
+
+  useEffect(() => {
+    async function loadProfile() {
+      const profile = await getBusinessProfile();
+      setBusinessName(profile.name || "Repair Shop");
+    }
+
+    void loadProfile();
+  }, []);
 
   const handleNavigation = (path: string) => {
     router.push(path);
@@ -53,7 +65,7 @@ export default function DashboardBar() {
           src="/assets/profile_img.svg"
           alt=""
         />
-        <h1>SG Repair Shop</h1>
+        <h1>{businessName}</h1>
       </div>
       {/* Items */}
       <div className={styles.spaceBetween}>
@@ -66,21 +78,21 @@ export default function DashboardBar() {
               hoveredIcon={<MdSpaceDashboard />}
               text="Dashboard"
               isSelected={isActive("/dashboard")}
-              onClick={() => handleNavigation("/en/dashboard")}
+              onClick={() => handleNavigation(`/${locale}/dashboard`)}
             />
             <DashboardItem
               icon={<FiBook />}
               hoveredIcon={<FaBook />}
               text="Bookings"
               isSelected={isActive("/bookings")}
-              onClick={() => handleNavigation("/en/bookings")}
+              onClick={() => handleNavigation(`/${locale}/bookings`)}
             />
             <DashboardItem
               icon={<FiCalendar />}
               hoveredIcon={<FaCalendar />}
               text="Calendar"
               isSelected={isActive("/calendar")}
-              onClick={() => handleNavigation("/en/calendar")}
+              onClick={() => handleNavigation(`/${locale}/calendar`)}
             />
           </div>
           <hr className={styles.dashedDivider} />
@@ -91,28 +103,28 @@ export default function DashboardBar() {
               hoveredIcon={<FaArchive />}
               text="Storage"
               isSelected={isActive("/overview") || isActive("/inventory")}
-              onClick={() => handleNavigation("/en/overview")}
+              onClick={() => handleNavigation(`/${locale}/overview`)}
             />
             <DashboardItem
               icon={<RiNotification3Line />}
               hoveredIcon={<RiNotification3Fill />}
               text="Inbox"
               isSelected={isActive("/inbox")}
-              onClick={() => handleNavigation("/en/inbox")}
+              onClick={() => handleNavigation(`/${locale}/inbox`)}
             />
             <DashboardItem
               icon={<IoTrophyOutline />}
               hoveredIcon={<IoTrophySharp />}
               text="Growth"
               isSelected={isActive("/reports")}
-              onClick={() => handleNavigation("/en/reports")}
+              onClick={() => handleNavigation(`/${locale}/reports`)}
             />
             <DashboardItem
               icon={<FaReceipt />}
               hoveredIcon={<FaReceipt />}
               text="Payments"
               isSelected={isActive("/payments")}
-              onClick={() => handleNavigation("/en/payments")}
+              onClick={() => handleNavigation(`/${locale}/payments`)}
             />
           </div>
           <hr className={styles.dashedDivider} />
@@ -130,7 +142,7 @@ export default function DashboardBar() {
               hoveredIcon={<IoSettings />}
               text="Settings"
               isSelected={pathname.includes("/settings")}
-              onClick={() => handleNavigation("/en/settings/personal")}
+              onClick={() => handleNavigation(`/${locale}/settings/personal`)}
             />
           </div>
         </div>

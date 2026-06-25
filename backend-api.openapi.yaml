@@ -1947,7 +1947,7 @@ components:
 
     BusinessOwnerCreateDto:
       type: object
-      required: [email, firstName, lastName, phoneNumber, streetAddress, country, city]
+      required: [email, firstName, lastName, phoneNumber, streetAddress, country, city, state, zipCode]
       properties:
         email:
           type: string
@@ -1963,6 +1963,10 @@ components:
         country:
           type: string
         city:
+          type: string
+        state:
+          type: string
+        zipCode:
           type: string
 
     User:

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import {
   FaCar,
   FaTruck,
@@ -15,9 +16,12 @@ import FormTextField from "@/presentation/components/form/FormTextField/FormText
 import FormSelectField from "@/presentation/components/form/FormSelectField/FormSelectField";
 import ChoiceCard from "@/presentation/components/form/ChoiceCard/ChoiceCard";
 import GetStartedButton from "@/presentation/components/form/GetStartedButton/GetStartedButton";
-import { useOnboardingSteps } from "@/application/hooks/useOnboardingSteps";
 import { validateStep } from "@/domain/validation/validation";
 import { businessInformationSchema } from "@/domain/validation/schema";
+import { useBusinessSignUp } from "@/application/context/business-signup.context";
+import { authApi } from "@/infrastructure/api/auth.api";
+import { apiClient } from "@/infrastructure/api/client";
+import { DEMO_BUSINESS_ACCOUNT } from "@/application/config/demo-business-account";
 import layoutStyles from "../Onboarding.module.css";
 import styles from "./BusinessInformation.module.css";
 
@@ -85,21 +89,58 @@ const EMPLOYEE_COUNTS = [
 type Errors = Partial<Record<string, string>>;
 
 export default function BusinessInformationPage() {
-  const { goToNextStep } = useOnboardingSteps();
+  const router = useRouter();
+  const params = useParams<{ locale: string }>();
+  const { data, setData, reset } = useBusinessSignUp();
 
-  const [businessName, setBusinessName] = useState("");
-  const [businessType, setBusinessType] = useState("");
-  const [employeeCount, setEmployeeCount] = useState("");
-  const [country, setCountry] = useState("");
-  const [streetAddress, setStreetAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [zipCode, setZipCode] = useState("");
+  const [businessName, setBusinessName] = useState(
+    data.name ?? DEMO_BUSINESS_ACCOUNT.business.name,
+  );
+  const [phoneNumber, setPhoneNumber] = useState(
+    data.phoneNumber ?? DEMO_BUSINESS_ACCOUNT.business.phoneNumber,
+  );
+  const [commercialRegistrationNumber, setCommercialRegistrationNumber] =
+    useState(
+      data.commercialRegistrationNumber
+        ? String(data.commercialRegistrationNumber)
+        : DEMO_BUSINESS_ACCOUNT.business.commercialRegistrationNumber,
+    );
+  const [taxIdentificationNumber, setTaxIdentificationNumber] = useState(
+    data.taxIdentificationNumber
+      ? String(data.taxIdentificationNumber)
+      : DEMO_BUSINESS_ACCOUNT.business.taxIdentificationNumber,
+  );
+  const [businessType, setBusinessType] = useState(
+    data.businessType ?? DEMO_BUSINESS_ACCOUNT.business.businessType,
+  );
+  const [employeeCount, setEmployeeCount] = useState(
+    data.employeeCount ?? DEMO_BUSINESS_ACCOUNT.business.employeeCount,
+  );
+  const [country, setCountry] = useState(
+    data.country ?? DEMO_BUSINESS_ACCOUNT.business.country,
+  );
+  const [streetAddress, setStreetAddress] = useState(
+    data.streetAddress ?? DEMO_BUSINESS_ACCOUNT.business.streetAddress,
+  );
+  const [city, setCity] = useState(
+    data.city ?? DEMO_BUSINESS_ACCOUNT.business.city,
+  );
+  const [state, setState] = useState(
+    data.state ?? DEMO_BUSINESS_ACCOUNT.business.state,
+  );
+  const [zipCode, setZipCode] = useState(
+    data.zipCode ?? DEMO_BUSINESS_ACCOUNT.business.zipCode,
+  );
   const [errors, setErrors] = useState<Errors>({});
+  const [formError, setFormError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleContinue() {
+  async function handleContinue() {
     const result = validateStep(businessInformationSchema, {
       businessName,
+      phoneNumber,
+      commercialRegistrationNumber,
+      taxIdentificationNumber,
       businessType,
       employeeCount,
       location: { country, streetAddress, city, state, zipCode },
@@ -110,8 +151,72 @@ export default function BusinessInformationPage() {
       return;
     }
 
+    if (!data.email || !data.password || !data.owner) {
+      setFormError("Please complete the signup and owner information steps first.");
+      return;
+    }
+
     setErrors({});
-    goToNextStep();
+    setFormError("");
+    setIsSubmitting(true);
+
+    try {
+      setData({
+        name: businessName,
+        businessType,
+        employeeCount,
+        phoneNumber,
+        country,
+        streetAddress,
+        city,
+        state,
+        zipCode,
+        commercialRegistrationNumber: Number(commercialRegistrationNumber),
+        commercialRegistraionNumber: Number(commercialRegistrationNumber),
+        taxIdentificationNumber: Number(taxIdentificationNumber),
+      });
+
+      await authApi.signUp({
+        email: data.email,
+        password: data.password,
+        name: businessName,
+        phoneNumber,
+        country,
+        city,
+        commercialRegistrationNumber: Number(commercialRegistrationNumber),
+        taxIdentificationNumber: Number(taxIdentificationNumber),
+        businessOwner: {
+          firstName: data.owner.firstName,
+          lastName: data.owner.lastName,
+          email: data.owner.email,
+          phoneNumber: data.owner.phoneNumber,
+          streetAddress: data.owner.streetAddress,
+          country: data.owner.country,
+          city: data.owner.city,
+          state: data.owner.state,
+          zipCode: data.owner.zipCode,
+        },
+      });
+
+      await apiClient("/onboarding/business-information", {
+        method: "POST",
+        body: {
+          businessName,
+          businessType,
+          employeeCount,
+          location: { country, streetAddress, city, state, zipCode },
+        },
+      });
+
+      reset();
+      router.push(`/${params.locale}/dashboard`);
+    } catch (error) {
+      setFormError(
+        error instanceof Error ? error.message : "Could not create business.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   let delay = 0;
@@ -131,6 +236,33 @@ export default function BusinessInformationPage() {
             value={businessName}
             onChange={(e) => setBusinessName(e.target.value)}
             error={errors["businessName"]}
+            required
+          />
+          <FormTextField
+            label="Business Phone"
+            placeholder='Ex: "+201001234567"'
+            span={12}
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            error={errors["phoneNumber"]}
+            required
+          />
+          <FormTextField
+            label="Commercial Registration Number"
+            placeholder="Ex: 123456789"
+            span={6}
+            value={commercialRegistrationNumber}
+            onChange={(e) => setCommercialRegistrationNumber(e.target.value)}
+            error={errors["commercialRegistrationNumber"]}
+            required
+          />
+          <FormTextField
+            label="Tax Identification Number"
+            placeholder="Ex: 987654321"
+            span={6}
+            value={taxIdentificationNumber}
+            onChange={(e) => setTaxIdentificationNumber(e.target.value)}
+            error={errors["taxIdentificationNumber"]}
             required
           />
         </FormRow>
@@ -245,6 +377,8 @@ export default function BusinessInformationPage() {
         style={{ animationDelay: `${((delay += step), delay)}ms` }}
       >
         <GetStartedButton label="Continue" onClick={handleContinue} />
+        {formError && <p className={styles.choiceError}>{formError}</p>}
+        {isSubmitting && <p className={styles.choiceError}>Creating account...</p>}
       </div>
     </div>
   );

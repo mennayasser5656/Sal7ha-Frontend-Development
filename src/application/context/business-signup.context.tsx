@@ -6,10 +6,16 @@ type BusinessSignUpData = {
   email: string;
   password: string;
   name: string;
+  businessType: string;
+  employeeCount: string;
   phoneNumber: string;
   country: string;
+  streetAddress: string;
   city: string;
+  state: string;
+  zipCode: string;
   commercialRegistraionNumber: number;
+  commercialRegistrationNumber: number;
   taxIdentificationNumber: number;
   owner: {
     firstName: string;
@@ -19,6 +25,8 @@ type BusinessSignUpData = {
     streetAddress: string;
     country: string;
     city: string;
+    state: string;
+    zipCode: string;
   };
 };
 

@@ -1,20 +1,47 @@
-import { useState, useMemo, useCallback } from "react";
-import { generateMockBookings } from "@/infrastructure/services/bookings.service";
+import { useState, useMemo, useCallback, useEffect } from "react";
+import Booking from "@/domain/entities/Booking";
 import {
-  getBookingsForMonth,
   getCalendarDays,
   getMonthName,
   getDayLabels,
   formatBookingDateRange,
   getClientImage,
-  getStatusCounts,
   getDefaultWidgetIds,
   getWidgetById,
   ALL_WIDGETS,
+  getDashboardSummary,
+  getDashboardMonthBookings,
+  getDashboardWidgets,
+  updateDashboardWidgets,
+  getBusinessSetupWarnings,
+  getBusinessProfile,
+  type BusinessProfileResponse,
+  type SetupWarning,
+  type StatusCounts,
+  type WidgetDefinition,
 } from "@/infrastructure/services/dashboard.service";
 
 export function useDashboard() {
-  const [bookings] = useState(generateMockBookings);
+  const [monthBookings, setMonthBookings] = useState<Booking[]>([]);
+  const [statusCounts, setStatusCounts] = useState<StatusCounts>({
+    inProgress: 0,
+    completed: 0,
+    pending: 0,
+    cancelled: 0,
+    accepted: 0,
+    total: 0,
+  });
+  const [activeWidgets, setActiveWidgets] = useState<WidgetDefinition[]>(() =>
+    getDefaultWidgetIds()
+      .map(getWidgetById)
+      .filter((widget): widget is WidgetDefinition => Boolean(widget)),
+  );
+  const [inactiveWidgets, setInactiveWidgets] = useState<WidgetDefinition[]>(
+    () => ALL_WIDGETS.filter((w) => !getDefaultWidgetIds().includes(w.id)),
+  );
+  const [setupWarnings, setSetupWarnings] = useState<SetupWarning[]>([]);
+  const [businessProfile, setBusinessProfile] =
+    useState<BusinessProfileResponse | null>(null);
   const today = new Date();
   const [viewMonth, setViewMonth] = useState(today.getMonth());
   const [viewYear, setViewYear] = useState(today.getFullYear());
@@ -27,35 +54,84 @@ export function useDashboard() {
     [viewYear, viewMonth],
   );
 
-  const monthBookings = useMemo(
-    () => getBookingsForMonth(bookings, viewYear, viewMonth),
-    [bookings, viewYear, viewMonth],
-  );
+  useEffect(() => {
+    let ignore = false;
 
-  const statusCounts = useMemo(
-    () => getStatusCounts(bookings),
-    [bookings],
-  );
+    async function loadDashboardStaticData() {
+      const [summary, widgets, warnings, profile] = await Promise.all([
+        getDashboardSummary(),
+        getDashboardWidgets(),
+        getBusinessSetupWarnings(),
+        getBusinessProfile(),
+      ]);
 
-  const [activeWidgetIds, setActiveWidgetIds] = useState<string[]>(getDefaultWidgetIds);
+      if (ignore) return;
 
-  const activeWidgets = useMemo(
-    () => activeWidgetIds.map(getWidgetById).filter(Boolean),
-    [activeWidgetIds],
-  );
+      setStatusCounts({
+        inProgress: summary.inProgress,
+        completed: summary.completed,
+        pending: summary.pending,
+        cancelled: summary.cancelled,
+        accepted: summary.accepted,
+        total: summary.totalBookings,
+      });
+      setActiveWidgets(widgets.activeWidgets);
+      setInactiveWidgets(widgets.inactiveWidgets);
+      setSetupWarnings(warnings);
+      setBusinessProfile(profile);
+    }
 
-  const inactiveWidgets = useMemo(
-    () => ALL_WIDGETS.filter((w) => !activeWidgetIds.includes(w.id)),
-    [activeWidgetIds],
-  );
+    void loadDashboardStaticData();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadMonthBookings() {
+      const response = await getDashboardMonthBookings(viewYear, viewMonth);
+      if (!ignore) {
+        setMonthBookings(response.bookings);
+      }
+    }
+
+    void loadMonthBookings();
+
+    return () => {
+      ignore = true;
+    };
+  }, [viewMonth, viewYear]);
 
   const addWidget = useCallback((id: string) => {
-    setActiveWidgetIds((prev) => [...prev, id]);
-  }, []);
+    const nextIds = [...activeWidgets.map((widget) => widget.id), id];
+    setActiveWidgets((prev) => [
+      ...prev,
+      inactiveWidgets.find((widget) => widget.id === id),
+    ].filter((widget): widget is WidgetDefinition => Boolean(widget)));
+    setInactiveWidgets((prev) => prev.filter((widget) => widget.id !== id));
+    void updateDashboardWidgets(nextIds).then((response) => {
+      setActiveWidgets(response.activeWidgets);
+      setInactiveWidgets(response.inactiveWidgets);
+    });
+  }, [activeWidgets, inactiveWidgets]);
 
   const removeWidget = useCallback((id: string) => {
-    setActiveWidgetIds((prev) => prev.filter((wid) => wid !== id));
-  }, []);
+    const nextIds = activeWidgets
+      .map((widget) => widget.id)
+      .filter((widgetId) => widgetId !== id);
+    setActiveWidgets((prev) => prev.filter((widget) => widget.id !== id));
+    const removed = activeWidgets.find((widget) => widget.id === id);
+    if (removed) {
+      setInactiveWidgets((prev) => [...prev, removed]);
+    }
+    void updateDashboardWidgets(nextIds).then((response) => {
+      setActiveWidgets(response.activeWidgets);
+      setInactiveWidgets(response.inactiveWidgets);
+    });
+  }, [activeWidgets]);
 
   const prevMonth = () => {
     if (viewMonth === 0) {
@@ -90,6 +166,8 @@ export function useDashboard() {
     statusCounts,
     activeWidgets,
     inactiveWidgets,
+    setupWarnings,
+    businessProfile,
     addWidget,
     removeWidget,
   };
