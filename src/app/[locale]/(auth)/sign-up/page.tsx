@@ -10,16 +10,18 @@ import CustomButton from "@/presentation/components/CustomButton/CustomButton";
 import { PasswordChecklist, Validation } from "@/domain/validation/validation";
 import { authSchema } from "@/domain/validation/schema";
 import z from "zod";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useBusinessSignUp } from "@/application/context/business-signup.context";
+import { DEMO_BUSINESS_ACCOUNT } from "@/application/config/demo-business-account";
 
 export default function SignUpView() {
   const router = useRouter();
+  const params = useParams<{ locale: string }>();
   const { setData } = useBusinessSignUp();
   // Form state
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+  const [email, setEmail] = useState(DEMO_BUSINESS_ACCOUNT.email);
+  const [password, setPassword] = useState(DEMO_BUSINESS_ACCOUNT.password);
+  const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState("");
 
   const checkList = React.useMemo<PasswordChecklist>(
@@ -43,8 +45,7 @@ export default function SignUpView() {
     try {
       authSchema.parse({ email, password, rememberMe });
       setData({ email, password });
-      console.log("saved:", { email, password });
-      router.push("sign-up/form");
+      router.push(`/${params.locale}/onboarding/owner-information`);
     } catch (err) {
       if (err instanceof z.ZodError) {
         setError(err.issues[0]?.message ?? "Validation Error");

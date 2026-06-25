@@ -1,14 +1,26 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import styles from "./dashboard.module.css";
 import DashboardBar from "@/presentation/components/Dashboard/DashboardBar/DashboardBar";
+import { getStoredAuthSession } from "@/infrastructure/api/client";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (!getStoredAuthSession()) {
+      const locale = pathname.split("/")[1] || "en";
+      router.replace(`/${locale}/sign-in`);
+    }
+  }, [pathname, router]);
+
   return (
     <div className={styles.screen}>
       <DashboardBar></DashboardBar>

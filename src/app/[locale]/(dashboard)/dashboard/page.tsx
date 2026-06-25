@@ -23,6 +23,8 @@ export default function DashboardView() {
     statusCounts,
     activeWidgets,
     inactiveWidgets,
+    setupWarnings,
+    businessProfile,
     addWidget,
     removeWidget,
   } = useDashboard();
@@ -53,6 +55,8 @@ export default function DashboardView() {
                 key={w.id}
                 widget={w}
                 statusCounts={statusCounts}
+                setupWarnings={setupWarnings}
+                businessProfile={businessProfile}
                 calendarProps={calendarProps}
               />
             ),
@@ -75,6 +79,8 @@ export default function DashboardView() {
           removeWidget={removeWidget}
           onClose={() => setOverlayOpen(false)}
           statusCounts={statusCounts}
+          setupWarnings={setupWarnings}
+          businessProfile={businessProfile}
           calendarProps={calendarProps}
         />
       )}

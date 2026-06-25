@@ -1,5 +1,13 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, X } from "lucide-react";
+import {
+  createBillingAccount,
+  submitBillingAccount,
+} from "@/infrastructure/services/billing.service";
 import styles from "./review.module.css";
 
 const STEPS = [
@@ -19,24 +27,45 @@ const DETAILS = [
   { key: "billingEmail", label: "Billing Email" },
 ] as const;
 
-export default async function ReviewBankDetailsPage({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ locale: string }>;
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
-  const { locale } = await params;
-  const submittedDetails = await searchParams;
+export default function ReviewBankDetailsPage() {
+  const params = useParams<{ locale: string }>();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const locale = params.locale;
   const billingHref = `/${locale}/settings/billing`;
   const detailsHref = `/${locale}/settings/billing/account/details`;
 
   function getValue(key: string) {
-    const value = submittedDetails[key];
-    if (Array.isArray(value)) {
-      return value[0] ?? "";
+    return searchParams.get(key) ?? "";
+  }
+
+  async function handleSubmit() {
+    setError("");
+    setIsSubmitting(true);
+
+    try {
+      const account = await createBillingAccount({
+        bankName: getValue("bank"),
+        accountHolder: getValue("accountHolder"),
+        accountNumber: getValue("accountNumber"),
+        iban: getValue("iban"),
+        swift: getValue("swift"),
+        branch: getValue("branch"),
+        billingEmail: getValue("billingEmail"),
+      });
+      await submitBillingAccount(account.id);
+      router.push(billingHref);
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : "Could not submit billing account.",
+      );
+    } finally {
+      setIsSubmitting(false);
     }
-    return value ?? "";
   }
 
   return (
@@ -101,9 +130,16 @@ export default async function ReviewBankDetailsPage({
             <strong>Ready to submit</strong>
           </div>
 
-          <Link href={billingHref} className={styles.primaryButton}>
-            Submit for review
-          </Link>
+          {error && <p>{error}</p>}
+
+          <button
+            type="button"
+            className={styles.primaryButton}
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : "Submit for review"}
+          </button>
         </div>
       </section>
     </main>

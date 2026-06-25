@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiEdit2 } from "react-icons/fi";
 import { useToastNotifications } from "@/application/hooks/useToastNotifications";
 import {
@@ -8,6 +8,12 @@ import {
   type SettingsEditField,
 } from "@/presentation/components/settings/SettingsEditOverlay";
 import ToastContainer from "@/presentation/components/Toast/Toast";
+import {
+  createBusinessService,
+  listBusinessServices,
+  updateBusinessService,
+  type BusinessServiceRow,
+} from "@/infrastructure/services/business-settings.service";
 import styles from "./services.module.css";
 
 type ServiceItem = {
@@ -78,33 +84,7 @@ const SERVICE_CATALOG: Record<string, string[]> = {
   ],
 };
 
-const INITIAL_SERVICES: ServiceItem[] = [
-  { id: "tire-replacement", category: "Wheel Services", name: "Tire Replacement", price: "$120" },
-  { id: "tire-rotation", category: "Wheel Services", name: "Tire Rotation", price: "$40" },
-  { id: "wheel-alignment", category: "Wheel Services", name: "Wheel Alignment", price: "$80" },
-  { id: "wheel-balancing", category: "Wheel Services", name: "Wheel Balancing", price: "$60" },
-  { id: "flat-tire-repair", category: "Wheel Services", name: "Flat Tire Repair", price: "$25" },
-  { id: "oil-change", category: "Engine Services", name: "Oil Change", price: "$55" },
-  { id: "engine-diagnostics", category: "Engine Services", name: "Engine Diagnostics", price: "$90" },
-  { id: "engine-tune-up", category: "Engine Services", name: "Engine Tune-Up", price: "$150" },
-  { id: "timing-belt", category: "Engine Services", name: "Timing Belt Replacement", price: "$320" },
-  { id: "spark-plugs", category: "Engine Services", name: "Spark Plug Replacement", price: "$70" },
-  { id: "brake-pads", category: "Brake Services", name: "Brake Pad Replacement", price: "$140" },
-  { id: "brake-fluid", category: "Brake Services", name: "Brake Fluid Flush", price: "$80" },
-  { id: "disc-resurfacing", category: "Brake Services", name: "Disc Resurfacing", price: "$110" },
-  { id: "dent-removal", category: "Body & Paint", name: "Dent Removal", price: "$200" },
-  { id: "paint-job", category: "Body & Paint", name: "Full Paint Job", price: "$1,200" },
-  { id: "scratch-repair", category: "Body & Paint", name: "Scratch Repair", price: "$90" },
-  { id: "bumper-repair", category: "Body & Paint", name: "Bumper Repair", price: "$180" },
-  { id: "battery-replacement", category: "Electrical Services", name: "Battery Replacement", price: "$130" },
-  { id: "alternator-repair", category: "Electrical Services", name: "Alternator Repair", price: "$220" },
-  { id: "wiring-diagnostics", category: "Electrical Services", name: "Wiring Diagnostics", price: "$95" },
-  { id: "ac-repair", category: "Electrical Services", name: "A/C Repair", price: "$160" },
-  { id: "car-wash", category: "General Maintenance", name: "Car Wash & Detailing", price: "$45" },
-  { id: "fluid-top-up", category: "General Maintenance", name: "Fluid Top-Up", price: "$20" },
-  { id: "filter-replacement", category: "General Maintenance", name: "Filter Replacement", price: "$35" },
-  { id: "inspection", category: "General Maintenance", name: "Full Vehicle Inspection", price: "$75" },
-].map((service) => ({ ...service, status: "active" as ServiceStatus }));
+const INITIAL_SERVICES: ServiceItem[] = [];
 
 const CATEGORY_OPTIONS = CATEGORY_ORDER.map((category) => ({
   value: category,
@@ -159,6 +139,25 @@ const EMPTY_SERVICE: Record<ServiceFieldKey, string> = {
   status: "active",
 };
 
+function formatPrice(value: number) {
+  return `$${Number(value || 0).toLocaleString("en-US")}`;
+}
+
+function parsePrice(value: string) {
+  const parsed = Number(value.replace(/[^0-9.]/g, ""));
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function toServiceItem(row: BusinessServiceRow): ServiceItem {
+  return {
+    id: row.id,
+    category: row.category,
+    name: row.name,
+    price: formatPrice(row.price),
+    status: row.status === "inactive" ? "inactive" : "active",
+  };
+}
+
 type EditingState =
   | { mode: "edit"; serviceId: string }
   | { mode: "new" }
@@ -169,6 +168,15 @@ export default function ServicesSettingsPage() {
   const { notifications, dismissNotification, showNotification } =
     useToastNotifications();
   const [editing, setEditing] = useState<EditingState>(null);
+
+  useEffect(() => {
+    async function loadServices() {
+      const rows = await listBusinessServices();
+      setServices(rows.map(toServiceItem));
+    }
+
+    void loadServices();
+  }, []);
 
   const editingService =
     editing?.mode === "edit"
@@ -187,7 +195,7 @@ export default function ServicesSettingsPage() {
   const overlayTitle =
     editing?.mode === "edit" ? "Edit service" : "New service";
 
-  function handleSave(values: Partial<Record<ServiceFieldKey, string>>) {
+  async function handleSave(values: Partial<Record<ServiceFieldKey, string>>) {
     const category = values.category ?? "";
     const name = values.name ?? "";
     const price = values.price ?? "";
@@ -196,11 +204,15 @@ export default function ServicesSettingsPage() {
     if (!category || !name) return;
 
     if (editing?.mode === "edit") {
+      const updated = await updateBusinessService(editing.serviceId, {
+        category,
+        name,
+        price: parsePrice(price),
+        status,
+      });
       setServices((current) =>
         current.map((service) =>
-          service.id === editing.serviceId
-            ? { ...service, category, name, price, status }
-            : service,
+          service.id === editing.serviceId ? toServiceItem(updated) : service,
         ),
       );
       showNotification(
@@ -209,10 +221,13 @@ export default function ServicesSettingsPage() {
         "settingsSaved",
       );
     } else {
-      setServices((current) => [
-        ...current,
-        { id: crypto.randomUUID(), category, name, price, status },
-      ]);
+      const created = await createBusinessService({
+        category,
+        name,
+        price: parsePrice(price),
+        status,
+      });
+      setServices((current) => [...current, toServiceItem(created)]);
       showNotification(
         "Service created successfully.",
         "success",

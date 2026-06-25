@@ -206,7 +206,7 @@ export default function PaymentsPage() {
         <div className={styles.toolsRight}>
           <PaymentActionsDropdown
             count={payments.selectedPayments.size}
-            onRefund={payments.clearSelectedPayments}
+            onRefund={payments.refundSelectedPayments}
           />
           <Link href={exportHref} className={styles.exportBtn}>
             Export

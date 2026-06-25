@@ -64,6 +64,7 @@ export const ownerInformationSchema = z.object({
   firstName: isTextOnlySchema(false).min(1, "First name is required."),
   lastName: isTextOnlySchema(false).min(1, "Last name is required."),
   email: emailSchema,
+  phoneNumber: z.string().trim().min(1, "Phone number is required."),
   location: locationSchema,
 });
 
@@ -73,6 +74,9 @@ export type OwnerInformationData = z.infer<typeof ownerInformationSchema>;
 
 export const businessInformationSchema = z.object({
   businessName: z.string().min(1, "Business name is required."),
+  phoneNumber: z.string().trim().min(1, "Business phone number is required."),
+  commercialRegistrationNumber: isNumericOnlySchema,
+  taxIdentificationNumber: isNumericOnlySchema,
   businessType: z.enum(
     ["general-repair", "specialized", "body-paint", "quick-service"],
     { message: "Please select a business type." }

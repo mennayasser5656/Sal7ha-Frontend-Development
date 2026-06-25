@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ReportPeriod, ReportSellable } from "@/domain/entities/Report";
 import {
+  emptyApplicationStats,
   getApplicationStats,
   REPORT_PERIODS,
   type ReportRange,
@@ -9,27 +10,57 @@ import {
 export function useReports() {
   const [period, setPeriod] = useState<ReportPeriod>("week");
   const [dateRange, setDateRange] = useState<ReportRange | null>(null);
+  const [stats, setStats] = useState(() => emptyApplicationStats("week"));
+  const [isLoading, setIsLoading] = useState(true);
 
   // The picked range and the bucket unit together drive everything: the range
   // label, the x-axis buckets, and the bar values all reframe around them.
   const startTime = dateRange?.start.getTime() ?? 0;
   const endTime = dateRange?.end?.getTime() ?? 0;
 
-  const stats = useMemo(
-    () => getApplicationStats(period, dateRange),
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadStats() {
+      setIsLoading(true);
+      try {
+        const response = await getApplicationStats(period, dateRange);
+        if (!ignore) {
+          setStats(response);
+        }
+      } finally {
+        if (!ignore) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    void loadStats();
+
+    return () => {
+      ignore = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [period, startTime, endTime],
-  );
+  }, [period, startTime, endTime]);
 
   const rangeLabel = stats.rangeLabel;
 
   // Default to everything selected, so the chart opens on total money made.
-  const [selectedServices, setSelectedServices] = useState<string[]>(() =>
-    SERVICE_AND_ITEM_KEYS(getApplicationStats("week").services),
-  );
-  const [selectedItems, setSelectedItems] = useState<string[]>(() =>
-    SERVICE_AND_ITEM_KEYS(getApplicationStats("week").items),
-  );
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+
+  useEffect(() => {
+    const serviceKeys = SERVICE_AND_ITEM_KEYS(stats.services);
+    const itemKeys = SERVICE_AND_ITEM_KEYS(stats.items);
+    setSelectedServices((current) => {
+      const next = current.filter((key) => serviceKeys.includes(key));
+      return next.length ? next : serviceKeys;
+    });
+    setSelectedItems((current) => {
+      const next = current.filter((key) => itemKeys.includes(key));
+      return next.length ? next : itemKeys;
+    });
+  }, [stats.items, stats.services]);
 
   // Combined profit per x-axis point across every selected service and item.
   const profitSeries = useMemo(() => {
@@ -55,6 +86,7 @@ export function useReports() {
     setDateRange,
     rangeLabel,
     stats,
+    isLoading,
     services: stats.services,
     items: stats.items,
     selectedServices,

@@ -1,10 +1,13 @@
 import type {
   Payment,
+  PaymentExportCategory,
   PaymentExportCriteria,
+  PaymentExportFormat,
   PaymentMethod,
   PaymentSortKey,
   PaymentSummary,
 } from "@/domain/entities/Payment";
+import { apiClient, type PaginatedResponse } from "@/infrastructure/api/client";
 
 export const PAYMENT_METHOD_FILTERS: PaymentMethod[] = [
   "VISA",
@@ -13,263 +16,125 @@ export const PAYMENT_METHOD_FILTERS: PaymentMethod[] = [
   "Cash",
 ];
 
-const MOCK_PAYMENTS: Payment[] = [
-  {
-    id: "PAY-8821",
-    customer: "Ali Hassan",
-    item: "Wheel alignment",
-    method: "VISA",
-    date: "Apr 24, 2026",
-    amount: 65,
-    kind: "service",
-  },
-  {
-    id: "PAY-8828",
-    customer: "Mariam Saleh",
-    item: "Engine diagnostics",
-    method: "Fawry",
-    date: "Apr 23, 2026",
-    amount: 120,
-    kind: "service",
-  },
-  {
-    id: "PAY-8819",
-    customer: "Omar Faisal",
-    item: "Body & Paint",
-    method: "PayPal",
-    date: "Apr 22, 2026",
-    amount: 350,
-    kind: "service",
-  },
-  {
-    id: "PAY-8818",
-    customer: "Lina Abdullah",
-    item: "Battery replacement",
-    method: "Cash",
-    date: "Apr 21, 2026",
-    amount: 85,
-    kind: "item",
-  },
-  {
-    id: "PAY-8817",
-    customer: "Yusuf Malik",
-    item: "Tire rotation",
-    method: "VISA",
-    date: "Apr 19, 2026",
-    amount: 45,
-    kind: "service",
-  },
-  {
-    id: "PAY-8816",
-    customer: "Sara Al-Zahra",
-    item: "Oil change",
-    method: "Fawry",
-    date: "Apr 18, 2026",
-    amount: 50,
-    kind: "service",
-  },
-  {
-    id: "PAY-8815",
-    customer: "Hassan Mohamed",
-    item: "Brake pads",
-    method: "Cash",
-    date: "Apr 17, 2026",
-    amount: 95,
-    kind: "item",
-  },
-  {
-    id: "PAY-8814",
-    customer: "Menna Yasser",
-    item: "Engine diagnostics",
-    method: "PayPal",
-    date: "Apr 16, 2026",
-    amount: 120,
-    kind: "service",
-  },
-];
-
-export function getPaymentHistory(): Payment[] {
-  return [...MOCK_PAYMENTS];
+export interface PaymentListQuery {
+  method?: string | null;
+  kind?: string | null;
+  search?: string;
+  startDate?: Date | string | null;
+  endDate?: Date | string | null;
+  sortBy?: PaymentSortKey | null;
+  sortOrder?: "asc" | "desc";
+  page?: number;
+  limit?: number;
 }
 
-export function getPaymentSummary(payments: Payment[]): PaymentSummary {
-  const monthlyPayments = payments.reduce(
-    (sum, payment) => sum + payment.amount,
-    0,
+export interface PaymentExportJob {
+  id: string;
+  type: string;
+  status: "queued" | "processing" | "completed" | "failed" | string;
+  format: PaymentExportFormat | string;
+  matchedCount: number;
+  downloadUrl: string | null;
+  errorMessage?: string | null;
+  createdAt: string;
+  completedAt?: string | null;
+  expiresAt?: string | null;
+}
+
+function toApiDate(date: Date | string | null | undefined) {
+  if (!date) return undefined;
+  return date instanceof Date ? date.toISOString().slice(0, 10) : date;
+}
+
+export function listPayments(query: PaymentListQuery) {
+  return apiClient<
+    PaginatedResponse<Payment> & {
+      summary: PaymentSummary;
+    }
+  >("/payments", {
+    query: {
+      method: query.method,
+      kind: query.kind,
+      search: query.search,
+      startDate: toApiDate(query.startDate),
+      endDate: toApiDate(query.endDate),
+      sortBy: query.sortBy ?? undefined,
+      sortOrder: query.sortOrder,
+      page: query.page,
+      limit: query.limit,
+    },
+  });
+}
+
+export function getPaymentSummary(query: {
+  startDate?: Date | string | null;
+  endDate?: Date | string | null;
+} = {}) {
+  return apiClient<PaymentSummary>("/payments/summary", {
+    query: {
+      startDate: toApiDate(query.startDate),
+      endDate: toApiDate(query.endDate),
+    },
+  });
+}
+
+export function refundPayment(paymentId: string, reason?: string) {
+  return apiClient(`/payments/${paymentId}/refund`, {
+    method: "POST",
+    body: { reason },
+  });
+}
+
+export function batchRefundPayments(ids: Iterable<string>, reason?: string) {
+  return apiClient("/payments/batch/refund", {
+    method: "POST",
+    body: { ids: Array.from(ids), reason },
+  });
+}
+
+export function createPaymentExportJob(criteria: PaymentExportCriteria) {
+  return apiClient<PaymentExportJob>("/payments/export-jobs", {
+    method: "POST",
+    body: {
+      format: criteria.format,
+      startDate: criteria.startDate || null,
+      endDate: criteria.endDate || null,
+      categories: criteria.categories as PaymentExportCategory[],
+      minPrice: criteria.minPrice ? Number(criteria.minPrice) : null,
+      maxPrice: criteria.maxPrice ? Number(criteria.maxPrice) : null,
+    },
+  });
+}
+
+export function getPaymentExportJob(jobId: string) {
+  return apiClient<PaymentExportJob>(`/payments/export-jobs/${jobId}`);
+}
+
+export async function downloadPaymentExport(job: PaymentExportJob) {
+  const { getAccessToken } = await import("@/infrastructure/api/client");
+  const token = getAccessToken();
+  const baseUrl =
+    process.env.NEXT_PUBLIC_API_BASE_URL ??
+    process.env.API_BASE_URL ??
+    "http://localhost:3334";
+  const response = await fetch(
+    `${baseUrl}/payments/export-jobs/${job.id}/download`,
+    {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    },
   );
 
-  return {
-    monthlyPayments,
-    yearlyPayments: monthlyPayments * 12,
-    itemsSold: payments.filter((payment) => payment.kind === "item").length,
-    servicesDone: payments.filter((payment) => payment.kind === "service")
-      .length,
-  };
-}
-
-export function filterPayments({
-  payments,
-  method,
-  query,
-  rangeStart,
-  rangeEnd,
-}: {
-  payments: Payment[];
-  method: string | null;
-  query: string;
-  rangeStart?: Date | null;
-  rangeEnd?: Date | null;
-}): Payment[] {
-  const normalizedQuery = query.trim().toLowerCase();
-
-  return payments.filter((payment) => {
-    if (method && payment.method !== method) {
-      return false;
-    }
-
-    if (rangeStart && !isPaymentWithinDateRange(payment, rangeStart, rangeEnd)) {
-      return false;
-    }
-
-    if (!normalizedQuery) {
-      return true;
-    }
-
-    return (
-      payment.customer.toLowerCase().includes(normalizedQuery) ||
-      payment.id.toLowerCase().includes(normalizedQuery) ||
-      payment.item.toLowerCase().includes(normalizedQuery) ||
-      payment.method.toLowerCase().includes(normalizedQuery)
-    );
-  });
-}
-
-function isPaymentWithinDateRange(
-  payment: Payment,
-  rangeStart: Date,
-  rangeEnd: Date | null | undefined,
-) {
-  const paymentDate = parsePaymentDate(payment.date);
-  if (!paymentDate) {
-    return true;
+  if (!response.ok) {
+    throw new Error("Could not download export.");
   }
 
-  const start = new Date(rangeStart);
-  start.setHours(0, 0, 0, 0);
-
-  const end = rangeEnd ? new Date(rangeEnd) : new Date(rangeStart);
-  end.setHours(23, 59, 59, 999);
-
-  return paymentDate >= start && paymentDate <= end;
-}
-
-export function sortPayments({
-  payments,
-  sortKey,
-  direction,
-}: {
-  payments: Payment[];
-  sortKey: PaymentSortKey | null;
-  direction: "asc" | "desc";
-}): Payment[] {
-  if (!sortKey) {
-    return payments;
-  }
-
-  const sorted = [...payments].sort((a, b) => {
-    const av = a[sortKey];
-    const bv = b[sortKey];
-
-    if (typeof av === "number" && typeof bv === "number") {
-      return av - bv;
-    }
-
-    return String(av).localeCompare(String(bv));
-  });
-
-  return direction === "asc" ? sorted : sorted.reverse();
-}
-
-export function getTotalPaymentPages(totalItems: number, itemsPerPage: number) {
-  return Math.max(1, Math.ceil(totalItems / itemsPerPage));
-}
-
-export function paginatePayments({
-  payments,
-  page,
-  itemsPerPage,
-}: {
-  payments: Payment[];
-  page: number;
-  itemsPerPage: number;
-}): Payment[] {
-  const start = (page - 1) * itemsPerPage;
-  return payments.slice(start, start + itemsPerPage);
-}
-
-function parsePaymentDate(value: string) {
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? null : date;
-}
-
-function isWithinDateRange(
-  payment: Payment,
-  startDate: string,
-  endDate: string,
-) {
-  const paymentDate = parsePaymentDate(payment.date);
-  if (!paymentDate) {
-    return true;
-  }
-
-  if (startDate) {
-    const start = new Date(startDate);
-    if (!Number.isNaN(start.getTime()) && paymentDate < start) {
-      return false;
-    }
-  }
-
-  if (endDate) {
-    const end = new Date(endDate);
-    end.setHours(23, 59, 59, 999);
-    if (!Number.isNaN(end.getTime()) && paymentDate > end) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-function isWithinPriceRange(payment: Payment, minPrice: string, maxPrice: string) {
-  const min = Number(minPrice);
-  const max = Number(maxPrice);
-
-  if (minPrice && !Number.isNaN(min) && payment.amount < min) {
-    return false;
-  }
-
-  if (maxPrice && !Number.isNaN(max) && payment.amount > max) {
-    return false;
-  }
-
-  return true;
-}
-
-export function filterPaymentsForExport({
-  payments,
-  criteria,
-}: {
-  payments: Payment[];
-  criteria: PaymentExportCriteria;
-}): Payment[] {
-  return payments.filter((payment) => {
-    if (!criteria.categories.includes(payment.kind)) {
-      return false;
-    }
-
-    return (
-      isWithinDateRange(payment, criteria.startDate, criteria.endDate) &&
-      isWithinPriceRange(payment, criteria.minPrice, criteria.maxPrice)
-    );
-  });
+  const blob = await response.blob();
+  const objectUrl = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = objectUrl;
+  anchor.download = `${job.id}`;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(objectUrl);
 }

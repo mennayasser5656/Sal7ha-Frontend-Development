@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiEdit2 } from "react-icons/fi";
 import { useToastNotifications } from "@/application/hooks/useToastNotifications";
 import {
@@ -8,6 +8,12 @@ import {
   type SettingsEditField,
 } from "@/presentation/components/settings/SettingsEditOverlay";
 import ToastContainer from "@/presentation/components/Toast/Toast";
+import {
+  createInventoryItem,
+  listInventoryItems,
+  updateInventoryItem,
+  type InventoryItem as BackendInventoryItem,
+} from "@/infrastructure/services/inventory.service";
 import styles from "../services/services.module.css";
 
 type InventoryItem = {
@@ -150,96 +156,7 @@ const DETAILS_CATALOG: Record<string, string[]> = {
   Wipers: ["Hybrid blade", "Flat blade", "Conventional blade", "All-weather rubber"],
 };
 
-const INITIAL_ITEMS: InventoryItem[] = [
-  {
-    id: "shell-helix-hx8",
-    category: "Oil",
-    name: "Synthetic Engine Oil",
-    company: "Shell",
-    specification: "5W-30",
-    capacity: "4L",
-    price: "$38",
-    details: "Helix HX8",
-    usedInServices: "Oil Change, Engine Tune-Up",
-  },
-  {
-    id: "mobil-super-2000",
-    category: "Oil",
-    name: "Semi-Synthetic Engine Oil",
-    company: "Mobil",
-    specification: "10W-40",
-    capacity: "4L",
-    price: "$32",
-    details: "Super 2000",
-    usedInServices: "Oil Change, Full Vehicle Inspection",
-  },
-  {
-    id: "michelin-primacy",
-    category: "Tires",
-    name: "All-Season Tire",
-    company: "Michelin",
-    specification: "205/55 R16",
-    capacity: "Single tire",
-    price: "$115",
-    details: "Primacy series",
-    usedInServices: "Tire Replacement, Tire Rotation",
-  },
-  {
-    id: "bosch-agm",
-    category: "Batteries",
-    name: "AGM Battery",
-    company: "Bosch",
-    specification: "70Ah",
-    capacity: "12V",
-    price: "$140",
-    details: "Start-stop compatible",
-    usedInServices: "Battery Replacement, Wiring Diagnostics",
-  },
-  {
-    id: "mann-oil-filter",
-    category: "Filters",
-    name: "Oil Filter",
-    company: "Mann-Filter",
-    specification: "HU 816 x",
-    capacity: "Single unit",
-    price: "$18",
-    details: "Engine oil filter",
-    usedInServices: "Oil Change, Filter Replacement",
-  },
-  {
-    id: "brembo-brake-pads",
-    category: "Brake Products",
-    name: "Brake Pads",
-    company: "Brembo",
-    specification: "Ceramic",
-    capacity: "Front axle set",
-    price: "$95",
-    details: "Low dust compound",
-    usedInServices: "Brake Pad Replacement, Disc Resurfacing",
-  },
-  {
-    id: "prestone-coolant",
-    category: "Coolants",
-    name: "Engine Coolant",
-    company: "Prestone",
-    specification: "Ready to use",
-    capacity: "4L",
-    price: "$24",
-    details: "All vehicles",
-    usedInServices: "Fluid Top-Up, Engine Tune-Up",
-  },
-  {
-    id: "bosch-wiper",
-    category: "Wipers",
-    name: "Front Wiper Blade",
-    company: "Bosch",
-    specification: "24 inch",
-    capacity: "Single blade",
-    price: "$20",
-    details: "Hybrid blade",
-    usedInServices: "Full Vehicle Inspection, Car Wash & Detailing",
-  },
-];
+const INITIAL_ITEMS: InventoryItem[] = [];
 
 const CATEGORY_OPTIONS = CATEGORY_ORDER.map((category) => ({
   value: category,
@@ -357,6 +274,38 @@ const EMPTY_ITEM: Record<ItemFieldKey, string> = {
   usedInServices: "",
 };
 
+function formatPrice(value: number) {
+  return `$${Number(value || 0).toLocaleString("en-US")}`;
+}
+
+function parsePrice(value: string) {
+  const parsed = Number(value.replace(/[^0-9.]/g, ""));
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function toItem(row: BackendInventoryItem): InventoryItem {
+  return {
+    id: row.id,
+    category: row.category,
+    name: row.name,
+    company: row.company ?? row.brand ?? "",
+    specification: row.specification ?? row.viscosity ?? "",
+    capacity: row.capacity ?? row.volume ?? "",
+    price: formatPrice(row.price),
+    details: row.details ?? "",
+    usedInServices: Array.isArray(row.usedInServices)
+      ? row.usedInServices.join(", ")
+      : "",
+  };
+}
+
+function toUsedInServices(value: string) {
+  return value
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+}
+
 type EditingState =
   | { mode: "edit"; itemId: string }
   | { mode: "new" }
@@ -367,6 +316,15 @@ export default function ItemsSettingsPage() {
   const { notifications, dismissNotification, showNotification } =
     useToastNotifications();
   const [editing, setEditing] = useState<EditingState>(null);
+
+  useEffect(() => {
+    async function loadItems() {
+      const response = await listInventoryItems({ page: 1, limit: 100 });
+      setItems(response.data.map(toItem));
+    }
+
+    void loadItems();
+  }, []);
 
   const editingItem =
     editing?.mode === "edit"
@@ -388,7 +346,7 @@ export default function ItemsSettingsPage() {
 
   const overlayTitle = editing?.mode === "edit" ? "Edit item" : "New item";
 
-  function handleSave(values: Partial<Record<ItemFieldKey, string>>) {
+  async function handleSave(values: Partial<Record<ItemFieldKey, string>>) {
     const category = values.category ?? "";
     const name = values.name ?? "";
     const company = values.company ?? "";
@@ -401,21 +359,19 @@ export default function ItemsSettingsPage() {
     if (!category || !name) return;
 
     if (editing?.mode === "edit") {
+      const updated = await updateInventoryItem(editing.itemId, {
+        category,
+        name,
+        company,
+        specification,
+        capacity,
+        price: parsePrice(price),
+        details,
+        usedInServices: toUsedInServices(usedInServices),
+      });
       setItems((current) =>
         current.map((item) =>
-          item.id === editing.itemId
-            ? {
-                ...item,
-                category,
-                name,
-                company,
-                specification,
-                capacity,
-                price,
-                details,
-                usedInServices,
-              }
-            : item,
+          item.id === editing.itemId ? toItem(updated) : item,
         ),
       );
       showNotification(
@@ -424,20 +380,18 @@ export default function ItemsSettingsPage() {
         "settingsSaved",
       );
     } else {
-      setItems((current) => [
-        ...current,
-        {
-          id: crypto.randomUUID(),
-          category,
-          name,
-          company,
-          specification,
-          capacity,
-          price,
-          details,
-          usedInServices,
-        },
-      ]);
+      const created = await createInventoryItem({
+        category,
+        name,
+        company,
+        specification,
+        capacity,
+        price: parsePrice(price),
+        details,
+        usedInServices: toUsedInServices(usedInServices),
+        currency: "USD",
+      });
+      setItems((current) => [...current, toItem(created)]);
       showNotification(
         "Item created successfully.",
         "success",

@@ -131,13 +131,22 @@ export default function PaymentExportDetailsPage() {
   const { notifications, dismissNotification, showNotification } =
     useToastNotifications();
 
-  function handleGenerateExport() {
-    exportFlow.generateExport();
-    showNotification(
-      "Export generated successfully.",
-      "success",
-      "exportGenerated",
-    );
+  async function handleGenerateExport() {
+    try {
+      const job = await exportFlow.generateExport();
+      showNotification(
+        job.status === "completed"
+          ? "Export generated successfully."
+          : "Export job queued. Try again in a moment.",
+        job.status === "completed" ? "success" : "success",
+        "exportGenerated",
+      );
+    } catch (error) {
+      showNotification(
+        error instanceof Error ? error.message : "Could not generate export.",
+        "error",
+      );
+    }
   }
 
   return (
@@ -232,7 +241,7 @@ export default function PaymentExportDetailsPage() {
           />
 
           <div className={styles.exportMeta}>
-            <span>{exportFlow.exportPayments.length} matching payments</span>
+            <span>{exportFlow.matchingCount} matching payments</span>
             <span>${exportFlow.summary.monthlyPayments} total</span>
           </div>
 
@@ -240,8 +249,9 @@ export default function PaymentExportDetailsPage() {
             type="button"
             className={styles.primaryButton}
             onClick={handleGenerateExport}
+            disabled={exportFlow.isGenerating}
           >
-            Generate export
+            {exportFlow.isGenerating ? "Generating..." : "Generate export"}
           </button>
         </form>
       </section>

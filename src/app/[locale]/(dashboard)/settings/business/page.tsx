@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useToastNotifications } from "@/application/hooks/useToastNotifications";
 import {
   SettingsInfoRow,
@@ -11,6 +11,10 @@ import {
   type SettingsEditField,
 } from "@/presentation/components/settings/SettingsEditOverlay";
 import ToastContainer from "@/presentation/components/Toast/Toast";
+import {
+  getBusinessProfileSettings,
+  updateBusinessProfileSettings,
+} from "@/infrastructure/services/business-settings.service";
 import styles from "./business.module.css";
 
 type BusinessInfo = {
@@ -25,14 +29,14 @@ type BusinessInfo = {
 };
 
 const INITIAL_BUSINESS: BusinessInfo = {
-  businessName: "Al-Faisal Auto Workshop",
-  businessType: "General Repair Shop",
-  employeeCount: "6 - 15 Employees",
-  country: "Saudi Arabia",
-  streetAddress: "123 Industrial Area",
-  city: "Riyadh",
-  state: "Riyadh Region",
-  zipCode: "12345",
+  businessName: "",
+  businessType: "",
+  employeeCount: "",
+  country: "",
+  streetAddress: "",
+  city: "",
+  state: "",
+  zipCode: "",
 };
 
 const COUNTRIES = [
@@ -49,17 +53,24 @@ const COUNTRIES = [
 ];
 
 const BUSINESS_TYPES = [
-  { value: "General Repair Shop", label: "General Repair Shop" },
-  { value: "Specialized Workshop", label: "Specialized Workshop" },
-  { value: "Body & Paint Shop", label: "Body & Paint Shop" },
-  { value: "Quick Service Center", label: "Quick Service Center" },
+  { value: "general_repair", label: "General Repair Shop" },
+  { value: "specialized", label: "Specialized Workshop" },
+  { value: "body_paint", label: "Body & Paint Shop" },
+  { value: "quick_service", label: "Quick Service Center" },
 ];
 
 const EMPLOYEE_COUNTS = [
-  { value: "1 - 5 Employees", label: "1 - 5 Employees" },
-  { value: "6 - 15 Employees", label: "6 - 15 Employees" },
-  { value: "16+ Employees", label: "16+ Employees" },
+  { value: "small", label: "1 - 5 Employees" },
+  { value: "medium", label: "6 - 15 Employees" },
+  { value: "large", label: "16+ Employees" },
 ];
+
+const businessTypeLabels = Object.fromEntries(
+  BUSINESS_TYPES.map((option) => [option.value, option.label]),
+);
+const employeeCountLabels = Object.fromEntries(
+  EMPLOYEE_COUNTS.map((option) => [option.value, option.label]),
+);
 
 const SECTIONS = {
   details: {
@@ -123,6 +134,24 @@ export default function BusinessInformationPage() {
   );
   const activeSection = editingSection ? SECTIONS[editingSection] : null;
 
+  useEffect(() => {
+    async function loadBusiness() {
+      const profile = await getBusinessProfileSettings();
+      setBusiness({
+        businessName: profile.name ?? "",
+        businessType: profile.businessType ?? "",
+        employeeCount: profile.employeeCount ?? "",
+        country: profile.address?.country ?? "",
+        streetAddress: profile.address?.streetAddress ?? "",
+        city: profile.address?.city ?? "",
+        state: profile.address?.state ?? "",
+        zipCode: profile.address?.zipCode ?? "",
+      });
+    }
+
+    void loadBusiness();
+  }, []);
+
   return (
     <>
       <ToastContainer
@@ -135,10 +164,13 @@ export default function BusinessInformationPage() {
           onEdit={() => setEditingSection("details")}
         >
           <SettingsInfoRow label="Business Name" value={business.businessName} />
-          <SettingsInfoRow label="Business Type" value={business.businessType} />
+          <SettingsInfoRow
+            label="Business Type"
+            value={businessTypeLabels[business.businessType] ?? business.businessType}
+          />
           <SettingsInfoRow
             label="Number of Employees"
-            value={business.employeeCount}
+            value={employeeCountLabels[business.employeeCount] ?? business.employeeCount}
           />
         </SettingsInfoSection>
 
@@ -163,11 +195,21 @@ export default function BusinessInformationPage() {
           fields={activeSection.fields}
           values={business}
           onClose={() => setEditingSection(null)}
-          onSave={(values) => {
-            setBusiness((currentBusiness) => ({
-              ...currentBusiness,
-              ...values,
-            }));
+          onSave={async (values) => {
+            const nextBusiness = { ...business, ...values };
+            setBusiness(nextBusiness);
+            await updateBusinessProfileSettings({
+              name: nextBusiness.businessName,
+              businessType: nextBusiness.businessType,
+              employeeCount: nextBusiness.employeeCount,
+              address: {
+                country: nextBusiness.country,
+                streetAddress: nextBusiness.streetAddress,
+                city: nextBusiness.city,
+                state: nextBusiness.state,
+                zipCode: nextBusiness.zipCode,
+              },
+            });
             showNotification(
               `${activeSection.title} updated successfully.`,
               "success",

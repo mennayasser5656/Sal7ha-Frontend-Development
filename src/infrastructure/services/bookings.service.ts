@@ -1,8 +1,51 @@
-import Booking, { ServiceDetail } from "@/domain/entities/Booking";
-import { parseDateMs, formatDate } from "./date.service";
+import Booking from "@/domain/entities/Booking";
+import { apiClient, type PaginatedResponse } from "@/infrastructure/api/client";
+import { parseDateMs } from "./date.service";
 
 export type SortKey = "serviceName" | "name" | "carMake" | "startDate" | "endDate" | "status" | null;
 export type SortDirection = "asc" | "desc";
+
+export interface BookingListQuery {
+  status?: string | null;
+  startDate?: Date | null;
+  endDate?: Date | null;
+  search?: string;
+  sortBy?: SortKey;
+  sortOrder?: SortDirection;
+  page?: number;
+  limit?: number;
+}
+
+function toApiDate(date: Date | null | undefined) {
+  return date ? date.toISOString().slice(0, 10) : undefined;
+}
+
+export function listBookings(query: BookingListQuery) {
+  return apiClient<PaginatedResponse<Booking>>("/bookings", {
+    query: {
+      status: query.status,
+      startDate: toApiDate(query.startDate),
+      endDate: toApiDate(query.endDate),
+      search: query.search,
+      sortBy: query.sortBy ?? undefined,
+      sortOrder: query.sortOrder,
+      page: query.page,
+      limit: query.limit,
+    },
+  });
+}
+
+export function updateBookingsStatus(ids: Iterable<string>, status: string) {
+  return apiClient<{
+    requested: number;
+    succeeded: number;
+    failed: number;
+    failedIds?: string[];
+  }>("/bookings/batch/status", {
+    method: "PATCH",
+    body: { ids: Array.from(ids), status },
+  });
+}
 
 export function filterByStatus(bookings: Booking[], status: string | null): Booking[] {
   if (!status) return bookings;
@@ -79,107 +122,3 @@ export function paginateBookings(
   return bookings.slice(start, start + itemsPerPage);
 }
 
-export function generateMockBookings(): Booking[] {
-  const services: { name: string; icon: string; price: number; details: ServiceDetail[] }[] = [
-    {
-      name: "Engine Diagnostics & Checkup",
-      icon: "/assets/engine_service.svg",
-      price: 120,
-      details: [
-        { label: "Engine Code", value: "VQ35DE" },
-        { label: "Fault Codes", value: "P0300, P0301" },
-        { label: "Diagnostic Tool", value: "OBD-II Scanner" },
-        { label: "Last Serviced", value: "12,000 km ago" },
-        { label: "Recommended Action", value: "Replace spark plugs" },
-      ],
-    },
-    {
-      name: "Tire Rotation & Alignment",
-      icon: "/assets/wheel_service.svg",
-      price: 65,
-      details: [
-        { label: "Tire Brand", value: "Michelin" },
-        { label: "Tire Size", value: "225/45R17" },
-        { label: "Rotation Pattern", value: "X-Pattern" },
-        { label: "Alignment Type", value: "4-Wheel" },
-        { label: "Tread Depth", value: "5mm" },
-      ],
-    },
-    {
-      name: "Paint Job",
-      icon: "/assets/paint_service.svg",
-      price: 350,
-      details: [
-        { label: "Paint Type", value: "Metallic" },
-        { label: "Color Code", value: "Pearl White" },
-        { label: "Coat Layers", value: "3" },
-        { label: "Surface Area", value: "Full Body" },
-        { label: "Finish", value: "Glossy" },
-      ],
-    },
-    {
-      name: "Battery Check & Replacement",
-      icon: "/assets/battery_service.svg",
-      price: 85,
-      details: [
-        { label: "Battery Brand", value: "Bosch" },
-        { label: "Voltage", value: "12V" },
-        { label: "Capacity", value: "60Ah" },
-        { label: "Cold Crank Amps", value: "540A" },
-        { label: "Warranty", value: "2 years" },
-      ],
-    },
-  ];
-
-  const carMakes: { make: string; models: string[] }[] = [
-    { make: "Nissan", models: ["Altima", "Sentra", "Maxima", "Patrol"] },
-    { make: "Toyota", models: ["Camry", "Corolla", "Land Cruiser", "RAV4"] },
-    { make: "Honda", models: ["Civic", "Accord", "CR-V", "Pilot"] },
-    { make: "BMW", models: ["320i", "520i", "X3", "X5"] },
-    { make: "Mercedes", models: ["C200", "E300", "GLC", "S500"] },
-    { make: "Audi", models: ["A4", "A6", "Q5", "Q7"] },
-    { make: "Ford", models: ["Fusion", "Mustang", "Explorer", "F-150"] },
-  ];
-  const carYears = ["2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"];
-  const names = ["Marwan Mohamed", "Hassan Mohamed", "Menna Yasser", "Ferial Nashaat", "Eslam Mahmoud", "Mohamed Hany"];
-  const ownerIcons = [
-    "/assets/man1.avif",
-    "/assets/man2.avif",
-    "/assets/woman1.jpg",
-    "/assets/woman2.avif",
-  ];
-  const statuses = ["In-Progress", "Completed", "Pending", "Cancelled"];
-
-  const bookings: Booking[] = [];
-
-  for (let i = 1; i <= 25; i++) {
-    const service = services[Math.floor(Math.random() * services.length)];
-    const car = carMakes[Math.floor(Math.random() * carMakes.length)];
-    const carModel = car.models[Math.floor(Math.random() * car.models.length)];
-    const carYear = carYears[Math.floor(Math.random() * carYears.length)];
-    const name = names[Math.floor(Math.random() * names.length)];
-    const ownerIcon = ownerIcons[Math.floor(Math.random() * ownerIcons.length)];
-    const status = statuses[Math.floor(Math.random() * statuses.length)];
-
-    const startDate = new Date(2026, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1);
-    const endDate = new Date(startDate.getTime() + (Math.floor(Math.random() * 3) + 1) * 86400000);
-
-    bookings.push({
-      id: Math.random().toString(36).substring(2, 8).toUpperCase(),
-      serviceName: service.name,
-      name: name,
-      serviceIcon: service.icon,
-      ownerIcon,
-      carMake: car.make,
-      carModel,
-      carYear,
-      startDate: formatDate(startDate),
-      endDate: formatDate(endDate),
-      status,
-      price: service.price,
-      serviceDetails: service.details,
-    });
-  }
-
-  return bookings;
-}

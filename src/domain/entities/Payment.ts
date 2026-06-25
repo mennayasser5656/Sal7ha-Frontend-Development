@@ -1,4 +1,9 @@
-export type PaymentMethod = "VISA" | "Fawry" | "PayPal" | "Cash";
+export type PaymentMethod =
+  | "VISA"
+  | "Fawry"
+  | "PayPal"
+  | "Cash"
+  | (string & {});
 
 export type PaymentKind = "item" | "service" | "car";
 

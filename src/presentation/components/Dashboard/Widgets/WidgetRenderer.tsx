@@ -1,7 +1,8 @@
 "use client";
 
 import {
-  SETUP_WARNINGS,
+  BusinessProfileResponse,
+  SetupWarning,
   WidgetDefinition,
 } from "@/infrastructure/services/dashboard.service";
 import { StatusCounts } from "@/infrastructure/services/dashboard.service";
@@ -14,6 +15,8 @@ import SetupWarningsWidget from "./SetupWarningsWidget/SetupWarningsWidget";
 interface WidgetRendererProps {
   widget: WidgetDefinition;
   statusCounts: StatusCounts;
+  setupWarnings: SetupWarning[];
+  businessProfile: BusinessProfileResponse | null;
   calendarProps: {
     today: Date;
     viewMonth: number;
@@ -29,14 +32,26 @@ interface WidgetRendererProps {
   };
 }
 
-export default function WidgetRenderer({ widget, statusCounts, calendarProps }: WidgetRendererProps) {
+export default function WidgetRenderer({
+  widget,
+  statusCounts,
+  setupWarnings,
+  businessProfile,
+  calendarProps,
+}: WidgetRendererProps) {
   switch (widget.type) {
     case "profile":
-      return <ProfileWidget key={widget.id} />;
+      return (
+        <ProfileWidget
+          key={widget.id}
+          name={businessProfile?.name ?? "Repair Shop"}
+          upToDate={setupWarnings.length === 0}
+        />
+      );
     case "calendar":
       return <CalendarWidget key={widget.id} {...calendarProps} />;
     case "setupWarnings":
-      return <SetupWarningsWidget key={widget.id} warnings={SETUP_WARNINGS} />;
+      return <SetupWarningsWidget key={widget.id} warnings={setupWarnings} />;
     case "status":
       return (
         <StatusWidget
