@@ -14,6 +14,10 @@ import {
   PendingComponent,
 } from "@/presentation/components/common/StatusComponent/StatusComponent";
 import Booking from "@/domain/entities/Booking";
+import {
+  resolveBookingCarIcon,
+  resolveBookingServiceIcon,
+} from "../bookingVisuals";
 
 const STATUS_GROUPS = [
   { key: "Pending", label: "Pending" },
@@ -163,39 +167,53 @@ export default function ListView({ bookings }: ListViewProps) {
             <tbody
               className={`${styles.collapsibleSection} ${collapsedGroups[key] ? styles.collapsed : ""}`}
             >
-              {groupBookings.map((booking) => (
-                <tr
-                  key={booking.id}
-                  className={
-                    selectedBookings.has(booking.id) ? styles.isSelected : ""
-                  }
-                >
-                  <td>
-                    <div className={styles.idColumn}>
-                      <input
-                        className={styles.checkBox}
-                        type="checkbox"
-                        checked={selectedBookings.has(booking.id)}
-                        onChange={() =>
-                          handleSelectBooking(booking.id, key, groupBookings)
-                        }
-                      />
-                      {booking.id}
-                    </div>
-                  </td>
-                  <td>
-                    <div className={styles.serviceName}>
-                      <img src={booking.serviceIcon} alt="" />
-                      <p>{booking.serviceName}</p>
-                    </div>
-                  </td>
-                  <td>{booking.carMake} {booking.carModel} {booking.carYear}</td>
-                  <td>{booking.startDate}</td>
-                  <td>{booking.endDate}</td>
-                  <td>{renderStatusComponent(booking.status)}</td>
-                  <td></td>
-                </tr>
-              ))}
+              {groupBookings.map((booking) => {
+                const CarIcon = resolveBookingCarIcon(booking.carMake);
+
+                return (
+                  <tr
+                    key={booking.id}
+                    className={
+                      selectedBookings.has(booking.id) ? styles.isSelected : ""
+                    }
+                  >
+                    <td>
+                      <div className={styles.idColumn}>
+                        <input
+                          className={styles.checkBox}
+                          type="checkbox"
+                          checked={selectedBookings.has(booking.id)}
+                          onChange={() =>
+                            handleSelectBooking(booking.id, key, groupBookings)
+                          }
+                        />
+                        {booking.id}
+                      </div>
+                    </td>
+                    <td>
+                      <div className={styles.serviceName}>
+                        <img src={resolveBookingServiceIcon(booking)} alt="" />
+                        <p>{booking.serviceName}</p>
+                      </div>
+                    </td>
+                    <td>
+                      <div className={styles.carInfo}>
+                        <span className={styles.carLogoIcon} aria-hidden="true">
+                          <CarIcon />
+                        </span>
+                        <span>
+                          {booking.carMake} {booking.carModel}{" "}
+                          {booking.carYear}
+                        </span>
+                      </div>
+                    </td>
+                    <td>{booking.startDate}</td>
+                    <td>{booking.endDate}</td>
+                    <td>{renderStatusComponent(booking.status)}</td>
+                    <td></td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         );

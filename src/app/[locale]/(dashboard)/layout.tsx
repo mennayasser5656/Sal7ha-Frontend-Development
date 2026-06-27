@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import styles from "./dashboard.module.css";
 import DashboardBar from "@/presentation/components/Dashboard/DashboardBar/DashboardBar";
 import { getStoredAuthSession } from "@/infrastructure/api/client";
+import { useFcmDeviceRegistration } from "@/application/hooks/useFcmDeviceRegistration";
 
 export default function DashboardLayout({
   children,
@@ -13,6 +14,10 @@ export default function DashboardLayout({
 }) {
   const router = useRouter();
   const pathname = usePathname();
+  useFcmDeviceRegistration({
+    autoRegister: true,
+    listenForForegroundMessages: true,
+  });
 
   useEffect(() => {
     if (!getStoredAuthSession()) {

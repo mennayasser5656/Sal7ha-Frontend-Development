@@ -7,6 +7,16 @@
   max-width: 52rem;
 }
 
+.logoInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 @media (max-width: 640px) {
   .content {
     width: 100%;

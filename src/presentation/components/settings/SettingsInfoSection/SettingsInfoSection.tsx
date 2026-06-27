@@ -13,6 +13,8 @@ export function SettingsInfoSection({
   children,
   editLabel,
   onEdit,
+  actionIcon,
+  actionDisabled,
   setupStatus,
   setupLabel,
 }: {
@@ -20,6 +22,8 @@ export function SettingsInfoSection({
   children: ReactNode;
   editLabel?: string;
   onEdit?: () => void;
+  actionIcon?: ReactNode;
+  actionDisabled?: boolean;
   setupStatus?: SetupStatus;
   setupLabel?: string;
 }) {
@@ -38,8 +42,9 @@ export function SettingsInfoSection({
             className={styles.editButton}
             onClick={onEdit}
             aria-label={editLabel ?? `Edit ${title}`}
+            disabled={actionDisabled}
           >
-            <FiEdit2 />
+            {actionIcon ?? <FiEdit2 />}
           </button>
         )}
       </div>

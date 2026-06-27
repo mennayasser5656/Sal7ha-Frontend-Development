@@ -9,6 +9,11 @@ import {
 import { useState } from "react";
 import Booking from "@/domain/entities/Booking";
 import StatusIcon from "@/presentation/components/common/StatusIcon/StatusIcon";
+import {
+  DEFAULT_OWNER_ICON,
+  resolveBookingCarIcon,
+  resolveBookingServiceIcon,
+} from "../bookingVisuals";
 
 interface OverlayBookingDetailsProps {
   booking: Booking;
@@ -19,6 +24,7 @@ export default function OverlayBookingDetails({
   booking,
   onClose,
 }: OverlayBookingDetailsProps) {
+  const CarIcon = resolveBookingCarIcon(booking.carMake);
   const [startDate, setStartDate] = useState<Date | null>(
     booking.startDate ? new Date(booking.startDate) : null,
   );
@@ -52,7 +58,7 @@ export default function OverlayBookingDetails({
             <div className={styles.details}>
               <h2>Owner</h2>
               <div className={styles.owner}>
-                <img src={booking.ownerIcon} alt={booking.name} />
+                <img src={booking.ownerIcon || DEFAULT_OWNER_ICON} alt={booking.name} />
                 <span>{booking.name}</span>
               </div>
             </div>
@@ -61,6 +67,9 @@ export default function OverlayBookingDetails({
             <div className={styles.details}>
               <h2>Car Make</h2>
               <div className={styles.owner}>
+                <span className={styles.carLogoIcon} aria-hidden="true">
+                  <CarIcon />
+                </span>
                 <span>{booking.carMake}</span>
               </div>
             </div>
@@ -109,7 +118,7 @@ export default function OverlayBookingDetails({
             <h2>Services</h2>
             <div className={styles.service}>
               <div className={styles.owner}>
-                <img src={booking.serviceIcon} alt={booking.serviceName} />
+                <img src={resolveBookingServiceIcon(booking)} alt={booking.serviceName} />
                 <span>{booking.serviceName}</span>
               </div>
               <div className={styles.serviceDetails}>

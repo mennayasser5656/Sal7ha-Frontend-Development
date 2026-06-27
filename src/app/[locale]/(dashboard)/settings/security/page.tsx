@@ -5,7 +5,10 @@ import { useToastNotifications } from "@/application/hooks/useToastNotifications
 import { validateStep } from "@/domain/validation/validation";
 import { twoFactorSchema } from "@/domain/validation/schema";
 import { UnderlineTextInput } from "@/presentation/components/UnderlineInput";
-import { SetupStatusIndicator } from "@/presentation/components/settings/SetupStatusIndicator";
+import {
+  SettingsInfoRow,
+  SettingsInfoSection,
+} from "@/presentation/components/settings/SettingsInfoSection";
 import ToastContainer from "@/presentation/components/Toast/Toast";
 import {
   getAccountSecurity,
@@ -59,6 +62,13 @@ const INITIAL_SECURITY: SecurityPreferences = {
   sessionTimeout: true,
   paymentExportConfirmation: false,
 };
+
+const SIGN_IN_PREFERENCES = SECURITY_PREFERENCES.filter(
+  (preference) => preference.key !== "paymentExportConfirmation",
+);
+const SENSITIVE_ACTION_PREFERENCES = SECURITY_PREFERENCES.filter(
+  (preference) => preference.key === "paymentExportConfirmation",
+);
 
 function formatMethod(method: MfaMethod) {
   return method === "sms" ? "SMS code" : "Authenticator app";
@@ -158,6 +168,25 @@ export default function SecuritySettingsPage() {
     );
   }
 
+  function renderPreferenceRows(
+    preferences: typeof SECURITY_PREFERENCES,
+  ) {
+    return preferences.map((preference) => {
+      const enabled = security[preference.key];
+
+      return (
+        <div key={preference.key} className={styles.row}>
+          <span className={styles.rowTitle}>{preference.title}</span>
+          <Toggle
+            enabled={enabled}
+            label={preference.title}
+            onClick={() => toggleSecurityPreference(preference.key)}
+          />
+        </div>
+      );
+    });
+  }
+
   return (
     <div className={styles.content}>
       <ToastContainer
@@ -165,66 +194,31 @@ export default function SecuritySettingsPage() {
         onDismiss={dismissNotification}
       />
 
-      <section className={styles.section}>
-        <div className={styles.header}>
-          <div>
-            <h2 className={styles.title}>Security Settings</h2>
-            <p className={styles.description}>
-              Manage sign-in protection and sensitive workflow safeguards.
-            </p>
-          </div>
-        </div>
+      <SettingsInfoSection title="Sign-In Protection">
+        {renderPreferenceRows(SIGN_IN_PREFERENCES)}
+      </SettingsInfoSection>
 
-        <div className={styles.rows}>
-          {SECURITY_PREFERENCES.map((preference) => {
-            const enabled = security[preference.key];
+      <SettingsInfoSection title="Sensitive Actions">
+        {renderPreferenceRows(SENSITIVE_ACTION_PREFERENCES)}
+      </SettingsInfoSection>
 
-            return (
-              <div key={preference.key} className={styles.row}>
-                <div className={styles.copy}>
-                  <span className={styles.rowTitle}>{preference.title}</span>
-                  <span className={styles.rowDescription}>
-                    {preference.description}
-                  </span>
-                </div>
-                <Toggle
-                  enabled={enabled}
-                  label={preference.title}
-                  onClick={() => toggleSecurityPreference(preference.key)}
-                />
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className={styles.section}>
-        <div className={styles.header}>
-          <div>
-            <h2 className={styles.title}>
-              Multi-Factor Authentication
-              {!mfaEnabled && (
-                <SetupStatusIndicator
-                  status="warning"
-                  label="Multi-factor authentication is not set"
-                />
-              )}
-            </h2>
-            <p className={styles.description}>
-              Add another verification step for admin access.
-            </p>
-          </div>
+      <SettingsInfoSection
+        title="Multi-Factor Authentication"
+        setupStatus={!mfaEnabled ? "warning" : undefined}
+        setupLabel="Multi-factor authentication is not set"
+      >
+        <div className={styles.row}>
+          <span className={styles.rowTitle}>Status</span>
           <Toggle enabled={mfaEnabled} label="MFA" onClick={handleMfaToggle} />
         </div>
-
-        <div className={styles.mfaSummary}>
-          <span>Status</span>
-          <strong>{mfaEnabled ? "Enabled" : "Disabled"}</strong>
-          <span>Method</span>
-          <strong>{mfaEnabled ? formatMethod(savedMfaMethod) : "Not set"}</strong>
-          <span>Recovery phone</span>
-          <strong>{savedPhone || "Not set"}</strong>
-        </div>
+        <SettingsInfoRow
+          label="Method"
+          value={mfaEnabled ? formatMethod(savedMfaMethod) : "Not set"}
+        />
+        <SettingsInfoRow
+          label="Recovery Phone"
+          value={savedPhone || "Not set"}
+        />
 
         {mfaEnabled && (
           <div className={styles.mfaPanel}>
@@ -272,7 +266,7 @@ export default function SecuritySettingsPage() {
             </button>
           </div>
         )}
-      </section>
+      </SettingsInfoSection>
     </div>
   );
 }

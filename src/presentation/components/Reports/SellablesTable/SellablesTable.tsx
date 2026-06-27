@@ -3,6 +3,7 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { FaArrowTrendDown, FaArrowTrendUp } from "react-icons/fa6";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { RiSearch2Line } from "react-icons/ri";
 import { TbChartPie2 } from "react-icons/tb";
 import type { ReportSellable } from "@/domain/entities/Report";
 import Dropdown from "@/presentation/components/Dropdown/Dropdown";
@@ -124,20 +125,30 @@ export default function SellablesTable({
   const columns = useMemo(() => buildColumns(), []);
 
   const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const [sortKey, setSortKey] = useState<SellableSortKey>("revenue");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
   const filteredRows = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    let nextRows = rows;
+
     if (selectedType === "Services") {
-      return rows.filter((row) => row.type === "service");
+      nextRows = nextRows.filter((row) => row.type === "service");
     }
 
     if (selectedType === "Items") {
-      return rows.filter((row) => row.type === "item");
+      nextRows = nextRows.filter((row) => row.type === "item");
     }
 
-    return rows;
-  }, [rows, selectedType]);
+    if (query) {
+      nextRows = nextRows.filter((row) =>
+        row.label.toLowerCase().includes(query),
+      );
+    }
+
+    return nextRows;
+  }, [rows, searchQuery, selectedType]);
 
   const sortedRows = useMemo(
     () => sortRows(filteredRows, sortKey, sortDirection),
@@ -169,6 +180,16 @@ export default function SellablesTable({
               onSelect={setSelectedType}
               label="Type"
             />
+            <div className={styles.searchBar}>
+              <RiSearch2Line />
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                aria-label="Search services and items"
+              />
+            </div>
           </div>
         </div>
       </header>

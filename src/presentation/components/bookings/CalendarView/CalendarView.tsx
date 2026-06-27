@@ -7,6 +7,10 @@ import { useCalendarTimeline, BookingWithParsedDates } from "@/application/hooks
 import { normalizeStatus } from "@/infrastructure/services/status.service";
 import OverlayBookingDetails from "@/presentation/components/bookings/OverlayBookingDetails/OverlayBookingDetails";
 import Booking from "@/domain/entities/Booking";
+import {
+  DEFAULT_OWNER_ICON,
+  resolveBookingServiceIcon,
+} from "../bookingVisuals";
 
 const MAX_VISIBLE_BOOKINGS = 2;
 
@@ -51,12 +55,12 @@ function BookingCard({ booking, onClick }: BookingCardProps) {
       <div className={styles.bookingMeta}>
         <img
           className={styles.bookingAvatar}
-          src={booking.ownerIcon}
+          src={booking.ownerIcon || DEFAULT_OWNER_ICON}
           alt={booking.name}
         />
         <img
           className={styles.bookingServiceIcon}
-          src={booking.serviceIcon}
+          src={resolveBookingServiceIcon(booking)}
           alt={booking.serviceName}
         />
         <span className={styles.metaDot}>·</span>

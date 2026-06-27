@@ -1,5 +1,11 @@
 import { apiClient } from "@/infrastructure/api/client";
 
+export type PersonalIdReviewStatus =
+  | "not_uploaded"
+  | "pending"
+  | "approved"
+  | "rejected";
+
 export interface AccountProfile {
   id: string;
   firstName: string;
@@ -8,6 +14,9 @@ export interface AccountProfile {
   phoneNumber?: string | null;
   address?: Record<string, unknown> | null;
   setupStatus?: "ok" | "warning";
+  personalIdUrl?: string | null;
+  personalIdFileName?: string | null;
+  personalIdReviewStatus?: PersonalIdReviewStatus;
 }
 
 export interface SecurityPreference {
@@ -38,6 +47,16 @@ export function updateAccountProfile(payload: {
   return apiClient<AccountProfile>("/account/profile", {
     method: "PATCH",
     body: payload,
+  });
+}
+
+export function uploadPersonalIdCard(file: File) {
+  const body = new FormData();
+  body.append("file", file);
+
+  return apiClient<AccountProfile>("/account/profile/personal-id-card", {
+    method: "PUT",
+    body,
   });
 }
 

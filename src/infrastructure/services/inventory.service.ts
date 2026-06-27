@@ -1,28 +1,10 @@
 import { apiClient, type PaginatedResponse } from "@/infrastructure/api/client";
+import type {
+  InventoryItem,
+  InventorySaleResult,
+} from "@/domain/entities/Inventory";
 
-export interface InventoryItem {
-  id: string;
-  category: string;
-  name: string;
-  company?: string | null;
-  brand?: string | null;
-  type?: string | null;
-  specification?: string | null;
-  viscosity?: string | null;
-  capacity?: string | null;
-  volume?: string | null;
-  apiSpec?: string | null;
-  application?: string | null;
-  details?: string | null;
-  usedInServices?: string[] | null;
-  imageUrl?: string | null;
-  price: number;
-  purchasePrice?: number | null;
-  currency?: string;
-  deliveryTime?: string | null;
-  quantity?: number;
-  status?: string;
-}
+export type { InventoryItem } from "@/domain/entities/Inventory";
 
 export interface InventoryCatalogCategory {
   name: string;
@@ -80,7 +62,7 @@ export function sellInventoryItem(id: string, payload: {
   unitPrice?: number | null;
   customerId?: string | null;
 }) {
-  return apiClient(`/inventory/items/${id}/sell`, {
+  return apiClient<InventorySaleResult>(`/inventory/items/${id}/sell`, {
     method: "POST",
     body: payload,
   });

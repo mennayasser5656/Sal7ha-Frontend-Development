@@ -1,0 +1,189 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+3 0 obj
+<< /Length 4957 >>
+stream
+BT 0.067 0.094 0.153 rg /F2 23.00 Tf 105.13 771.89 Td (Next.js Project Learning Topics) Tj ET
+BT 0.294 0.333 0.388 rg /F1 9.80 Tf 50.19 747.89 Td (A focused study guide for the graduation project presentation. Covers the Next.js, React,) Tj ET
+BT 0.294 0.333 0.388 rg /F1 9.80 Tf 50.19 735.89 Td (TypeScript, validation, API, styling, and library topics used in the admin dashboard.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 14.00 Tf 60.00 695.89 Td (1. Core Next.js Topics) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 671.89 Td (App Router) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 659.89 Td (The app folder structure, page.tsx files, layout.tsx files, nested layouts, and route-driven) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 647.89 Td (UI.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 631.89 Td (Dynamic routes) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 619.89 Td (Folder names such as [locale] and how URLs like /en/dashboard and /ar/dashboard are handled.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 603.89 Td (Route groups) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 591.89 Td (Parentheses folders such as \(auth\), \(dashboard\), and \(standalone\). They organize code) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 579.89 Td (without changing the URL path.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 563.89 Td (Client components) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 551.89 Td (The use client directive and why React hooks like useState and useEffect require client) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 539.89 Td (components.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 523.89 Td (Server components) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 511.89 Td (Default component behavior in Next.js when use client is not added.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 495.89 Td (Navigation) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 483.89 Td (Link, useRouter, usePathname, and useParams from Next.js navigation.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 467.89 Td (Middleware) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 455.89 Td (How middleware can run before a route loads. In this project it supports locale routing.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 439.89 Td (Environment variables) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 427.89 Td (NEXT_PUBLIC variables, API base URLs, and how frontend configuration is passed safely.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 411.89 Td (Public assets) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 399.89 Td (How images, SVGs, and static files from public are referenced in pages and components.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 383.89 Td (Next fonts) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 371.89 Td (Using next/font/google to load optimized fonts.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 14.00 Tf 60.00 347.89 Td (2. React APIs Used Inside The Next.js App) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 323.89 Td (Components - React) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 311.89 Td (UI is split into reusable pieces with props and JSX.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 295.89 Td (State - useState) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 283.89 Td (Stores values that change on the client, such as form fields, filters, and selected rows.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 267.89 Td (Effects - useEffect) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 255.89 Td (Runs side effects such as loading API data after a component renders.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 239.89 Td (Memoized values - useMemo) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 227.89 Td (Avoids recalculating derived values unless inputs change.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 211.89 Td (Stable callbacks - useCallback) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 199.89 Td (Keeps function references stable, useful for effects and child components.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 183.89 Td (DOM references - useRef) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 171.89 Td (Stores references to DOM nodes, timers, or values that should not trigger re-rendering.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 155.89 Td (Context - createContext / useContext) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 143.89 Td (Shares state across related screens, such as multi-step signup data.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 127.89 Td (Custom hooks - Project hooks) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 115.89 Td (Reusable logic functions like useBookings, usePayments, and useDashboard.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 14.00 Tf 60.00 91.89 Td (3. TypeScript Topics) Tj ET
+BT 0.420 0.447 0.502 rg /F1 8.00 Tf 48.00 30.00 Td (Car Service Admin - Next.js Learning Topics) Tj ET
+BT 0.420 0.447 0.502 rg /F1 8.00 Tf 502.28 30.00 Td (Page 1 of 3) Tj ET
+endstream
+endobj
+4 0 obj
+<< /Length 4781 >>
+stream
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 733.89 Td (Types and interfaces) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 721.89 Td (Describe the shape of data like Booking, Payment, Report, and API responses.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 705.89 Td (Generics) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 693.89 Td (Reusable typed components and functions, such as a table that can display different row) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 681.89 Td (types.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 665.89 Td (Union types) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 653.89 Td (Limited sets of allowed values, such as payment methods, report periods, and export formats.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 637.89 Td (Optional fields) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 625.89 Td (Handling values that may be missing, null, or undefined.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 609.89 Td (Path aliases) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 597.89 Td (Imports like @/application/hooks/useBookings instead of long relative paths.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 14.00 Tf 60.00 573.89 Td (4. Validation And Forms) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 549.89 Td (Schema validation - Zod) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 537.89 Td (Define rules for email, password, owner information, business information, bank details, and) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 525.89 Td (MFA.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 509.89 Td (Controlled forms - React state) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 497.89 Td (Inputs read from state and update state on every change.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 481.89 Td (Submit handling - onSubmit / async functions) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 469.89 Td (Validate data, call APIs, handle loading, then navigate or show errors.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 453.89 Td (Error messages - Conditional rendering) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 441.89 Td (Show field errors and form errors only when validation or API calls fail.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 425.89 Td (Multi-step forms - React Context + router) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 413.89 Td (Keep signup data while moving between onboarding screens.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 14.00 Tf 60.00 389.89 Td (5. API, Authentication, And Backend Communication) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 365.89 Td (REST APIs) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 353.89 Td (GET, POST, PUT, PATCH, DELETE and how frontend actions map to backend endpoints.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 337.89 Td (Fetch API) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 325.89 Td (How browser code sends requests, attaches headers, serializes JSON, and reads responses.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 309.89 Td (API client pattern) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 297.89 Td (A shared helper builds URLs, sends requests, handles JSON, errors, auth headers, and token) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 285.89 Td (refresh.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 269.89 Td (JWT / token auth) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 257.89 Td (Access tokens, refresh tokens, bearer authorization headers, and why tokens expire.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 241.89 Td (Local storage) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 229.89 Td (Where the browser stores the auth session for client-side access.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 213.89 Td (Cookies) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 201.89 Td (How an auth token can also be written as a cookie for route/session handling.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 185.89 Td (OpenAPI) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 173.89 Td (A machine-readable backend contract that documents endpoints, request bodies, and responses.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 14.00 Tf 60.00 149.89 Td (6. Styling And UI Libraries) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 125.89 Td (Scoped styling - CSS Modules) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 113.89 Td (Component-specific CSS files that avoid global class conflicts.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 97.89 Td (Global styles - globals.css) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 85.89 Td (CSS variables, shared classes, fonts, and base styling.) Tj ET
+BT 0.420 0.447 0.502 rg /F1 8.00 Tf 48.00 30.00 Td (Car Service Admin - Next.js Learning Topics) Tj ET
+BT 0.420 0.447 0.502 rg /F1 8.00 Tf 502.28 30.00 Td (Page 2 of 3) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Length 4622 >>
+stream
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 733.89 Td (Utility styling - Tailwind CSS) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 721.89 Td (Utility-first CSS approach, even if most styling is done with modules.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 705.89 Td (Icons - React Icons / Lucide React) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 693.89 Td (Reusable icon components for navigation, buttons, status, and actions.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 677.89 Td (Material UI support - MUI + AppRouterCacheProvider) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 665.89 Td (Integration support for Material UI styles in the Next App Router.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 649.89 Td (Responsive design - CSS) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 637.89 Td (Flexbox, grid, breakpoints, overflow behavior, and dashboard layouts.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 14.00 Tf 60.00 613.89 Td (7. Feature-Specific Libraries And Concepts) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 589.89 Td (Internationalization - next-intl) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 577.89 Td (Locale routing, messages, English/Arabic support, and RTL/LTR awareness.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 561.89 Td (Push notifications - Firebase Cloud Messaging \(FCM\)) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 549.89 Td (Notification permission, Firebase web messaging, service worker, VAPID key, device token) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 537.89 Td (registration, and backend delivery.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 521.89 Td (Phone input - react-international-phone) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 509.89 Td (Country-aware phone number inputs and formatting.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 493.89 Td (Charts - SVG + React) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 481.89 Td (How report data becomes plotted points, lines, labels, and tooltips.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 465.89 Td (Tables - Custom components) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 453.89 Td (Pagination, sorting, filtering, searching, row selection, and bulk actions.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 9.50 Tf 58.00 437.89 Td (Toasts - Custom notification UI) Tj ET
+BT 0.216 0.255 0.318 rg /F1 9.00 Tf 68.00 425.89 Td (Temporary success/error messages after user actions.) Tj ET
+BT 0.067 0.094 0.153 rg /F2 14.00 Tf 60.00 401.89 Td (8. Suggested Learning Priority) Tj ET
+BT 0.122 0.161 0.216 rg /F1 9.40 Tf 48.00 377.89 Td (1. Next.js App Router, page.tsx, layout.tsx, dynamic routes, and route groups.) Tj ET
+BT 0.122 0.161 0.216 rg /F1 9.40 Tf 48.00 363.89 Td (2. Client components and the use client directive.) Tj ET
+BT 0.122 0.161 0.216 rg /F1 9.40 Tf 48.00 349.89 Td (3. React hooks: useState, useEffect, useMemo, useCallback, useRef, useContext.) Tj ET
+BT 0.122 0.161 0.216 rg /F1 9.40 Tf 48.00 335.89 Td (4. TypeScript types, interfaces, generics, and union types.) Tj ET
+BT 0.122 0.161 0.216 rg /F1 9.40 Tf 48.00 321.89 Td (5. Zod validation and controlled forms.) Tj ET
+BT 0.122 0.161 0.216 rg /F1 9.40 Tf 48.00 307.89 Td (6. REST APIs, fetch, API client helpers, and error handling.) Tj ET
+BT 0.122 0.161 0.216 rg /F1 9.40 Tf 48.00 293.89 Td (7. Authentication tokens, local storage, cookies, and protected route behavior.) Tj ET
+BT 0.122 0.161 0.216 rg /F1 9.40 Tf 48.00 279.89 Td (8. next-intl localization for English and Arabic routes.) Tj ET
+BT 0.122 0.161 0.216 rg /F1 9.40 Tf 48.00 265.89 Td (9. CSS Modules, global CSS variables, icons, and responsive dashboard UI.) Tj ET
+BT 0.122 0.161 0.216 rg /F1 9.40 Tf 48.00 251.89 Td (10. Firebase Cloud Messaging: notification permission, service worker, VAPID key, device) Tj ET
+BT 0.122 0.161 0.216 rg /F1 9.40 Tf 64.00 237.89 Td (tokens, and backend notification flow.) Tj ET
+BT 0.122 0.161 0.216 rg /F1 9.40 Tf 48.00 223.89 Td (11. Reusable components, custom hooks, and how data flows from page to hook to service to API.) Tj ET
+BT 0.420 0.447 0.502 rg /F1 8.40 Tf 48.00 201.89 Td (Note: useState is a React hook, not a separate library. Zod, next-intl, React Icons, Lucide React,) Tj ET
+BT 0.420 0.447 0.502 rg /F1 8.40 Tf 48.00 190.89 Td (Firebase, Tailwind CSS, MUI, and react-international-phone are external libraries used alongside Next.js) Tj ET
+BT 0.420 0.447 0.502 rg /F1 8.40 Tf 48.00 179.89 Td (and React.) Tj ET
+BT 0.420 0.447 0.502 rg /F1 8.00 Tf 48.00 30.00 Td (Car Service Admin - Next.js Learning Topics) Tj ET
+BT 0.420 0.447 0.502 rg /F1 8.00 Tf 502.28 30.00 Td (Page 3 of 3) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 9 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 3 0 R >>
+endobj
+7 0 obj
+<< /Type /Page /Parent 9 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 4 0 R >>
+endobj
+8 0 obj
+<< /Type /Page /Parent 9 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 5 0 R >>
+endobj
+9 0 obj
+<< /Type /Pages /Kids [6 0 R 7 0 R 8 0 R] /Count 3 >>
+endobj
+10 0 obj
+<< /Type /Catalog /Pages 9 0 R >>
+endobj
+xref
+0 11
+0000000000 65535 f 
+0000000015 00000 n 
+0000000085 00000 n 
+0000000160 00000 n 
+0000005169 00000 n 
+0000010002 00000 n 
+0000014676 00000 n 
+0000014818 00000 n 
+0000014960 00000 n 
+0000015102 00000 n 
+0000015171 00000 n 
+trailer
+<< /Size 11 /Root 10 0 R >>
+startxref
+15221
+%%EOF

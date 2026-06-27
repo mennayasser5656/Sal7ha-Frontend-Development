@@ -48,6 +48,11 @@
   color: #000;
 }
 
+.editButton:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
 .rows {
   display: flex;
   flex-direction: column;

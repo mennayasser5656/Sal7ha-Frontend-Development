@@ -34,7 +34,10 @@ export default function StatusWidget({ title, count, total, color }: StatusWidge
             strokeDashoffset={offset}
           />
         </svg>
-        <div className={styles.statusCircleText}>{count}</div>
+        <div className={styles.statusCircleText}>
+          <span className={styles.statusCount}>{count}</span>
+          <span className={styles.statusLabel}>Service</span>
+        </div>
       </div>
     </div>
   );

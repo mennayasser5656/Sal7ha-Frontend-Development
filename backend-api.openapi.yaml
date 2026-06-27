@@ -413,6 +413,58 @@ paths:
         "400":
           $ref: "#/components/responses/ValidationError"
 
+  /account/profile/personal-id-card:
+    put:
+      tags: [Account]
+      operationId: uploadPersonalIdCard
+      summary: Upload or replace the account owner's Personal ID card
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Updated account profile with pending ID review
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountProfile"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+
+  /business/profile/logo:
+    put:
+      tags: [Business]
+      operationId: uploadBusinessLogo
+      summary: Upload or replace the current business shop logo
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Updated business profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Business"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+
   /business/setup-warnings:
     get:
       tags: [Business]
@@ -2054,6 +2106,19 @@ components:
           $ref: "#/components/schemas/Address"
         setupStatus:
           $ref: "#/components/schemas/SetupStatus"
+        personalIdUrl:
+          type: string
+          format: uri
+          nullable: true
+        personalIdFileName:
+          type: string
+          nullable: true
+        personalIdReviewStatus:
+          $ref: "#/components/schemas/PersonalIdReviewStatus"
+
+    PersonalIdReviewStatus:
+      type: string
+      enum: [not_uploaded, pending, approved, rejected]
 
     AccountProfileUpdateDto:
       type: object
@@ -2320,6 +2385,13 @@ components:
         taxIdentificationNumber:
           type: string
           nullable: true
+        logoUrl:
+          type: string
+          format: uri
+          nullable: true
+        logoFileName:
+          type: string
+          nullable: true
         businessType:
           $ref: "#/components/schemas/BusinessType"
         employeeCount:
@@ -2350,6 +2422,11 @@ components:
         commercialRegistrationNumber:
           type: string
         taxIdentificationNumber:
+          type: string
+        logoUrl:
+          type: string
+          format: uri
+        logoFileName:
           type: string
         businessType:
           $ref: "#/components/schemas/BusinessType"
@@ -3946,6 +4023,9 @@ x-database:
         - birth_date date null
         - address jsonb not null default '{}'
         - avatar_url text null
+        - personal_id_url text null
+        - personal_id_file_name text null
+        - personal_id_review_status text not null default 'not_uploaded'
         - mfa_enabled boolean not null default false
         - mfa_method text null
         - mfa_phone text null
@@ -3965,6 +4045,8 @@ x-database:
         - phone_number text not null
         - commercial_registration_number text null
         - tax_identification_number text null
+        - logo_url text null
+        - logo_file_name text null
         - business_type text null
         - employee_count text null
         - address jsonb not null default '{}'

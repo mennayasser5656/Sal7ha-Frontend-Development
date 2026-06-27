@@ -5,6 +5,10 @@ export interface BusinessProfileSettings {
   name: string;
   phoneNumber?: string | null;
   email?: string | null;
+  commercialRegistrationNumber?: string | null;
+  taxIdentificationNumber?: string | null;
+  logoUrl?: string | null;
+  logoFileName?: string | null;
   businessType?: string | null;
   employeeCount?: string | null;
   address?: {
@@ -51,6 +55,16 @@ export function updateBusinessProfileSettings(
   return apiClient<BusinessProfileSettings>("/business/profile", {
     method: "PATCH",
     body: payload,
+  });
+}
+
+export function uploadBusinessLogo(file: File) {
+  const body = new FormData();
+  body.append("file", file);
+
+  return apiClient<BusinessProfileSettings>("/business/profile/logo", {
+    method: "PUT",
+    body,
   });
 }
 

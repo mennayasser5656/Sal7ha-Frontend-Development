@@ -1,0 +1,125 @@
+.statusWidget {
+  grid-column: span 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0.9rem 1rem 0.8rem;
+  background-color: #f2f0ea;
+  border-radius: 0.75rem;
+  gap: 0.3rem;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.statusWidget:hover {
+  transform: scale(1.03);
+}
+
+.statusWidgetHeader {
+  flex: 0 0 auto;
+}
+
+.statusWidgetTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: black;
+}
+
+.statusWidgetSub {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: black;
+}
+
+.statusChart {
+  position: relative;
+  width: min(100%, 11.75rem);
+  height: 5.1rem;
+  margin: 0 auto;
+}
+
+.statusChart svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.statusArcBg,
+.statusArcSegment {
+  fill: none;
+  stroke-width: 11;
+}
+
+.statusArcBg {
+  stroke: #dedbd3;
+  stroke-linecap: round;
+}
+
+.statusArcSegment {
+  stroke-linecap: butt;
+  transition: stroke-dasharray 0.5s ease;
+}
+
+.statusChartText {
+  position: absolute;
+  left: 50%;
+  bottom: -0.05rem;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.12rem;
+  color: black;
+}
+
+.statusCount {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.statusLabel {
+  font-size: 0.58rem;
+  font-weight: 400;
+  line-height: 1;
+  color: #606060;
+}
+
+.statusLegend {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.32rem 0.65rem;
+  margin-top: auto;
+}
+
+.statusLegendItem {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 0.32rem;
+  min-width: 0;
+  color: #252525;
+}
+
+.statusLegendDot {
+  grid-row: 1 / span 2;
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: 50%;
+}
+
+.statusLegendLabel {
+  overflow: hidden;
+  font-size: 0.58rem;
+  font-weight: 600;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statusLegendValue {
+  font-size: 0.52rem;
+  line-height: 1.1;
+  color: #707070;
+}

@@ -8,6 +8,14 @@ export interface InboxMessage {
   type: string;
   createdAt: string;
   readAt?: string | null;
+  archivedAt?: string | null;
+  actionUrl?: string | null;
+  actorName?: string | null;
+  bookingId?: string | null;
+  serviceIcon?: string | null;
+  serviceName?: string | null;
+  data?: Record<string, unknown> | null;
+  metadata?: Record<string, unknown> | null;
 }
 
 export function listInboxMessages(query: {

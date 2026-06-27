@@ -76,7 +76,12 @@ export function getClientImage(index: number): string {
 export interface WidgetDefinition {
   id: string;
   title: string;
-  type: "profile" | "calendar" | "status" | "setupWarnings";
+  type:
+    | "profile"
+    | "calendar"
+    | "status"
+    | "statusSummary"
+    | "setupWarnings";
   statusKey?: "inProgress" | "completed" | "pending" | "cancelled";
   color?: string;
   span?: number;
@@ -116,17 +121,40 @@ export const SETUP_WARNINGS: SetupWarning[] = [
   },
 ];
 
+const LEGACY_STATUS_WIDGET_IDS = [
+  "in-progress",
+  "completed",
+  "pending",
+  "cancelled",
+] as const;
+
+const STATUS_SUMMARY_STORAGE_KEY = "dashboard-booking-status-widget-active";
+
+export const STATUS_SUMMARY_WIDGET: WidgetDefinition = {
+  id: "booking-status",
+  title: "Booking Status",
+  type: "statusSummary",
+  span: 1,
+};
+
 export const ALL_WIDGETS: WidgetDefinition[] = [
   { id: "profile", title: "Profile", type: "profile", span: 1 },
   { id: "calendar", title: "Calendar & Services", type: "calendar", span: 2 },
-  { id: "setup-warnings", title: "Setup Warnings", type: "setupWarnings", span: 1 },
+  { id: "setup-warnings", title: "Action Items", type: "setupWarnings", span: 2 },
   { id: "in-progress", title: "In-Progress", type: "status", statusKey: "inProgress", color: "#a0a0a0", span: 1 },
   { id: "completed", title: "Completed", type: "status", statusKey: "completed", color: "#10b981", span: 1 },
   { id: "pending", title: "Pending", type: "status", statusKey: "pending", color: "#ffbf51", span: 1 },
   { id: "cancelled", title: "Cancelled", type: "status", statusKey: "cancelled", color: "#ef4444", span: 1 },
+  STATUS_SUMMARY_WIDGET,
 ];
 
-const DEFAULT_WIDGET_IDS = ["profile", "calendar", "setup-warnings", "in-progress", "completed", "pending", "cancelled"];
+const DEFAULT_WIDGET_IDS = [
+  "profile",
+  "calendar",
+  "setup-warnings",
+  ...LEGACY_STATUS_WIDGET_IDS,
+  STATUS_SUMMARY_WIDGET.id,
+];
 
 export function getDefaultWidgetIds(): string[] {
   return [...DEFAULT_WIDGET_IDS];
@@ -159,9 +187,54 @@ export interface DashboardWidgetsResponse {
   inactiveWidgets: WidgetDefinition[];
 }
 
+function getStoredStatusSummaryPreference(): boolean {
+  if (typeof window === "undefined") return true;
+  return window.localStorage.getItem(STATUS_SUMMARY_STORAGE_KEY) !== "false";
+}
+
+function normalizeDashboardWidgets(
+  widgets: DashboardWidgetsResponse,
+  statusSummaryIsActive = getStoredStatusSummaryPreference(),
+): DashboardWidgetsResponse {
+  const activeWidgets = widgets.activeWidgets.filter(
+    (widget) => widget.id !== STATUS_SUMMARY_WIDGET.id,
+  );
+  const inactiveWidgets = widgets.inactiveWidgets.filter(
+    (widget) => widget.id !== STATUS_SUMMARY_WIDGET.id,
+  );
+
+  if (statusSummaryIsActive) {
+    activeWidgets.push(STATUS_SUMMARY_WIDGET);
+  } else {
+    inactiveWidgets.push(STATUS_SUMMARY_WIDGET);
+  }
+
+  return { activeWidgets, inactiveWidgets };
+}
+
+function prepareDashboardWidgetIds(widgetIds: string[]) {
+  const statusSummaryIsActive = widgetIds.includes(STATUS_SUMMARY_WIDGET.id);
+
+  if (typeof window !== "undefined") {
+    window.localStorage.setItem(
+      STATUS_SUMMARY_STORAGE_KEY,
+      String(statusSummaryIsActive),
+    );
+  }
+
+  return {
+    statusSummaryIsActive,
+    persistedIds: widgetIds.filter(
+      (id) => id !== STATUS_SUMMARY_WIDGET.id,
+    ),
+  };
+}
+
 export interface BusinessProfileResponse {
   id: string;
   name: string;
+  logoUrl?: string | null;
+  logoFileName?: string | null;
   email?: string | null;
   phoneNumber?: string | null;
   onboardingCompleted?: boolean;
@@ -179,14 +252,21 @@ export function getDashboardMonthBookings(year: number, month: number) {
 }
 
 export function getDashboardWidgets() {
-  return apiClient<DashboardWidgetsResponse>("/dashboard/widgets");
+  return apiClient<DashboardWidgetsResponse>("/dashboard/widgets").then(
+    normalizeDashboardWidgets,
+  );
 }
 
 export function updateDashboardWidgets(activeWidgetIds: string[]) {
+  const { persistedIds, statusSummaryIsActive } =
+    prepareDashboardWidgetIds(activeWidgetIds);
+
   return apiClient<DashboardWidgetsResponse>("/dashboard/widgets", {
     method: "PUT",
-    body: { activeWidgetIds },
-  });
+    body: { activeWidgetIds: persistedIds },
+  }).then((widgets) =>
+    normalizeDashboardWidgets(widgets, statusSummaryIsActive),
+  );
 }
 
 export function getBusinessProfile() {

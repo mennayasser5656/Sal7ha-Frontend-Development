@@ -10,6 +10,11 @@ import Dropdown from "@/presentation/components/Dropdown/Dropdown";
 import ActionDropdown from "@/presentation/components/ActionDropdown/ActionDropdown";
 import DateActionButton from "@/presentation/components/DateActionButton/DateActionButton";
 import ToastContainer from "@/presentation/components/Toast/Toast";
+import {
+  DEFAULT_OWNER_ICON,
+  resolveBookingCarIcon,
+  resolveBookingServiceIcon,
+} from "@/presentation/components/bookings/bookingVisuals";
 import { useBookings } from "@/application/hooks/useBookings";
 import Booking from "@/domain/entities/Booking";
 import { SortKey } from "@/infrastructure/services/bookings.service";
@@ -23,7 +28,7 @@ const COLUMNS: ColumnDef<Booking>[] = [
     sortable: true,
     render: (b) => (
       <div className={styles.serviceName}>
-        <img src={b.serviceIcon} alt="" />
+        <img src={resolveBookingServiceIcon(b)} alt="" />
         <p>{b.serviceName}</p>
       </div>
     ),
@@ -34,7 +39,7 @@ const COLUMNS: ColumnDef<Booking>[] = [
     sortable: true,
     render: (b) => (
       <div className={styles.ownerInfo}>
-        <img src={b.ownerIcon} alt={b.name} className={styles.ownerImage} />
+        <img src={b.ownerIcon || DEFAULT_OWNER_ICON} alt={b.name} className={styles.ownerImage} />
         <span>{b.name}</span>
       </div>
     ),
@@ -43,7 +48,18 @@ const COLUMNS: ColumnDef<Booking>[] = [
     key: "carMake",
     label: "Brand",
     sortable: true,
-    render: (b) => `${b.carMake} ${b.carModel} ${b.carYear}`,
+    render: (b) => {
+      const CarIcon = resolveBookingCarIcon(b.carMake);
+
+      return (
+        <div className={styles.carInfo}>
+          <span className={styles.carLogoIcon} aria-hidden="true">
+            <CarIcon />
+          </span>
+          <span>{`${b.carMake} ${b.carModel} ${b.carYear}`}</span>
+        </div>
+      );
+    },
   },
   { key: "startDate", label: "Start Date", sortable: true, render: (b) => b.startDate },
   { key: "endDate", label: "End Date", sortable: true, render: (b) => b.endDate },

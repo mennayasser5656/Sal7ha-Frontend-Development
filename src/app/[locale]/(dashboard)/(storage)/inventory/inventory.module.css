@@ -6,11 +6,34 @@
   gap: 1rem;
 }
 
+.toolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 .filters {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   flex-wrap: wrap;
+}
+
+.addButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 6px;
+  padding: 0.45rem 1rem;
+  background: var(--selective-yellow);
+  color: #1a1a1a;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .searchBar {
@@ -64,6 +87,35 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 5rem;
+}
+
+.emptyState {
+  display: grid;
+  place-items: center;
+  min-height: 15rem;
+  padding: 2rem;
+  border: 1px dashed #ddd;
+  border-radius: 0.75rem;
+  color: #777;
+  text-align: center;
+}
+
+.emptyState p {
+  margin: 0;
+  max-width: 30rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.emptyState button {
+  margin-top: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  padding: 0.45rem 0.8rem;
+  background: #111;
+  color: #fff;
+  font-size: 0.72rem;
+  cursor: pointer;
 }
 
 @media (max-width: 1200px) {
@@ -192,4 +244,20 @@
   background-color: #ffe5e5;
   border-color: #ff4d4f;
   color: #ff4d4f;
+}
+
+@media (max-width: 640px) {
+  .toolbar {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .addButton {
+    align-self: flex-end;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 }

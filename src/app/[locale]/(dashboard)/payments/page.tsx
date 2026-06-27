@@ -153,7 +153,7 @@ function PaymentActionsDropdown({
 }
 
 export default function PaymentsPage() {
-  const payments = usePayments();
+  const   payments = usePayments();
   const params = useParams<{ locale: string }>();
   const exportHref = `/${params.locale}/payments/export`;
   const dateRange = payments.dateRangeStart

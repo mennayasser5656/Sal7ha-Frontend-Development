@@ -1,5 +1,7 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import Booking from "@/domain/entities/Booking";
+import { getAccountSetupWarnings } from "@/application/utils/accountSetupWarnings";
+import { getAccountProfile } from "@/infrastructure/services/account.service";
 import {
   getCalendarDays,
   getMonthName,
@@ -15,11 +17,29 @@ import {
   updateDashboardWidgets,
   getBusinessSetupWarnings,
   getBusinessProfile,
+  SETUP_WARNINGS,
   type BusinessProfileResponse,
   type SetupWarning,
   type StatusCounts,
   type WidgetDefinition,
 } from "@/infrastructure/services/dashboard.service";
+
+function mergeSetupWarnings(
+  warnings: SetupWarning[],
+  accountWarnings: SetupWarning[],
+) {
+  const warningsById = new Map(
+    SETUP_WARNINGS.filter((warning) => warning.segment !== "personal").map(
+      (warning) => [warning.id, warning],
+    ),
+  );
+
+  warnings.forEach((warning) => warningsById.set(warning.id, warning));
+  accountWarnings.forEach((warning) =>
+    warningsById.set(warning.id, warning),
+  );
+  return Array.from(warningsById.values());
+}
 
 export function useDashboard() {
   const [monthBookings, setMonthBookings] = useState<Booking[]>([]);
@@ -58,11 +78,12 @@ export function useDashboard() {
     let ignore = false;
 
     async function loadDashboardStaticData() {
-      const [summary, widgets, warnings, profile] = await Promise.all([
+      const [summary, widgets, warnings, profile, accountProfile] = await Promise.all([
         getDashboardSummary(),
         getDashboardWidgets(),
         getBusinessSetupWarnings(),
         getBusinessProfile(),
+        getAccountProfile(),
       ]);
 
       if (ignore) return;
@@ -77,7 +98,9 @@ export function useDashboard() {
       });
       setActiveWidgets(widgets.activeWidgets);
       setInactiveWidgets(widgets.inactiveWidgets);
-      setSetupWarnings(warnings);
+      setSetupWarnings(
+        mergeSetupWarnings(warnings, getAccountSetupWarnings(accountProfile)),
+      );
       setBusinessProfile(profile);
     }
 

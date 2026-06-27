@@ -108,9 +108,9 @@ export default function DashboardBar() {
             <DashboardItem
               icon={<RiNotification3Line />}
               hoveredIcon={<RiNotification3Fill />}
-              text="Inbox"
-              isSelected={isActive("/inbox")}
-              onClick={() => handleNavigation(`/${locale}/inbox`)}
+              text="Notifications"
+              isSelected={isActive("/notifications") || isActive("/inbox")}
+              onClick={() => handleNavigation(`/${locale}/notifications`)}
             />
             <DashboardItem
               icon={<IoTrophyOutline />}
