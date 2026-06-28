@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import styles from "./bookings.module.css";
 import { RiSearch2Line } from "react-icons/ri";
 import TableView, { ColumnDef } from "@/presentation/components/TableView/TableView";
@@ -18,6 +18,7 @@ import {
 import { useBookings } from "@/application/hooks/useBookings";
 import Booking from "@/domain/entities/Booking";
 import { SortKey } from "@/infrastructure/services/bookings.service";
+import { normalizeStatus } from "@/infrastructure/services/status.service";
 
 const STATUS_FILTERS = ["In-Progress", "Completed", "Pending", "Cancelled", "Accepted"];
 
@@ -88,7 +89,9 @@ export default function BookingsView() {
     setDateRangeStart,
     setDateRangeEnd,
     acceptBookings,
+    completeBookings,
     declineBookings,
+    cancelBookings,
     notifications,
     dismissNotification,
     sortKey,
@@ -121,6 +124,22 @@ export default function BookingsView() {
   const handleDecline = () => {
     declineBookings(selectedBookings);
     setSelectedBookings(new Set());
+  };
+
+  const handleOverlayStatusChange = (id: string, status: string) => {
+    const ids = new Set([id]);
+    switch (status) {
+      case "In-Progress":
+        acceptBookings(ids);
+        break;
+      case "Completed":
+        completeBookings(ids);
+        break;
+      case "Cancelled":
+        cancelBookings(ids);
+        break;
+    }
+    setOpenBooking(null);
   };
 
   return (
@@ -157,7 +176,11 @@ export default function BookingsView() {
       </div>
 
       {openBooking && (
-        <OverlayBookingDetails booking={openBooking} onClose={() => setOpenBooking(null)} />
+        <OverlayBookingDetails
+          booking={openBooking}
+          onClose={() => setOpenBooking(null)}
+          onStatusChange={(status) => handleOverlayStatusChange(openBooking.id, status)}
+        />
       )}
 
       <TableView
@@ -177,30 +200,47 @@ export default function BookingsView() {
         sortDirection={sortDirection}
         onSort={(key) => handleSort(key as SortKey)}
         onRowClick={setOpenBooking}
-        rowActions={(booking, close) => (
-          <>
-            <button
-              className={styles.rowMenuItem}
-              onClick={(e) => {
-                e.stopPropagation();
-                acceptBookings(new Set([booking.id]));
-                close();
-              }}
-            >
-              Accept
-            </button>
-            <button
-              className={styles.rowMenuItem}
-              onClick={(e) => {
-                e.stopPropagation();
-                declineBookings(new Set([booking.id]));
-                close();
-              }}
-            >
-              Decline
-            </button>
-          </>
-        )}
+        rowActions={(booking, close) => {
+          const statusKey = normalizeStatus(booking.status);
+          const ids = new Set([booking.id]);
+          const runAction = (action: (set: Set<string>) => void) => (
+            e: MouseEvent,
+          ) => {
+            e.stopPropagation();
+            action(ids);
+            close();
+          };
+
+          if (statusKey === "pending") {
+            return (
+              <>
+                <button className={styles.rowMenuItem} onClick={runAction(acceptBookings)}>
+                  Accept
+                </button>
+                <button className={styles.rowMenuItem} onClick={runAction(declineBookings)}>
+                  Decline
+                </button>
+              </>
+            );
+          }
+
+          if (statusKey === "inProgress") {
+            return (
+              <>
+                <button className={styles.rowMenuItem} onClick={runAction(completeBookings)}>
+                  Mark Completed
+                </button>
+                <button className={styles.rowMenuItem} onClick={runAction(cancelBookings)}>
+                  Cancel
+                </button>
+              </>
+            );
+          }
+
+          return (
+            <span className={styles.rowMenuEmpty}>No actions available</span>
+          );
+        }}
       />
     </div>
   );

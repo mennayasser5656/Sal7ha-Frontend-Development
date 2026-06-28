@@ -10,6 +10,8 @@ interface DropdownProps {
   selected: string | null;
   onSelect: (value: string | null) => void;
   label?: string;
+  clearable?: boolean;
+  showLabelWithSelection?: boolean;
 }
 
 export default function Dropdown({
@@ -17,6 +19,8 @@ export default function Dropdown({
   selected,
   onSelect,
   label = "Select",
+  clearable = true,
+  showLabelWithSelection = false,
 }: DropdownProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -28,8 +32,14 @@ export default function Dropdown({
         className={`${styles.button} ${selected ? styles.buttonActive : ""}`}
         onClick={() => setOpen(!open)}
       >
-        <span>{selected || label}</span>
-        {selected ? (
+        <span>
+          {selected
+            ? showLabelWithSelection
+              ? `${label}: ${selected}`
+              : selected
+            : label}
+        </span>
+        {selected && clearable ? (
           <IoIosClose
             className={styles.clearIcon}
             onClick={(e) => {
@@ -51,7 +61,7 @@ export default function Dropdown({
               key={option}
               className={`${styles.item} ${selected === option ? styles.itemActive : ""}`}
               onClick={() => {
-                onSelect(selected === option ? null : option);
+                onSelect(selected === option && clearable ? null : option);
                 setOpen(false);
               }}
             >

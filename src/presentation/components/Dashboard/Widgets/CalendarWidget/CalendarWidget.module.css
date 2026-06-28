@@ -107,20 +107,58 @@
   width: 1.3rem;
   height: 1.3rem;
   margin: 0 auto;
+  padding: 0;
+  border: none;
   font-size: 0.6rem;
   font-weight: 600;
   color: #333;
+  background: none;
   border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.day:hover:not(:disabled):not(.daySelected):not(.dayRangeStart):not(.dayRangeEnd) {
+  background-color: #e2e2e2;
 }
 
 .dayOutside {
   color: #ddd;
+  cursor: default;
 }
 
 .dayToday {
+  background-color: lightgray;
+  color: #333;
+}
+
+.daySelected {
   background-color: #000;
   color: #fff;
   font-weight: 600;
+}
+
+.dayRangeStart,
+.dayRangeEnd,
+.dayInRange {
+  width: 100%;
+}
+
+.dayRangeStart {
+  background-color: #000;
+  color: #fff;
+  border-radius: 50% 0 0 50%;
+}
+
+.dayRangeEnd {
+  background-color: #000;
+  color: #fff;
+  border-radius: 0 50% 50% 0;
+}
+
+.dayInRange {
+  background-color: #d8d8d8;
+  border-radius: 0;
 }
 
 /* ── Services Side ── */

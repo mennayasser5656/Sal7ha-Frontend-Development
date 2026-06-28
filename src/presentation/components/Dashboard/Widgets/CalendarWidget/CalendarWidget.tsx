@@ -1,9 +1,10 @@
 "use client";
 
 import styles from "./CalendarWidget.module.css";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import Booking from "@/domain/entities/Booking";
+import { parseDate } from "@/infrastructure/services/date.service";
 import { normalizeStatus } from "@/infrastructure/services/status.service";
 import OverlayBookingDetails from "@/presentation/components/bookings/OverlayBookingDetails/OverlayBookingDetails";
 
@@ -17,6 +18,20 @@ const STATUS_CLASS_MAP: Record<string, string> = {
 
 function getStatusClass(status: string): string {
   return STATUS_CLASS_MAP[normalizeStatus(status) ?? ""] ?? "";
+}
+
+interface DateRange {
+  start: Date;
+  end: Date | null;
+}
+
+function isSameDay(a: Date | null | undefined, b: Date): boolean {
+  return Boolean(
+    a &&
+      a.getDate() === b.getDate() &&
+      a.getMonth() === b.getMonth() &&
+      a.getFullYear() === b.getFullYear(),
+  );
 }
 
 interface CalendarWidgetProps {
@@ -47,6 +62,41 @@ export default function CalendarWidget({
   getClientImage,
 }: CalendarWidgetProps) {
   const [openBooking, setOpenBooking] = useState<Booking | null>(null);
+  const [selectedRange, setSelectedRange] = useState<DateRange | null>(null);
+
+  const visibleBookings = useMemo(() => {
+    if (!selectedRange) return monthBookings;
+
+    const selectedEnd = selectedRange.end ?? selectedRange.start;
+    return monthBookings.filter((booking) => {
+      const bookingStart = parseDate(booking.startDate);
+      const bookingEnd = parseDate(booking.endDate);
+      return bookingStart <= selectedEnd && bookingEnd >= selectedRange.start;
+    });
+  }, [monthBookings, selectedRange]);
+
+  function handleDayClick(day: number) {
+    const clicked = new Date(viewYear, viewMonth, day);
+
+    setSelectedRange((current) => {
+      if (!current || current.end) {
+        return { start: clicked, end: null };
+      }
+
+      if (isSameDay(current.start, clicked)) return null;
+      if (clicked < current.start) {
+        return { start: clicked, end: current.start };
+      }
+
+      return { start: current.start, end: clicked };
+    });
+  }
+
+  const emptyMessage = selectedRange
+    ? selectedRange.end
+      ? "No services in this date range"
+      : "No services on this day"
+    : "No services this month";
 
   return (
     <>
@@ -82,29 +132,62 @@ export default function CalendarWidget({
           </div>
           <div className={styles.days}>
             {calendarDays.map((cell, i) => {
+              const cellDate = new Date(viewYear, viewMonth, cell.day);
+              const rangeStart =
+                !cell.outside && isSameDay(selectedRange?.start, cellDate);
+              const rangeEnd =
+                !cell.outside && isSameDay(selectedRange?.end, cellDate);
+              const inRange = Boolean(
+                !cell.outside &&
+                  selectedRange?.end &&
+                  cellDate > selectedRange.start &&
+                  cellDate < selectedRange.end,
+              );
               const isToday =
                 !cell.outside &&
                 cell.day === today.getDate() &&
                 viewMonth === today.getMonth() &&
                 viewYear === today.getFullYear();
+
               return (
-                <div
+                <button
+                  type="button"
                   key={i}
-                  className={`${styles.day} ${cell.outside ? styles.dayOutside : ""} ${isToday ? styles.dayToday : ""}`}
+                  className={[
+                    styles.day,
+                    cell.outside ? styles.dayOutside : "",
+                    rangeStart && selectedRange?.end
+                      ? styles.dayRangeStart
+                      : "",
+                    rangeEnd ? styles.dayRangeEnd : "",
+                    rangeStart && !selectedRange?.end
+                      ? styles.daySelected
+                      : "",
+                    inRange ? styles.dayInRange : "",
+                    isToday && !rangeStart && !rangeEnd
+                      ? styles.dayToday
+                      : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
+                  disabled={cell.outside}
+                  aria-pressed={rangeStart || rangeEnd}
+                  aria-label={`${monthName} ${cell.day}, ${viewYear}`}
+                  onClick={() => handleDayClick(cell.day)}
                 >
                   {cell.day}
-                </div>
+                </button>
               );
             })}
           </div>
         </div>
         <div className={styles.servicesSide}>
           <span className={styles.servicesTitle}>Upcoming</span>
-          {monthBookings.length === 0 ? (
-            <span className={styles.emptyServices}>No services this month</span>
+          {visibleBookings.length === 0 ? (
+            <span className={styles.emptyServices}>{emptyMessage}</span>
           ) : (
             <div className={styles.servicesList}>
-              {monthBookings.map((booking, i) => (
+              {visibleBookings.map((booking, i) => (
                 <button
                   key={booking.id}
                   type="button"

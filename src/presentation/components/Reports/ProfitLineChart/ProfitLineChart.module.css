@@ -1,0 +1,132 @@
+.chart {
+  display: flex;
+  gap: 0.75rem;
+  height: 16rem;
+  min-height: 0;
+}
+
+.chartCompact {
+  height: 8rem;
+}
+
+.yAxis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 1.4rem;
+  font-size: 0.7rem;
+  color: #c0c0c0;
+  text-align: right;
+}
+
+.yTick {
+  line-height: 1;
+}
+
+.plot {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.plotArea {
+  position: absolute;
+  inset: 0 0 1.4rem 0;
+}
+
+.grid {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.gridLine {
+  border-top: 1px dashed #efefef;
+}
+
+.lineChart {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.lineStroke {
+  stroke: var(--selective-yellow);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pointGuide {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px dashed rgba(17, 17, 17, 0.25);
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.point {
+  position: absolute;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 2px solid var(--selective-yellow);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 3;
+  box-shadow: 0 0 0 3px rgba(255, 183, 0, 0.18);
+}
+
+.pointTooltip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 0.7rem));
+  padding: 0.25rem 0.5rem;
+  background-color: #111;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 0.4rem;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 4;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.pointTooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 0.3rem solid transparent;
+  border-top-color: #111;
+}
+
+.xLabels {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1.4rem;
+  display: flex;
+  align-items: center;
+}
+
+.xLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.65rem;
+  color: #b5b5b5;
+}

@@ -1,4 +1,4 @@
-  const BASE_URL =
+const BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ??
   process.env.API_BASE_URL ??
   "http://localhost:3334";
@@ -147,6 +147,13 @@ async function readError(response: Response) {
     const message = Array.isArray(payload.message)
       ? payload.message.join(", ")
       : payload.message;
+    if (
+      response.status === 404 &&
+      typeof message === "string" &&
+      /^Cannot (GET|POST|PUT|PATCH|DELETE) /.test(message)
+    ) {
+      return "This action is not available on the connected API. Check that the backend is up to date and the API URL is correct.";
+    }
     return message ?? payload.error ?? "Something went wrong";
   } catch {
     return response.statusText || "Something went wrong";

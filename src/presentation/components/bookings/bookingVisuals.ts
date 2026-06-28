@@ -40,11 +40,19 @@ import {
 export const DEFAULT_OWNER_ICON = "/assets/profile_img.svg";
 
 const SERVICE_ICON_ASSETS = {
+  oil: "/assets/oil_icon.png",
   wheel: "/assets/wheel_service.svg",
   engine: "/assets/engine_service.svg",
   battery: "/assets/battery_service.svg",
   paint: "/assets/paint_service.svg",
 } as const;
+
+const SERVICE_ICON_OVERRIDES = [
+  {
+    icon: SERVICE_ICON_ASSETS.oil,
+    words: ["oil-change", "oil change", "oil service", "lubrication"],
+  },
+];
 
 const SERVICE_ICON_KEYWORDS = [
   {
@@ -61,7 +69,7 @@ const SERVICE_ICON_KEYWORDS = [
   },
   {
     icon: SERVICE_ICON_ASSETS.engine,
-    words: ["engine", "oil", "filter", "brake", "diagnostic", "repair"],
+    words: ["engine", "filter", "brake", "diagnostic", "repair"],
   },
 ];
 
@@ -109,12 +117,18 @@ const CAR_BRAND_ICONS: Record<string, IconType> = {
 };
 
 export function resolveBookingServiceIcon(
-  booking: Pick<Booking, "serviceIcon" | "serviceName">,
+  booking: Pick<Booking, "serviceIcon" | "serviceId" | "serviceName">,
 ) {
+  const searchable = `${booking.serviceId ?? ""} ${booking.serviceName}`.toLowerCase();
+  for (const match of SERVICE_ICON_OVERRIDES) {
+    if (match.words.some((word) => searchable.includes(word))) {
+      return match.icon;
+    }
+  }
+
   const explicit = normalizeServiceIcon(booking.serviceIcon);
   if (explicit) return explicit;
 
-  const searchable = booking.serviceName.toLowerCase();
   for (const match of SERVICE_ICON_KEYWORDS) {
     if (match.words.some((word) => searchable.includes(word))) {
       return match.icon;
@@ -147,6 +161,12 @@ function normalizeServiceIcon(value?: string | null) {
   }
 
   const lower = icon.toLowerCase();
+  for (const match of SERVICE_ICON_OVERRIDES) {
+    if (match.words.some((word) => lower.includes(word))) {
+      return match.icon;
+    }
+  }
+
   for (const match of SERVICE_ICON_KEYWORDS) {
     if (match.words.some((word) => lower.includes(word))) {
       return match.icon;

@@ -12,6 +12,7 @@ import CalendarWidget from "./CalendarWidget/CalendarWidget";
 import StatusWidget from "./StatusWidget/StatusWidget";
 import StatusSummaryWidget from "./StatusSummaryWidget/StatusSummaryWidget";
 import SetupWarningsWidget from "./SetupWarningsWidget/SetupWarningsWidget";
+import GrowthWidget from "./GrowthWidget/GrowthWidget";
 
 interface WidgetRendererProps {
   widget: WidgetDefinition;
@@ -78,6 +79,8 @@ export default function WidgetRenderer({
           counts={statusCounts}
         />
       );
+    case "growth":
+      return <GrowthWidget key={widget.id} />;
     default:
       return null;
   }

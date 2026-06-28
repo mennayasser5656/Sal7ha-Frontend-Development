@@ -12,6 +12,7 @@ export interface InboxMessage {
   actionUrl?: string | null;
   actorName?: string | null;
   bookingId?: string | null;
+  serviceId?: string | null;
   serviceIcon?: string | null;
   serviceName?: string | null;
   data?: Record<string, unknown> | null;

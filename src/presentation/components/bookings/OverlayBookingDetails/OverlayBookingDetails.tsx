@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import Booking from "@/domain/entities/Booking";
 import StatusIcon from "@/presentation/components/common/StatusIcon/StatusIcon";
+import { normalizeStatus } from "@/infrastructure/services/status.service";
 import {
   DEFAULT_OWNER_ICON,
   resolveBookingCarIcon,
@@ -18,13 +19,16 @@ import {
 interface OverlayBookingDetailsProps {
   booking: Booking;
   onClose: () => void;
+  onStatusChange?: (status: string) => void;
 }
 
 export default function OverlayBookingDetails({
   booking,
   onClose,
+  onStatusChange,
 }: OverlayBookingDetailsProps) {
   const CarIcon = resolveBookingCarIcon(booking.carMake);
+  const statusKey = normalizeStatus(booking.status);
   const [startDate, setStartDate] = useState<Date | null>(
     booking.startDate ? new Date(booking.startDate) : null,
   );
@@ -142,14 +146,38 @@ export default function OverlayBookingDetails({
               </div>
             </div>
           </div>
-          <div className={`${styles.row} ${styles.actionsRow}`}>
-            <button className={`${styles.actionBtn} ${styles.decline}`}>
-              Decline
-            </button>
-            <button className={`${styles.actionBtn} ${styles.accept}`}>
-              Accept
-            </button>
-          </div>
+          {statusKey === "pending" && (
+            <div className={`${styles.row} ${styles.actionsRow}`}>
+              <button
+                className={`${styles.actionBtn} ${styles.decline}`}
+                onClick={() => onStatusChange?.("Cancelled")}
+              >
+                Decline
+              </button>
+              <button
+                className={`${styles.actionBtn} ${styles.accept}`}
+                onClick={() => onStatusChange?.("In-Progress")}
+              >
+                Accept
+              </button>
+            </div>
+          )}
+          {statusKey === "inProgress" && (
+            <div className={`${styles.row} ${styles.actionsRow}`}>
+              <button
+                className={`${styles.actionBtn} ${styles.decline}`}
+                onClick={() => onStatusChange?.("Cancelled")}
+              >
+                Cancel
+              </button>
+              <button
+                className={`${styles.actionBtn} ${styles.accept}`}
+                onClick={() => onStatusChange?.("Completed")}
+              >
+                Complete
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </section>

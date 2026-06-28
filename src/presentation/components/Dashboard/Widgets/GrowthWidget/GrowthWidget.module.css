@@ -1,0 +1,70 @@
+.widget {
+  box-sizing: border-box;
+  grid-column: span 3;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  gap: 0.35rem;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid #eee;
+  border-radius: 0.75rem;
+  background-color: #f2f0ea;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.titleGroup {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1;
+  color: #111;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.controls > div > button {
+  gap: 0.25rem;
+  min-height: 1.4rem;
+  padding: 0.2rem 0.45rem;
+  font-size: 0.6rem;
+}
+
+.controls > div > button svg {
+  width: 0.7rem;
+  height: 0.7rem;
+}
+
+.chartPanel {
+  flex: 1;
+  min-height: 0;
+  padding: 0.25rem 0.55rem 0.05rem;
+  border-radius: 0.65rem;
+  background-color: rgba(255, 255, 255, 0.55);
+}
+
+.chartPanel > div {
+  height: 100%;
+  min-height: 6rem;
+}

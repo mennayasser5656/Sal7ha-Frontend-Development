@@ -79,6 +79,7 @@ export interface WidgetDefinition {
   type:
     | "profile"
     | "calendar"
+    | "growth"
     | "status"
     | "statusSummary"
     | "setupWarnings";
@@ -129,6 +130,7 @@ const LEGACY_STATUS_WIDGET_IDS = [
 ] as const;
 
 const STATUS_SUMMARY_STORAGE_KEY = "dashboard-booking-status-widget-active";
+const GROWTH_STORAGE_KEY = "dashboard-growth-widget-active";
 
 export const STATUS_SUMMARY_WIDGET: WidgetDefinition = {
   id: "booking-status",
@@ -136,6 +138,21 @@ export const STATUS_SUMMARY_WIDGET: WidgetDefinition = {
   type: "statusSummary",
   span: 1,
 };
+
+export const GROWTH_WIDGET: WidgetDefinition = {
+  id: "growth",
+  title: "Growth",
+  type: "growth",
+  span: 3,
+};
+
+const LOCAL_WIDGETS = [
+  {
+    widget: STATUS_SUMMARY_WIDGET,
+    storageKey: STATUS_SUMMARY_STORAGE_KEY,
+  },
+  { widget: GROWTH_WIDGET, storageKey: GROWTH_STORAGE_KEY },
+];
 
 export const ALL_WIDGETS: WidgetDefinition[] = [
   { id: "profile", title: "Profile", type: "profile", span: 1 },
@@ -146,6 +163,7 @@ export const ALL_WIDGETS: WidgetDefinition[] = [
   { id: "pending", title: "Pending", type: "status", statusKey: "pending", color: "#ffbf51", span: 1 },
   { id: "cancelled", title: "Cancelled", type: "status", statusKey: "cancelled", color: "#ef4444", span: 1 },
   STATUS_SUMMARY_WIDGET,
+  GROWTH_WIDGET,
 ];
 
 const DEFAULT_WIDGET_IDS = [
@@ -154,6 +172,7 @@ const DEFAULT_WIDGET_IDS = [
   "setup-warnings",
   ...LEGACY_STATUS_WIDGET_IDS,
   STATUS_SUMMARY_WIDGET.id,
+  GROWTH_WIDGET.id,
 ];
 
 export function getDefaultWidgetIds(): string[] {
@@ -187,46 +206,64 @@ export interface DashboardWidgetsResponse {
   inactiveWidgets: WidgetDefinition[];
 }
 
-function getStoredStatusSummaryPreference(): boolean {
-  if (typeof window === "undefined") return true;
-  return window.localStorage.getItem(STATUS_SUMMARY_STORAGE_KEY) !== "false";
+function getStoredLocalWidgetPreferences(): Record<string, boolean> {
+  return Object.fromEntries(
+    LOCAL_WIDGETS.map(({ widget, storageKey }) => [
+      widget.id,
+      typeof window === "undefined"
+        ? true
+        : window.localStorage.getItem(storageKey) !== "false",
+    ]),
+  );
 }
 
 function normalizeDashboardWidgets(
   widgets: DashboardWidgetsResponse,
-  statusSummaryIsActive = getStoredStatusSummaryPreference(),
+  localPreferences = getStoredLocalWidgetPreferences(),
 ): DashboardWidgetsResponse {
+  const localWidgetIds = new Set(
+    LOCAL_WIDGETS.map(({ widget }) => widget.id),
+  );
   const activeWidgets = widgets.activeWidgets.filter(
-    (widget) => widget.id !== STATUS_SUMMARY_WIDGET.id,
+    (widget) => !localWidgetIds.has(widget.id),
   );
   const inactiveWidgets = widgets.inactiveWidgets.filter(
-    (widget) => widget.id !== STATUS_SUMMARY_WIDGET.id,
+    (widget) => !localWidgetIds.has(widget.id),
   );
 
-  if (statusSummaryIsActive) {
-    activeWidgets.push(STATUS_SUMMARY_WIDGET);
-  } else {
-    inactiveWidgets.push(STATUS_SUMMARY_WIDGET);
-  }
+  LOCAL_WIDGETS.forEach(({ widget }) => {
+    if (localPreferences[widget.id]) {
+      activeWidgets.push(widget);
+    } else {
+      inactiveWidgets.push(widget);
+    }
+  });
 
   return { activeWidgets, inactiveWidgets };
 }
 
 function prepareDashboardWidgetIds(widgetIds: string[]) {
-  const statusSummaryIsActive = widgetIds.includes(STATUS_SUMMARY_WIDGET.id);
+  const localPreferences = Object.fromEntries(
+    LOCAL_WIDGETS.map(({ widget }) => [
+      widget.id,
+      widgetIds.includes(widget.id),
+    ]),
+  );
 
   if (typeof window !== "undefined") {
-    window.localStorage.setItem(
-      STATUS_SUMMARY_STORAGE_KEY,
-      String(statusSummaryIsActive),
-    );
+    LOCAL_WIDGETS.forEach(({ widget, storageKey }) => {
+      window.localStorage.setItem(
+        storageKey,
+        String(localPreferences[widget.id]),
+      );
+    });
   }
 
   return {
-    statusSummaryIsActive,
-    persistedIds: widgetIds.filter(
-      (id) => id !== STATUS_SUMMARY_WIDGET.id,
-    ),
+    localPreferences,
+    persistedIds: widgetIds.filter((id) => !LOCAL_WIDGETS.some(
+      ({ widget }) => widget.id === id,
+    )),
   };
 }
 
@@ -258,14 +295,14 @@ export function getDashboardWidgets() {
 }
 
 export function updateDashboardWidgets(activeWidgetIds: string[]) {
-  const { persistedIds, statusSummaryIsActive } =
+  const { persistedIds, localPreferences } =
     prepareDashboardWidgetIds(activeWidgetIds);
 
   return apiClient<DashboardWidgetsResponse>("/dashboard/widgets", {
     method: "PUT",
     body: { activeWidgetIds: persistedIds },
   }).then((widgets) =>
-    normalizeDashboardWidgets(widgets, statusSummaryIsActive),
+    normalizeDashboardWidgets(widgets, localPreferences),
   );
 }
 

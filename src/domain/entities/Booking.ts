@@ -5,6 +5,7 @@ export interface ServiceDetail {
 
 export default interface Booking {
   id: string;
+  serviceId?: string | null;
   serviceName: string;
   serviceIcon: string;
   ownerIcon: string;

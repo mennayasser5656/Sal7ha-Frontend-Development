@@ -1,6 +1,10 @@
 import { useState, useCallback, useEffect } from "react";
 import Booking from "@/domain/entities/Booking";
 import { useToastNotifications } from "@/application/hooks/useToastNotifications";
+import type {
+  NotificationPreferenceKey,
+  NotificationType,
+} from "@/domain/entities/Notification";
 import {
   listBookings,
   updateBookingsStatus,
@@ -82,43 +86,57 @@ export function useBookings() {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   }
 
-  const acceptBookings = useCallback(async (ids: Set<string>) => {
-    try {
-      await updateBookingsStatus(ids, "Accepted");
-      ids.forEach((id) => {
+  const runStatusUpdate = useCallback(
+    async (
+      ids: Set<string>,
+      status: string,
+      verb: string,
+      type: NotificationType,
+      preferenceKey: NotificationPreferenceKey,
+    ) => {
+      try {
+        await updateBookingsStatus(ids, status);
+        ids.forEach((id) => {
+          showNotification(`Service "${id}" Has Been ${verb}`, type, preferenceKey);
+        });
+        void loadBookings();
+      } catch (error) {
         showNotification(
-          `Service "${id}" Has Been Accepted`,
-          "accepted",
-          "bookingAccepted",
+          error instanceof Error ? error.message : "Could not update bookings.",
+          "error",
         );
-      });
-      void loadBookings();
-    } catch (error) {
-      showNotification(
-        error instanceof Error ? error.message : "Could not accept bookings.",
-        "error",
-      );
-    }
-  }, [loadBookings, showNotification]);
+      }
+    },
+    [loadBookings, showNotification],
+  );
 
-  const declineBookings = useCallback(async (ids: Set<string>) => {
-    try {
-      await updateBookingsStatus(ids, "Cancelled");
-      ids.forEach((id) => {
-        showNotification(
-          `Service "${id}" Has Been Declined`,
-          "declined",
-          "bookingDeclined",
-        );
-      });
-      void loadBookings();
-    } catch (error) {
-      showNotification(
-        error instanceof Error ? error.message : "Could not decline bookings.",
-        "error",
-      );
-    }
-  }, [loadBookings, showNotification]);
+  // Accepting a pending request moves it into the active "In-Progress" state.
+  const acceptBookings = useCallback(
+    (ids: Set<string>) =>
+      runStatusUpdate(ids, "In-Progress", "Accepted", "accepted", "bookingAccepted"),
+    [runStatusUpdate],
+  );
+
+  // In-Progress bookings can be marked as Completed.
+  const completeBookings = useCallback(
+    (ids: Set<string>) =>
+      runStatusUpdate(ids, "Completed", "Completed", "accepted", "bookingAccepted"),
+    [runStatusUpdate],
+  );
+
+  // Declining a pending request cancels it.
+  const declineBookings = useCallback(
+    (ids: Set<string>) =>
+      runStatusUpdate(ids, "Cancelled", "Declined", "declined", "bookingDeclined"),
+    [runStatusUpdate],
+  );
+
+  // In-Progress bookings can be cancelled.
+  const cancelBookings = useCallback(
+    (ids: Set<string>) =>
+      runStatusUpdate(ids, "Cancelled", "Cancelled", "declined", "bookingDeclined"),
+    [runStatusUpdate],
+  );
 
   return {
     bookings,
@@ -154,7 +172,9 @@ export function useBookings() {
     goToPreviousPage: () => setCurrentPage(p => Math.max(p - 1, 1)),
     goToNextPage: () => setCurrentPage(p => Math.min(p + 1, totalPages)),
     acceptBookings,
+    completeBookings,
     declineBookings,
+    cancelBookings,
     notifications,
     dismissNotification,
   };

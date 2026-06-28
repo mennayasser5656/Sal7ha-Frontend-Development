@@ -35,6 +35,20 @@ export function listBookings(query: BookingListQuery) {
   });
 }
 
+export function getBooking(id: string) {
+  return apiClient<Booking>(`/bookings/${encodeURIComponent(id)}`);
+}
+
+export function updateBookingStatus(id: string, status: string) {
+  return apiClient<Booking>(
+    `/bookings/${encodeURIComponent(id)}/status`,
+    {
+      method: "PATCH",
+      body: { status },
+    },
+  );
+}
+
 export function updateBookingsStatus(ids: Iterable<string>, status: string) {
   return apiClient<{
     requested: number;

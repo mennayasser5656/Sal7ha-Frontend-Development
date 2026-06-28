@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
   Archive,
@@ -30,7 +30,10 @@ import {
   markInboxMessageRead,
   type InboxMessage,
 } from "@/infrastructure/services/inbox.service";
-import { updateBookingsStatus } from "@/infrastructure/services/bookings.service";
+import {
+  getBooking,
+  updateBookingStatus,
+} from "@/infrastructure/services/bookings.service";
 import { useFcmDeviceRegistration } from "@/application/hooks/useFcmDeviceRegistration";
 import { FCM_FOREGROUND_EVENT } from "@/infrastructure/services/firebase-messaging.service";
 import Dropdown from "@/presentation/components/Dropdown/Dropdown";
@@ -67,6 +70,7 @@ interface NotificationViewModel {
   actionUrl?: string | null;
   actorName?: string | null;
   bookingId?: string | null;
+  bookingStatus?: string | null;
   serviceIcon?: string | null;
   serviceName?: string | null;
   previousStatus?: Exclude<NotificationStatus, "archived">;
@@ -90,6 +94,7 @@ const TABS: { id: NotificationTab; label: string }[] = [
 ];
 
 const STATUS_FILTER_OPTIONS = ["Unread only", "Read only"];
+const NOTIFICATION_REFRESH_INTERVAL_MS = 15_000;
 
 const KIND_CONFIG: Record<NotificationKind, KindConfig> = {
   "booking-request": {
@@ -184,6 +189,10 @@ const KIND_CONFIG: Record<NotificationKind, KindConfig> = {
 
 const SERVICE_ICON_BY_KEYWORD: { keywords: string[]; icon: string }[] = [
   {
+    keywords: ["oil-change", "oil change", "oil service", "lubrication"],
+    icon: "/assets/oil_icon.png",
+  },
+  {
     keywords: ["wheel", "tire", "tyre", "alignment", "rotation"],
     icon: "/assets/wheel_service.svg",
   },
@@ -196,7 +205,7 @@ const SERVICE_ICON_BY_KEYWORD: { keywords: string[]; icon: string }[] = [
     icon: "/assets/paint_service.svg",
   },
   {
-    keywords: ["engine", "oil", "diagnostic", "repair", "service"],
+    keywords: ["engine", "diagnostic", "repair", "service"],
     icon: "/assets/engine_service.svg",
   },
 ];
@@ -221,7 +230,9 @@ function searchableText(message: InboxMessage) {
     message.type,
     message.title,
     message.body,
+    message.serviceId,
     message.serviceName,
+    getString(metadata.serviceId),
     getString(metadata.serviceName),
   ]
     .filter(Boolean)
@@ -289,6 +300,13 @@ function inferKind(message: InboxMessage): NotificationKind {
 
 function getServiceIcon(message: InboxMessage) {
   const metadata = getMetadata(message);
+  const text = searchableText(message);
+  const oilIcon = SERVICE_ICON_BY_KEYWORD[0];
+
+  if (oilIcon.keywords.some((keyword) => text.includes(keyword))) {
+    return oilIcon.icon;
+  }
+
   const explicit =
     getString(message.serviceIcon) ||
     getString(metadata.serviceIcon) ||
@@ -298,7 +316,6 @@ function getServiceIcon(message: InboxMessage) {
     return explicit;
   }
 
-  const text = searchableText(message);
   return SERVICE_ICON_BY_KEYWORD.find((item) =>
     item.keywords.some((keyword) => text.includes(keyword)),
   )?.icon;
@@ -318,16 +335,64 @@ function getMessageStatus(message: InboxMessage): NotificationStatus {
   return "unread";
 }
 
-function toViewModel(message: InboxMessage): NotificationViewModel {
+function getBookingId(message: InboxMessage) {
   const metadata = getMetadata(message);
-  const kind = inferKind(message);
+  return getString(message.bookingId) || getString(metadata.bookingId);
+}
+
+function kindForBookingStatus(
+  inferredKind: NotificationKind,
+  bookingStatus?: string,
+): NotificationKind {
+  if (inferredKind !== "booking-request" || !bookingStatus) {
+    return inferredKind;
+  }
+
+  switch (bookingStatus.toLowerCase()) {
+    case "accepted":
+    case "in-progress":
+      return "service-approved";
+    case "cancelled":
+    case "canceled":
+      return "service-denied";
+    case "completed":
+      return "booking-completed";
+    default:
+      return inferredKind;
+  }
+}
+
+function toViewModel(
+  message: InboxMessage,
+  bookingStatus?: string,
+): NotificationViewModel {
+  const metadata = getMetadata(message);
+  const inferredKind = inferKind(message);
+  const kind = kindForBookingStatus(inferredKind, bookingStatus);
   const config = KIND_CONFIG[kind];
+  const serviceName =
+    getString(message.serviceName) || getString(metadata.serviceName);
+  let title = message.title;
+  let body = message.body;
+
+  if (inferredKind === "booking-request" && kind !== inferredKind) {
+    if (kind === "service-approved") {
+      title = `${serviceName ?? "Service"} was approved`;
+      body = "The booking was accepted and moved into the service queue.";
+    } else if (kind === "service-denied") {
+      title = `${serviceName ?? "Service"} was denied`;
+      body = "The booking request was declined.";
+    } else if (kind === "booking-completed") {
+      title = `${serviceName ?? "Service"} was completed`;
+      body = "The booking has been completed.";
+    }
+  }
 
   return {
     id: message.id,
     source: message,
-    title: message.title,
-    body: message.body,
+    title,
+    body,
     status: getMessageStatus(message),
     kind,
     category: config.category,
@@ -341,84 +406,44 @@ function toViewModel(message: InboxMessage): NotificationViewModel {
       getString(message.actorName) ||
       getString(metadata.actorName) ||
       getString(metadata.customerName),
-    bookingId: getString(message.bookingId) || getString(metadata.bookingId),
+    bookingId: getBookingId(message),
+    bookingStatus,
     serviceIcon: getServiceIcon(message),
-    serviceName: getString(message.serviceName) || getString(metadata.serviceName),
+    serviceName,
   };
 }
 
-function createPreviewNotifications(): InboxMessage[] {
-  const now = Date.now();
+async function toPersistedViewModels(messages: InboxMessage[]) {
+  const bookingIds = Array.from(
+    new Set(
+      messages
+        .filter((message) => inferKind(message) === "booking-request")
+        .map(getBookingId)
+        .filter((id): id is string => Boolean(id)),
+    ),
+  );
+  const bookingStatuses = new Map<string, string>();
+  let failedStatusChecks = 0;
 
-  return [
-    {
-      id: "preview-booking-request",
-      title: "New booking request for Engine Diagnostics",
-      body: "Mariam Hassan requested Engine Diagnostics for a 2022 Toyota Corolla.",
-      status: "unread",
-      type: "booking_request",
-      createdAt: new Date(now - 8 * 60 * 1000).toISOString(),
-      bookingId: "BK-2048",
-      serviceIcon: "/assets/engine_service.svg",
-      serviceName: "Engine Diagnostics",
-      actorName: "Mariam Hassan",
-    },
-    {
-      id: "preview-service-approved",
-      title: "Wheel Alignment was approved",
-      body: "The booking was accepted and added to today's service queue.",
-      status: "read",
-      type: "booking_accepted",
-      createdAt: new Date(now - 42 * 60 * 1000).toISOString(),
-      bookingId: "BK-2039",
-      serviceIcon: "/assets/wheel_service.svg",
-      serviceName: "Wheel Alignment",
-      actorName: "Omar Adel",
-      readAt: new Date(now - 35 * 60 * 1000).toISOString(),
-    },
-    {
-      id: "preview-service-denied",
-      title: "Paint Touch-up was denied",
-      body: "The request was declined because the selected bay is unavailable.",
-      status: "unread",
-      type: "booking_declined",
-      createdAt: new Date(now - 2 * 60 * 60 * 1000).toISOString(),
-      bookingId: "BK-2027",
-      serviceIcon: "/assets/paint_service.svg",
-      serviceName: "Paint Touch-up",
-      actorName: "Youssef Nabil",
-    },
-    {
-      id: "preview-export-ready",
-      title: "Payments export is ready",
-      body: "Excel export finished with 128 matching payment records.",
-      status: "read",
-      type: "payment_export_completed",
-      createdAt: new Date(now - 4 * 60 * 60 * 1000).toISOString(),
-      actionUrl: "/payments/export/details",
-      readAt: new Date(now - 3 * 60 * 60 * 1000).toISOString(),
-      metadata: { exportFormat: "excel" },
-    },
-    {
-      id: "preview-storage-sale",
-      title: "Battery stock item sold",
-      body: "One AC Delco battery was sold from storage and recorded in payments.",
-      status: "unread",
-      type: "storage_item_sold",
-      createdAt: new Date(now - 7 * 60 * 60 * 1000).toISOString(),
-      serviceIcon: "/assets/battery_service.svg",
-      serviceName: "Battery Replacement",
-    },
-    {
-      id: "preview-security",
-      title: "MFA settings updated",
-      body: "Multi-factor authentication preferences were saved successfully.",
-      status: "read",
-      type: "mfa_updated",
-      createdAt: new Date(now - 24 * 60 * 60 * 1000).toISOString(),
-      readAt: new Date(now - 23 * 60 * 60 * 1000).toISOString(),
-    },
-  ];
+  const results = await Promise.allSettled(bookingIds.map(getBooking));
+  results.forEach((result, index) => {
+    if (result.status === "fulfilled") {
+      bookingStatuses.set(bookingIds[index], result.value.status);
+    } else {
+      failedStatusChecks += 1;
+    }
+  });
+
+  return {
+    rows: messages.map((message) => {
+      const bookingId = getBookingId(message);
+      return toViewModel(
+        message,
+        bookingId ? bookingStatuses.get(bookingId) : undefined,
+      );
+    }),
+    failedStatusChecks,
+  };
 }
 
 function formatTimeAgo(value: string) {
@@ -488,49 +513,75 @@ export default function NotificationCenter() {
   const [isLoading, setIsLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const isRefreshing = useRef(false);
   const pushRegistration = useFcmDeviceRegistration();
 
-  const loadNotifications = useCallback(async () => {
-    setIsLoading(true);
+  const loadNotifications = useCallback(async (background = false) => {
+    if (isRefreshing.current) {
+      return;
+    }
+
+    isRefreshing.current = true;
+    if (!background) {
+      setIsLoading(true);
+    }
 
     try {
       const response = await listInboxMessages({ page: 1, limit: 75 });
-      setNotifications(response.data.map(toViewModel));
-      setNotice(null);
-    } catch {
-      const previewRows =
-        process.env.NODE_ENV === "production" ? [] : createPreviewNotifications();
-      setNotifications(previewRows.map(toViewModel));
-      setNotice(
-        previewRows.length
-          ? "Preview notifications are shown while inbox data is unavailable."
-          : "Could not load notifications.",
-      );
+      const persisted = await toPersistedViewModels(response.data);
+      setNotifications(persisted.rows);
+      if (persisted.failedStatusChecks > 0) {
+        setNotice(
+          "Some booking actions are unavailable because their current status could not be verified.",
+        );
+      } else if (!background) {
+        setNotice(null);
+      }
+    } catch (error) {
+      if (!background) {
+        setNotifications([]);
+        setNotice(
+          error instanceof Error ? error.message : "Could not load notifications.",
+        );
+      }
     } finally {
-      setIsLoading(false);
+      isRefreshing.current = false;
+      if (!background) {
+        setIsLoading(false);
+      }
     }
   }, []);
 
   useEffect(() => {
-    let ignore = false;
-
-    void loadNotifications().finally(() => {
-      if (ignore) return;
-    });
-
-    return () => {
-      ignore = true;
-    };
+    void loadNotifications();
   }, [loadNotifications]);
 
   useEffect(() => {
-    function handleForegroundMessage() {
-      void loadNotifications();
+    function refreshInBackground() {
+      void loadNotifications(true);
     }
 
-    window.addEventListener(FCM_FOREGROUND_EVENT, handleForegroundMessage);
+    function handleVisibilityChange() {
+      if (document.visibilityState === "visible") {
+        refreshInBackground();
+      }
+    }
+
+    const refreshTimer = window.setInterval(() => {
+      if (document.visibilityState === "visible") {
+        refreshInBackground();
+      }
+    }, NOTIFICATION_REFRESH_INTERVAL_MS);
+
+    window.addEventListener(FCM_FOREGROUND_EVENT, refreshInBackground);
+    window.addEventListener("focus", refreshInBackground);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     return () => {
-      window.removeEventListener(FCM_FOREGROUND_EVENT, handleForegroundMessage);
+      window.clearInterval(refreshTimer);
+      window.removeEventListener(FCM_FOREGROUND_EVENT, refreshInBackground);
+      window.removeEventListener("focus", refreshInBackground);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [loadNotifications]);
 
@@ -692,14 +743,16 @@ export default function NotificationCenter() {
     setNotice(null);
 
     try {
-      if (notification.bookingId) {
-        await updateBookingsStatus([notification.bookingId], status);
+      if (!notification.bookingId) {
+        throw new Error("This notification is not linked to a booking.");
       }
 
+      const booking = await updateBookingStatus(notification.bookingId, status);
       await markRead(notification);
       updateNotification(notification.id, {
         kind: status === "Accepted" ? "service-approved" : "service-denied",
         category: "services",
+        bookingStatus: booking.status,
         title: `${notification.serviceName ?? "Service"} was ${
           status === "Accepted" ? "approved" : "denied"
         }`,
@@ -708,8 +761,12 @@ export default function NotificationCenter() {
             ? "The booking was accepted and moved into the service queue."
             : "The booking request was declined.",
       });
-    } catch {
-      setNotice("Could not update that booking. Open Bookings to manage it.");
+    } catch (error) {
+      setNotice(
+        error instanceof Error
+          ? error.message
+          : "Could not update that booking. Open Bookings to manage it.",
+      );
     } finally {
       setBusyId(null);
     }
@@ -800,6 +857,10 @@ export default function NotificationCenter() {
                 notification.kind === "storage-sale");
             const isUnread = notification.status === "unread";
             const isBusy = busyId === notification.id;
+            const canDecideBooking =
+              notification.kind === "booking-request" &&
+              Boolean(notification.bookingId) &&
+              notification.bookingStatus?.toLowerCase() === "pending";
 
             return (
               <article
@@ -852,7 +913,7 @@ export default function NotificationCenter() {
                     {notification.actorName && <span>{notification.actorName}</span>}
                   </div>
 
-                  {notification.kind === "booking-request" && (
+                  {canDecideBooking && (
                     <div className={styles.actions}>
                       <button
                         type="button"
