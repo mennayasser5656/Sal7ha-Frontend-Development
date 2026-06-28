@@ -1,3 +1,10 @@
+import {
+  handleMockApiRequest,
+  hasMockHandler,
+  isMockAuthSession,
+  isMockSignInRequest,
+} from "@/infrastructure/mock/mock-api";
+
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ??
   process.env.API_BASE_URL ??
@@ -106,6 +113,36 @@ export function clearStoredAuthSession() {
   writeAuthCookie(null);
 }
 
+function getErrorStatus(error: unknown) {
+  return error instanceof Error && "status" in error
+    ? (error as Error & { status?: number }).status
+    : undefined;
+}
+
+function isRecoverableBackendError(error: unknown) {
+  const status = getErrorStatus(error);
+
+  return (
+    error instanceof TypeError ||
+    status === 404 ||
+    (typeof status === "number" && status >= 500)
+  );
+}
+
+async function tryMockApi<T>(
+  endpoint: string,
+  options: ApiRequestOptions,
+): Promise<{ mocked: true; data: T } | { mocked: false }> {
+  if (!hasMockHandler(endpoint)) {
+    return { mocked: false };
+  }
+
+  const response = await handleMockApiRequest<T>(endpoint, options);
+  return response.handled
+    ? { mocked: true, data: response.data as T }
+    : { mocked: false };
+}
+
 async function refreshSession() {
   const session = readStoredSession();
   if (!session?.refreshToken) return null;
@@ -206,14 +243,21 @@ export async function apiClient<T>(
     typeof optionsOrMethod === "string"
       ? { method: optionsOrMethod, body }
       : optionsOrMethod;
+  const useMockBeforeRequest =
+    isMockAuthSession(readStoredSession()) ||
+    isMockSignInRequest(endpoint, options);
+
+  if (useMockBeforeRequest) {
+    const mocked = await tryMockApi<T>(endpoint, options);
+    if (mocked.mocked) {
+      return mocked.data;
+    }
+  }
 
   try {
     return await sendRequest<T>(endpoint, options, token);
   } catch (error) {
-    const status =
-      error instanceof Error && "status" in error
-        ? (error as Error & { status?: number }).status
-        : undefined;
+    const status = getErrorStatus(error);
 
     if (
       status === 401 &&
@@ -223,6 +267,17 @@ export async function apiClient<T>(
       const session = await refreshSession();
       if (session?.accessToken) {
         return sendRequest<T>(endpoint, options, session.accessToken);
+      }
+    }
+
+    if (
+      isRecoverableBackendError(error) ||
+      isMockAuthSession(readStoredSession()) ||
+      isMockSignInRequest(endpoint, options)
+    ) {
+      const mocked = await tryMockApi<T>(endpoint, options);
+      if (mocked.mocked) {
+        return mocked.data;
       }
     }
 

@@ -1,0 +1,6338 @@
+{
+  "account": {
+    "email": "mockup@gmail.com",
+    "password": "Mockup123456!",
+    "session": {
+      "accessToken": "mockup-local-access-token",
+      "refreshToken": "mockup-local-refresh-token",
+      "expiresIn": 604800,
+      "tokenType": "Bearer"
+    },
+    "user": {
+      "id": "mock-user-001",
+      "email": "mockup@gmail.com",
+      "role": "business",
+      "firstName": "Mockup",
+      "lastName": "Owner",
+      "phoneNumber": "+201001234567",
+      "businessId": "mock-business-001",
+      "onboardingCompleted": true,
+      "twoFactorEnabled": false
+    },
+    "ownerProfile": {
+      "id": "mock-owner-001",
+      "firstName": "Mockup",
+      "lastName": "Owner",
+      "birthDate": "1992-04-16",
+      "phoneNumber": "+201001234567",
+      "address": {
+        "country": "Egypt",
+        "streetAddress": "12 Nile Corniche",
+        "city": "Cairo",
+        "state": "Cairo",
+        "zipCode": "11511"
+      },
+      "setupStatus": "ok",
+      "personalIdUrl": "/assets/profile_img.svg",
+      "personalIdFileName": "mockup-owner-id.pdf",
+      "personalIdReviewStatus": "approved"
+    },
+    "businessProfile": {
+      "id": "mock-business-001",
+      "name": "Mockup Auto Service",
+      "logoUrl": "/assets/profile_img.svg",
+      "logoFileName": "mockup-auto-service-logo.png",
+      "email": "mockup@gmail.com",
+      "phoneNumber": "+201009876543",
+      "onboardingCompleted": true,
+      "commercialRegistrationNumber": "123456789",
+      "taxIdentificationNumber": "987654321",
+      "businessType": "general_repair",
+      "employeeCount": "medium",
+      "address": {
+        "country": "Egypt",
+        "streetAddress": "45 Service Road",
+        "city": "Cairo",
+        "state": "Cairo",
+        "zipCode": "11511"
+      }
+    },
+    "security": {
+      "preferences": [
+        {
+          "key": "loginAlerts",
+          "title": "Login alerts",
+          "description": "Notify admins when someone signs in to the workspace.",
+          "enabled": true
+        },
+        {
+          "key": "newDeviceApproval",
+          "title": "New device approval",
+          "description": "Require confirmation before a new device can stay trusted.",
+          "enabled": true
+        },
+        {
+          "key": "sessionTimeout",
+          "title": "Idle session timeout",
+          "description": "Sign users out after a long period of inactivity.",
+          "enabled": true
+        },
+        {
+          "key": "paymentExportConfirmation",
+          "title": "Export confirmation",
+          "description": "Ask for confirmation before sensitive payment exports.",
+          "enabled": false
+        }
+      ],
+      "mfa": {
+        "enabled": false,
+        "method": null,
+        "phone": null,
+        "verifiedAt": null
+      }
+    },
+    "notificationPreferences": [
+      {
+        "key": "bookingAccepted",
+        "enabled": true
+      },
+      {
+        "key": "bookingDeclined",
+        "enabled": true
+      },
+      {
+        "key": "settingsSaved",
+        "enabled": true
+      },
+      {
+        "key": "securitySettingsUpdated",
+        "enabled": true
+      },
+      {
+        "key": "mfaUpdated",
+        "enabled": true
+      },
+      {
+        "key": "exportGenerated",
+        "enabled": true
+      },
+      {
+        "key": "storageItemSold",
+        "enabled": true
+      }
+    ]
+  },
+  "allWidgets": [
+    {
+      "id": "profile",
+      "title": "Profile",
+      "type": "profile",
+      "span": 1
+    },
+    {
+      "id": "calendar",
+      "title": "Calendar & Services",
+      "type": "calendar",
+      "span": 2
+    },
+    {
+      "id": "setup-warnings",
+      "title": "Action Items",
+      "type": "setupWarnings",
+      "span": 2
+    },
+    {
+      "id": "in-progress",
+      "title": "In-Progress",
+      "type": "status",
+      "statusKey": "inProgress",
+      "color": "#a0a0a0",
+      "span": 1
+    },
+    {
+      "id": "completed",
+      "title": "Completed",
+      "type": "status",
+      "statusKey": "completed",
+      "color": "#10b981",
+      "span": 1
+    },
+    {
+      "id": "pending",
+      "title": "Pending",
+      "type": "status",
+      "statusKey": "pending",
+      "color": "#ffbf51",
+      "span": 1
+    },
+    {
+      "id": "cancelled",
+      "title": "Cancelled",
+      "type": "status",
+      "statusKey": "cancelled",
+      "color": "#ef4444",
+      "span": 1
+    },
+    {
+      "id": "booking-status",
+      "title": "Booking Status",
+      "type": "statusSummary",
+      "span": 1
+    },
+    {
+      "id": "growth",
+      "title": "Growth",
+      "type": "growth",
+      "span": 3
+    }
+  ],
+  "activeWidgetIds": [
+    "profile",
+    "calendar",
+    "setup-warnings",
+    "in-progress",
+    "completed",
+    "pending",
+    "cancelled",
+    "booking-status",
+    "growth"
+  ],
+  "setupWarnings": [
+    {
+      "id": "billing-review",
+      "title": "Billing",
+      "description": "Billing account is ready for review.",
+      "segment": "billing",
+      "severity": "warning"
+    }
+  ],
+  "businessServices": [
+    {
+      "id": "svc-oil-change",
+      "serviceId": "oil-change",
+      "category": "Engine Services",
+      "name": "Oil Change",
+      "price": 85,
+      "currency": "USD",
+      "status": "active"
+    },
+    {
+      "id": "svc-diagnostics",
+      "serviceId": "engine-diagnostics",
+      "category": "Engine Services",
+      "name": "Engine Diagnostics",
+      "price": 120,
+      "currency": "USD",
+      "status": "active"
+    },
+    {
+      "id": "svc-brakes",
+      "serviceId": "brake-pad-replacement",
+      "category": "Brake Services",
+      "name": "Brake Pad Replacement",
+      "price": 180,
+      "currency": "USD",
+      "status": "active"
+    },
+    {
+      "id": "svc-tires",
+      "serviceId": "tire-replacement",
+      "category": "Wheel Services",
+      "name": "Tire Replacement",
+      "price": 240,
+      "currency": "USD",
+      "status": "active"
+    },
+    {
+      "id": "svc-detailing",
+      "serviceId": "car-wash-detailing",
+      "category": "General Maintenance",
+      "name": "Car Wash & Detailing",
+      "price": 65,
+      "currency": "USD",
+      "status": "active"
+    }
+  ],
+  "serviceCatalog": [
+    {
+      "id": "engine",
+      "name": "Engine Services",
+      "icon": "/assets/engine_service.svg",
+      "services": [
+        {
+          "id": "oil-change",
+          "name": "Oil Change",
+          "categoryId": "engine",
+          "category": "Engine Services",
+          "icon": "/assets/oil_icon.png"
+        },
+        {
+          "id": "engine-diagnostics",
+          "name": "Engine Diagnostics",
+          "categoryId": "engine",
+          "category": "Engine Services",
+          "icon": "/assets/engine_service.svg"
+        }
+      ]
+    },
+    {
+      "id": "brakes",
+      "name": "Brake Services",
+      "icon": "/assets/wheel_service.svg",
+      "services": [
+        {
+          "id": "brake-pad-replacement",
+          "name": "Brake Pad Replacement",
+          "categoryId": "brakes",
+          "category": "Brake Services",
+          "icon": "/assets/wheel_service.svg"
+        }
+      ]
+    },
+    {
+      "id": "wheels",
+      "name": "Wheel Services",
+      "icon": "/assets/wheel_service.svg",
+      "services": [
+        {
+          "id": "tire-replacement",
+          "name": "Tire Replacement",
+          "categoryId": "wheels",
+          "category": "Wheel Services",
+          "icon": "/assets/wheel_service.svg"
+        },
+        {
+          "id": "wheel-alignment",
+          "name": "Wheel Alignment",
+          "categoryId": "wheels",
+          "category": "Wheel Services",
+          "icon": "/assets/wheel_service.svg"
+        }
+      ]
+    }
+  ],
+  "bookings": [
+    {
+      "id": "BK-1001",
+      "serviceId": "battery-replacement",
+      "serviceName": "Battery Replacement",
+      "serviceIcon": "/assets/battery_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "4/22/2026",
+      "endDate": "4/22/2026",
+      "status": "In-Progress",
+      "price": 175,
+      "serviceDetails": [
+        {
+          "label": "System",
+          "value": "Charging"
+        },
+        {
+          "label": "Check",
+          "value": "Diagnostics included"
+        }
+      ]
+    },
+    {
+      "id": "BK-1002",
+      "serviceId": "engine-tune-up",
+      "serviceName": "Engine Tune-Up",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "4/25/2026",
+      "endDate": "4/25/2026",
+      "status": "Pending",
+      "price": 180,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Premium"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 3"
+        }
+      ]
+    },
+    {
+      "id": "BK-1003",
+      "serviceId": "car-wash-detailing",
+      "serviceName": "Car Wash & Detailing",
+      "serviceIcon": "/assets/paint_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "4/28/2026",
+      "endDate": "4/28/2026",
+      "status": "Accepted",
+      "price": 95,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 4"
+        }
+      ]
+    },
+    {
+      "id": "BK-1004",
+      "serviceId": "brake-fluid-flush",
+      "serviceName": "Brake Fluid Flush",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "5/1/2026",
+      "endDate": "5/1/2026",
+      "status": "Cancelled",
+      "price": 135,
+      "serviceDetails": [
+        {
+          "label": "Axle",
+          "value": "Rear"
+        },
+        {
+          "label": "Pad Type",
+          "value": "Ceramic"
+        }
+      ]
+    },
+    {
+      "id": "BK-1005",
+      "serviceId": "full-vehicle-inspection",
+      "serviceName": "Full Vehicle Inspection",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "5/4/2026",
+      "endDate": "5/4/2026",
+      "status": "Completed",
+      "price": 110,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 2"
+        }
+      ]
+    },
+    {
+      "id": "BK-1006",
+      "serviceId": "wheel-alignment",
+      "serviceName": "Wheel Alignment",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "5/7/2026",
+      "endDate": "5/7/2026",
+      "status": "In-Progress",
+      "price": 105,
+      "serviceDetails": [
+        {
+          "label": "Tire Size",
+          "value": "225/45R17"
+        },
+        {
+          "label": "Alignment",
+          "value": "Front axle"
+        }
+      ]
+    },
+    {
+      "id": "BK-1007",
+      "serviceId": "engine-diagnostics",
+      "serviceName": "Engine Diagnostics",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "5/10/2026",
+      "endDate": "5/10/2026",
+      "status": "Accepted",
+      "price": 140,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 4"
+        }
+      ]
+    },
+    {
+      "id": "BK-1008",
+      "serviceId": "ac-repair",
+      "serviceName": "A/C Repair",
+      "serviceIcon": "/assets/battery_service.svg",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "5/13/2026",
+      "endDate": "5/13/2026",
+      "status": "Cancelled",
+      "price": 240,
+      "serviceDetails": [
+        {
+          "label": "System",
+          "value": "Cooling"
+        },
+        {
+          "label": "Check",
+          "value": "Diagnostics included"
+        }
+      ]
+    },
+    {
+      "id": "BK-1009",
+      "serviceId": "brake-pad-replacement",
+      "serviceName": "Brake Pad Replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "5/16/2026",
+      "endDate": "5/16/2026",
+      "status": "Completed",
+      "price": 220,
+      "serviceDetails": [
+        {
+          "label": "Axle",
+          "value": "Front"
+        },
+        {
+          "label": "Pad Type",
+          "value": "Semi-Metallic"
+        }
+      ]
+    },
+    {
+      "id": "BK-1010",
+      "serviceId": "dent-removal",
+      "serviceName": "Dent Removal",
+      "serviceIcon": "/assets/paint_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "5/19/2026",
+      "endDate": "5/19/2026",
+      "status": "In-Progress",
+      "price": 140,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Premium"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 3"
+        }
+      ]
+    },
+    {
+      "id": "BK-1011",
+      "serviceId": "tire-replacement",
+      "serviceName": "Tire Replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "5/22/2026",
+      "endDate": "5/23/2026",
+      "status": "Pending",
+      "price": 250,
+      "serviceDetails": [
+        {
+          "label": "Tire Size",
+          "value": "205/55R16"
+        },
+        {
+          "label": "Alignment",
+          "value": "Four wheel"
+        }
+      ]
+    },
+    {
+      "id": "BK-1012",
+      "serviceId": "oil-change",
+      "serviceName": "Oil Change",
+      "serviceIcon": "/assets/oil_icon.png",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "5/25/2026",
+      "endDate": "5/25/2026",
+      "status": "Accepted",
+      "price": 105,
+      "serviceDetails": [
+        {
+          "label": "Oil",
+          "value": "0W-20 Full Synthetic"
+        },
+        {
+          "label": "Filter",
+          "value": "Mann-Filter"
+        }
+      ]
+    },
+    {
+      "id": "BK-1013",
+      "serviceId": "battery-replacement",
+      "serviceName": "Battery Replacement",
+      "serviceIcon": "/assets/battery_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "5/28/2026",
+      "endDate": "5/28/2026",
+      "status": "Cancelled",
+      "price": 195,
+      "serviceDetails": [
+        {
+          "label": "System",
+          "value": "Charging"
+        },
+        {
+          "label": "Check",
+          "value": "Diagnostics included"
+        }
+      ]
+    },
+    {
+      "id": "BK-1014",
+      "serviceId": "engine-tune-up",
+      "serviceName": "Engine Tune-Up",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "5/31/2026",
+      "endDate": "5/31/2026",
+      "status": "In-Progress",
+      "price": 200,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Premium"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 3"
+        }
+      ]
+    },
+    {
+      "id": "BK-1015",
+      "serviceId": "car-wash-detailing",
+      "serviceName": "Car Wash & Detailing",
+      "serviceIcon": "/assets/paint_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "6/3/2026",
+      "endDate": "6/3/2026",
+      "status": "Pending",
+      "price": 65,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 4"
+        }
+      ]
+    },
+    {
+      "id": "BK-1016",
+      "serviceId": "brake-fluid-flush",
+      "serviceName": "Brake Fluid Flush",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "6/6/2026",
+      "endDate": "6/6/2026",
+      "status": "Accepted",
+      "price": 105,
+      "serviceDetails": [
+        {
+          "label": "Axle",
+          "value": "Rear"
+        },
+        {
+          "label": "Pad Type",
+          "value": "Ceramic"
+        }
+      ]
+    },
+    {
+      "id": "BK-1017",
+      "serviceId": "full-vehicle-inspection",
+      "serviceName": "Full Vehicle Inspection",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "6/9/2026",
+      "endDate": "6/9/2026",
+      "status": "Cancelled",
+      "price": 130,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 2"
+        }
+      ]
+    },
+    {
+      "id": "BK-1018",
+      "serviceId": "wheel-alignment",
+      "serviceName": "Wheel Alignment",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "6/12/2026",
+      "endDate": "6/12/2026",
+      "status": "Completed",
+      "price": 125,
+      "serviceDetails": [
+        {
+          "label": "Tire Size",
+          "value": "225/45R17"
+        },
+        {
+          "label": "Alignment",
+          "value": "Front axle"
+        }
+      ]
+    },
+    {
+      "id": "BK-1019",
+      "serviceId": "engine-diagnostics",
+      "serviceName": "Engine Diagnostics",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "6/15/2026",
+      "endDate": "6/15/2026",
+      "status": "In-Progress",
+      "price": 160,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 4"
+        }
+      ]
+    },
+    {
+      "id": "BK-1020",
+      "serviceId": "ac-repair",
+      "serviceName": "A/C Repair",
+      "serviceIcon": "/assets/battery_service.svg",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "6/18/2026",
+      "endDate": "6/18/2026",
+      "status": "Pending",
+      "price": 210,
+      "serviceDetails": [
+        {
+          "label": "System",
+          "value": "Cooling"
+        },
+        {
+          "label": "Check",
+          "value": "Diagnostics included"
+        }
+      ]
+    },
+    {
+      "id": "BK-1021",
+      "serviceId": "brake-pad-replacement",
+      "serviceName": "Brake Pad Replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "6/21/2026",
+      "endDate": "6/21/2026",
+      "status": "Cancelled",
+      "price": 190,
+      "serviceDetails": [
+        {
+          "label": "Axle",
+          "value": "Front"
+        },
+        {
+          "label": "Pad Type",
+          "value": "Semi-Metallic"
+        }
+      ]
+    },
+    {
+      "id": "BK-1022",
+      "serviceId": "dent-removal",
+      "serviceName": "Dent Removal",
+      "serviceIcon": "/assets/paint_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "6/24/2026",
+      "endDate": "6/25/2026",
+      "status": "Completed",
+      "price": 160,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Premium"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 3"
+        }
+      ]
+    },
+    {
+      "id": "BK-1023",
+      "serviceId": "tire-replacement",
+      "serviceName": "Tire Replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "6/27/2026",
+      "endDate": "6/27/2026",
+      "status": "In-Progress",
+      "price": 270,
+      "serviceDetails": [
+        {
+          "label": "Tire Size",
+          "value": "205/55R16"
+        },
+        {
+          "label": "Alignment",
+          "value": "Four wheel"
+        }
+      ]
+    },
+    {
+      "id": "BK-1024",
+      "serviceId": "oil-change",
+      "serviceName": "Oil Change",
+      "serviceIcon": "/assets/oil_icon.png",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "6/30/2026",
+      "endDate": "6/30/2026",
+      "status": "Pending",
+      "price": 125,
+      "serviceDetails": [
+        {
+          "label": "Oil",
+          "value": "0W-20 Full Synthetic"
+        },
+        {
+          "label": "Filter",
+          "value": "Mann-Filter"
+        }
+      ]
+    },
+    {
+      "id": "BK-1025",
+      "serviceId": "battery-replacement",
+      "serviceName": "Battery Replacement",
+      "serviceIcon": "/assets/battery_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "7/3/2026",
+      "endDate": "7/3/2026",
+      "status": "Accepted",
+      "price": 165,
+      "serviceDetails": [
+        {
+          "label": "System",
+          "value": "Charging"
+        },
+        {
+          "label": "Check",
+          "value": "Diagnostics included"
+        }
+      ]
+    },
+    {
+      "id": "BK-1026",
+      "serviceId": "engine-tune-up",
+      "serviceName": "Engine Tune-Up",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "7/6/2026",
+      "endDate": "7/6/2026",
+      "status": "Cancelled",
+      "price": 170,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Premium"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 3"
+        }
+      ]
+    },
+    {
+      "id": "BK-1027",
+      "serviceId": "car-wash-detailing",
+      "serviceName": "Car Wash & Detailing",
+      "serviceIcon": "/assets/paint_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "7/9/2026",
+      "endDate": "7/9/2026",
+      "status": "Completed",
+      "price": 85,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 4"
+        }
+      ]
+    },
+    {
+      "id": "BK-1028",
+      "serviceId": "brake-fluid-flush",
+      "serviceName": "Brake Fluid Flush",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "7/12/2026",
+      "endDate": "7/12/2026",
+      "status": "Pending",
+      "price": 125,
+      "serviceDetails": [
+        {
+          "label": "Axle",
+          "value": "Rear"
+        },
+        {
+          "label": "Pad Type",
+          "value": "Ceramic"
+        }
+      ]
+    },
+    {
+      "id": "BK-1029",
+      "serviceId": "full-vehicle-inspection",
+      "serviceName": "Full Vehicle Inspection",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "7/15/2026",
+      "endDate": "7/15/2026",
+      "status": "Accepted",
+      "price": 150,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 2"
+        }
+      ]
+    },
+    {
+      "id": "BK-1030",
+      "serviceId": "wheel-alignment",
+      "serviceName": "Wheel Alignment",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "7/18/2026",
+      "endDate": "7/18/2026",
+      "status": "Cancelled",
+      "price": 95,
+      "serviceDetails": [
+        {
+          "label": "Tire Size",
+          "value": "225/45R17"
+        },
+        {
+          "label": "Alignment",
+          "value": "Front axle"
+        }
+      ]
+    },
+    {
+      "id": "BK-1031",
+      "serviceId": "engine-diagnostics",
+      "serviceName": "Engine Diagnostics",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "7/21/2026",
+      "endDate": "7/21/2026",
+      "status": "Completed",
+      "price": 130,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 4"
+        }
+      ]
+    },
+    {
+      "id": "BK-1032",
+      "serviceId": "ac-repair",
+      "serviceName": "A/C Repair",
+      "serviceIcon": "/assets/battery_service.svg",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "7/24/2026",
+      "endDate": "7/24/2026",
+      "status": "In-Progress",
+      "price": 230,
+      "serviceDetails": [
+        {
+          "label": "System",
+          "value": "Cooling"
+        },
+        {
+          "label": "Check",
+          "value": "Diagnostics included"
+        }
+      ]
+    },
+    {
+      "id": "BK-1033",
+      "serviceId": "brake-pad-replacement",
+      "serviceName": "Brake Pad Replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "4/20/2026",
+      "endDate": "4/21/2026",
+      "status": "Pending",
+      "price": 210,
+      "serviceDetails": [
+        {
+          "label": "Axle",
+          "value": "Front"
+        },
+        {
+          "label": "Pad Type",
+          "value": "Semi-Metallic"
+        }
+      ]
+    },
+    {
+      "id": "BK-1034",
+      "serviceId": "dent-removal",
+      "serviceName": "Dent Removal",
+      "serviceIcon": "/assets/paint_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "4/23/2026",
+      "endDate": "4/23/2026",
+      "status": "Accepted",
+      "price": 180,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Premium"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 3"
+        }
+      ]
+    },
+    {
+      "id": "BK-1035",
+      "serviceId": "tire-replacement",
+      "serviceName": "Tire Replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "4/26/2026",
+      "endDate": "4/26/2026",
+      "status": "Completed",
+      "price": 240,
+      "serviceDetails": [
+        {
+          "label": "Tire Size",
+          "value": "205/55R16"
+        },
+        {
+          "label": "Alignment",
+          "value": "Four wheel"
+        }
+      ]
+    },
+    {
+      "id": "BK-1036",
+      "serviceId": "oil-change",
+      "serviceName": "Oil Change",
+      "serviceIcon": "/assets/oil_icon.png",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "4/29/2026",
+      "endDate": "4/29/2026",
+      "status": "In-Progress",
+      "price": 95,
+      "serviceDetails": [
+        {
+          "label": "Oil",
+          "value": "0W-20 Full Synthetic"
+        },
+        {
+          "label": "Filter",
+          "value": "Mann-Filter"
+        }
+      ]
+    },
+    {
+      "id": "BK-1037",
+      "serviceId": "battery-replacement",
+      "serviceName": "Battery Replacement",
+      "serviceIcon": "/assets/battery_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "5/2/2026",
+      "endDate": "5/2/2026",
+      "status": "Pending",
+      "price": 185,
+      "serviceDetails": [
+        {
+          "label": "System",
+          "value": "Charging"
+        },
+        {
+          "label": "Check",
+          "value": "Diagnostics included"
+        }
+      ]
+    },
+    {
+      "id": "BK-1038",
+      "serviceId": "engine-tune-up",
+      "serviceName": "Engine Tune-Up",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "5/5/2026",
+      "endDate": "5/5/2026",
+      "status": "Accepted",
+      "price": 190,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Premium"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 3"
+        }
+      ]
+    },
+    {
+      "id": "BK-1039",
+      "serviceId": "car-wash-detailing",
+      "serviceName": "Car Wash & Detailing",
+      "serviceIcon": "/assets/paint_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "5/8/2026",
+      "endDate": "5/8/2026",
+      "status": "Cancelled",
+      "price": 105,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 4"
+        }
+      ]
+    },
+    {
+      "id": "BK-1040",
+      "serviceId": "brake-fluid-flush",
+      "serviceName": "Brake Fluid Flush",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "5/11/2026",
+      "endDate": "5/11/2026",
+      "status": "Completed",
+      "price": 95,
+      "serviceDetails": [
+        {
+          "label": "Axle",
+          "value": "Rear"
+        },
+        {
+          "label": "Pad Type",
+          "value": "Ceramic"
+        }
+      ]
+    },
+    {
+      "id": "BK-1041",
+      "serviceId": "full-vehicle-inspection",
+      "serviceName": "Full Vehicle Inspection",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "5/14/2026",
+      "endDate": "5/14/2026",
+      "status": "In-Progress",
+      "price": 120,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 2"
+        }
+      ]
+    },
+    {
+      "id": "BK-1042",
+      "serviceId": "wheel-alignment",
+      "serviceName": "Wheel Alignment",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "5/17/2026",
+      "endDate": "5/17/2026",
+      "status": "Accepted",
+      "price": 115,
+      "serviceDetails": [
+        {
+          "label": "Tire Size",
+          "value": "225/45R17"
+        },
+        {
+          "label": "Alignment",
+          "value": "Front axle"
+        }
+      ]
+    },
+    {
+      "id": "BK-1043",
+      "serviceId": "engine-diagnostics",
+      "serviceName": "Engine Diagnostics",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "5/20/2026",
+      "endDate": "5/20/2026",
+      "status": "Cancelled",
+      "price": 150,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 4"
+        }
+      ]
+    },
+    {
+      "id": "BK-1044",
+      "serviceId": "ac-repair",
+      "serviceName": "A/C Repair",
+      "serviceIcon": "/assets/battery_service.svg",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "5/23/2026",
+      "endDate": "5/24/2026",
+      "status": "Completed",
+      "price": 250,
+      "serviceDetails": [
+        {
+          "label": "System",
+          "value": "Cooling"
+        },
+        {
+          "label": "Check",
+          "value": "Diagnostics included"
+        }
+      ]
+    },
+    {
+      "id": "BK-1045",
+      "serviceId": "brake-pad-replacement",
+      "serviceName": "Brake Pad Replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "5/26/2026",
+      "endDate": "5/26/2026",
+      "status": "In-Progress",
+      "price": 180,
+      "serviceDetails": [
+        {
+          "label": "Axle",
+          "value": "Front"
+        },
+        {
+          "label": "Pad Type",
+          "value": "Semi-Metallic"
+        }
+      ]
+    },
+    {
+      "id": "BK-1046",
+      "serviceId": "dent-removal",
+      "serviceName": "Dent Removal",
+      "serviceIcon": "/assets/paint_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "5/29/2026",
+      "endDate": "5/29/2026",
+      "status": "Pending",
+      "price": 150,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Premium"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 3"
+        }
+      ]
+    },
+    {
+      "id": "BK-1047",
+      "serviceId": "tire-replacement",
+      "serviceName": "Tire Replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "6/1/2026",
+      "endDate": "6/1/2026",
+      "status": "Accepted",
+      "price": 260,
+      "serviceDetails": [
+        {
+          "label": "Tire Size",
+          "value": "205/55R16"
+        },
+        {
+          "label": "Alignment",
+          "value": "Four wheel"
+        }
+      ]
+    },
+    {
+      "id": "BK-1048",
+      "serviceId": "oil-change",
+      "serviceName": "Oil Change",
+      "serviceIcon": "/assets/oil_icon.png",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "6/4/2026",
+      "endDate": "6/4/2026",
+      "status": "Cancelled",
+      "price": 115,
+      "serviceDetails": [
+        {
+          "label": "Oil",
+          "value": "0W-20 Full Synthetic"
+        },
+        {
+          "label": "Filter",
+          "value": "Mann-Filter"
+        }
+      ]
+    },
+    {
+      "id": "BK-1049",
+      "serviceId": "battery-replacement",
+      "serviceName": "Battery Replacement",
+      "serviceIcon": "/assets/battery_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "6/7/2026",
+      "endDate": "6/7/2026",
+      "status": "In-Progress",
+      "price": 205,
+      "serviceDetails": [
+        {
+          "label": "System",
+          "value": "Charging"
+        },
+        {
+          "label": "Check",
+          "value": "Diagnostics included"
+        }
+      ]
+    },
+    {
+      "id": "BK-1050",
+      "serviceId": "engine-tune-up",
+      "serviceName": "Engine Tune-Up",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "6/10/2026",
+      "endDate": "6/10/2026",
+      "status": "Pending",
+      "price": 160,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Premium"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 3"
+        }
+      ]
+    },
+    {
+      "id": "BK-1051",
+      "serviceId": "car-wash-detailing",
+      "serviceName": "Car Wash & Detailing",
+      "serviceIcon": "/assets/paint_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "6/13/2026",
+      "endDate": "6/13/2026",
+      "status": "Accepted",
+      "price": 75,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 4"
+        }
+      ]
+    },
+    {
+      "id": "BK-1052",
+      "serviceId": "brake-fluid-flush",
+      "serviceName": "Brake Fluid Flush",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "6/16/2026",
+      "endDate": "6/16/2026",
+      "status": "Cancelled",
+      "price": 115,
+      "serviceDetails": [
+        {
+          "label": "Axle",
+          "value": "Rear"
+        },
+        {
+          "label": "Pad Type",
+          "value": "Ceramic"
+        }
+      ]
+    },
+    {
+      "id": "BK-1053",
+      "serviceId": "full-vehicle-inspection",
+      "serviceName": "Full Vehicle Inspection",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "6/19/2026",
+      "endDate": "6/19/2026",
+      "status": "Completed",
+      "price": 140,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 2"
+        }
+      ]
+    },
+    {
+      "id": "BK-1054",
+      "serviceId": "wheel-alignment",
+      "serviceName": "Wheel Alignment",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "6/22/2026",
+      "endDate": "6/22/2026",
+      "status": "In-Progress",
+      "price": 135,
+      "serviceDetails": [
+        {
+          "label": "Tire Size",
+          "value": "225/45R17"
+        },
+        {
+          "label": "Alignment",
+          "value": "Front axle"
+        }
+      ]
+    },
+    {
+      "id": "BK-1055",
+      "serviceId": "engine-diagnostics",
+      "serviceName": "Engine Diagnostics",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "6/25/2026",
+      "endDate": "6/26/2026",
+      "status": "Pending",
+      "price": 120,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 4"
+        }
+      ]
+    },
+    {
+      "id": "BK-1056",
+      "serviceId": "ac-repair",
+      "serviceName": "A/C Repair",
+      "serviceIcon": "/assets/battery_service.svg",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "6/28/2026",
+      "endDate": "6/28/2026",
+      "status": "Cancelled",
+      "price": 220,
+      "serviceDetails": [
+        {
+          "label": "System",
+          "value": "Cooling"
+        },
+        {
+          "label": "Check",
+          "value": "Diagnostics included"
+        }
+      ]
+    },
+    {
+      "id": "BK-1057",
+      "serviceId": "brake-pad-replacement",
+      "serviceName": "Brake Pad Replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "7/1/2026",
+      "endDate": "7/1/2026",
+      "status": "Completed",
+      "price": 200,
+      "serviceDetails": [
+        {
+          "label": "Axle",
+          "value": "Front"
+        },
+        {
+          "label": "Pad Type",
+          "value": "Semi-Metallic"
+        }
+      ]
+    },
+    {
+      "id": "BK-1058",
+      "serviceId": "dent-removal",
+      "serviceName": "Dent Removal",
+      "serviceIcon": "/assets/paint_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "7/4/2026",
+      "endDate": "7/4/2026",
+      "status": "In-Progress",
+      "price": 170,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Premium"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 3"
+        }
+      ]
+    },
+    {
+      "id": "BK-1059",
+      "serviceId": "tire-replacement",
+      "serviceName": "Tire Replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "7/7/2026",
+      "endDate": "7/7/2026",
+      "status": "Pending",
+      "price": 280,
+      "serviceDetails": [
+        {
+          "label": "Tire Size",
+          "value": "205/55R16"
+        },
+        {
+          "label": "Alignment",
+          "value": "Four wheel"
+        }
+      ]
+    },
+    {
+      "id": "BK-1060",
+      "serviceId": "oil-change",
+      "serviceName": "Oil Change",
+      "serviceIcon": "/assets/oil_icon.png",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "7/10/2026",
+      "endDate": "7/10/2026",
+      "status": "Accepted",
+      "price": 85,
+      "serviceDetails": [
+        {
+          "label": "Oil",
+          "value": "0W-20 Full Synthetic"
+        },
+        {
+          "label": "Filter",
+          "value": "Mann-Filter"
+        }
+      ]
+    },
+    {
+      "id": "BK-1061",
+      "serviceId": "battery-replacement",
+      "serviceName": "Battery Replacement",
+      "serviceIcon": "/assets/battery_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "7/13/2026",
+      "endDate": "7/13/2026",
+      "status": "Cancelled",
+      "price": 175,
+      "serviceDetails": [
+        {
+          "label": "System",
+          "value": "Charging"
+        },
+        {
+          "label": "Check",
+          "value": "Diagnostics included"
+        }
+      ]
+    },
+    {
+      "id": "BK-1062",
+      "serviceId": "engine-tune-up",
+      "serviceName": "Engine Tune-Up",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "7/16/2026",
+      "endDate": "7/16/2026",
+      "status": "Completed",
+      "price": 180,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Premium"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 3"
+        }
+      ]
+    },
+    {
+      "id": "BK-1063",
+      "serviceId": "car-wash-detailing",
+      "serviceName": "Car Wash & Detailing",
+      "serviceIcon": "/assets/paint_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "7/19/2026",
+      "endDate": "7/19/2026",
+      "status": "Pending",
+      "price": 95,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 4"
+        }
+      ]
+    },
+    {
+      "id": "BK-1064",
+      "serviceId": "brake-fluid-flush",
+      "serviceName": "Brake Fluid Flush",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "7/22/2026",
+      "endDate": "7/22/2026",
+      "status": "Accepted",
+      "price": 135,
+      "serviceDetails": [
+        {
+          "label": "Axle",
+          "value": "Rear"
+        },
+        {
+          "label": "Pad Type",
+          "value": "Ceramic"
+        }
+      ]
+    },
+    {
+      "id": "BK-1065",
+      "serviceId": "full-vehicle-inspection",
+      "serviceName": "Full Vehicle Inspection",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "7/25/2026",
+      "endDate": "7/25/2026",
+      "status": "Cancelled",
+      "price": 110,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 2"
+        }
+      ]
+    },
+    {
+      "id": "BK-1066",
+      "serviceId": "wheel-alignment",
+      "serviceName": "Wheel Alignment",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "4/21/2026",
+      "endDate": "4/22/2026",
+      "status": "Completed",
+      "price": 105,
+      "serviceDetails": [
+        {
+          "label": "Tire Size",
+          "value": "225/45R17"
+        },
+        {
+          "label": "Alignment",
+          "value": "Front axle"
+        }
+      ]
+    },
+    {
+      "id": "BK-1067",
+      "serviceId": "engine-diagnostics",
+      "serviceName": "Engine Diagnostics",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "4/24/2026",
+      "endDate": "4/24/2026",
+      "status": "In-Progress",
+      "price": 140,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 4"
+        }
+      ]
+    },
+    {
+      "id": "BK-1068",
+      "serviceId": "ac-repair",
+      "serviceName": "A/C Repair",
+      "serviceIcon": "/assets/battery_service.svg",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "4/27/2026",
+      "endDate": "4/27/2026",
+      "status": "Pending",
+      "price": 240,
+      "serviceDetails": [
+        {
+          "label": "System",
+          "value": "Cooling"
+        },
+        {
+          "label": "Check",
+          "value": "Diagnostics included"
+        }
+      ]
+    },
+    {
+      "id": "BK-1069",
+      "serviceId": "brake-pad-replacement",
+      "serviceName": "Brake Pad Replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "4/30/2026",
+      "endDate": "4/30/2026",
+      "status": "Accepted",
+      "price": 220,
+      "serviceDetails": [
+        {
+          "label": "Axle",
+          "value": "Front"
+        },
+        {
+          "label": "Pad Type",
+          "value": "Semi-Metallic"
+        }
+      ]
+    },
+    {
+      "id": "BK-1070",
+      "serviceId": "dent-removal",
+      "serviceName": "Dent Removal",
+      "serviceIcon": "/assets/paint_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "5/3/2026",
+      "endDate": "5/3/2026",
+      "status": "Completed",
+      "price": 140,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Premium"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 3"
+        }
+      ]
+    },
+    {
+      "id": "BK-1071",
+      "serviceId": "tire-replacement",
+      "serviceName": "Tire Replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "5/6/2026",
+      "endDate": "5/6/2026",
+      "status": "In-Progress",
+      "price": 250,
+      "serviceDetails": [
+        {
+          "label": "Tire Size",
+          "value": "205/55R16"
+        },
+        {
+          "label": "Alignment",
+          "value": "Four wheel"
+        }
+      ]
+    },
+    {
+      "id": "BK-1072",
+      "serviceId": "oil-change",
+      "serviceName": "Oil Change",
+      "serviceIcon": "/assets/oil_icon.png",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "5/9/2026",
+      "endDate": "5/9/2026",
+      "status": "Pending",
+      "price": 105,
+      "serviceDetails": [
+        {
+          "label": "Oil",
+          "value": "0W-20 Full Synthetic"
+        },
+        {
+          "label": "Filter",
+          "value": "Mann-Filter"
+        }
+      ]
+    },
+    {
+      "id": "BK-1073",
+      "serviceId": "battery-replacement",
+      "serviceName": "Battery Replacement",
+      "serviceIcon": "/assets/battery_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "5/12/2026",
+      "endDate": "5/12/2026",
+      "status": "Accepted",
+      "price": 195,
+      "serviceDetails": [
+        {
+          "label": "System",
+          "value": "Charging"
+        },
+        {
+          "label": "Check",
+          "value": "Diagnostics included"
+        }
+      ]
+    },
+    {
+      "id": "BK-1074",
+      "serviceId": "engine-tune-up",
+      "serviceName": "Engine Tune-Up",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "5/15/2026",
+      "endDate": "5/15/2026",
+      "status": "Cancelled",
+      "price": 200,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Premium"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 3"
+        }
+      ]
+    },
+    {
+      "id": "BK-1075",
+      "serviceId": "car-wash-detailing",
+      "serviceName": "Car Wash & Detailing",
+      "serviceIcon": "/assets/paint_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "5/18/2026",
+      "endDate": "5/18/2026",
+      "status": "Completed",
+      "price": 65,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 4"
+        }
+      ]
+    },
+    {
+      "id": "BK-1076",
+      "serviceId": "brake-fluid-flush",
+      "serviceName": "Brake Fluid Flush",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "5/21/2026",
+      "endDate": "5/21/2026",
+      "status": "In-Progress",
+      "price": 105,
+      "serviceDetails": [
+        {
+          "label": "Axle",
+          "value": "Rear"
+        },
+        {
+          "label": "Pad Type",
+          "value": "Ceramic"
+        }
+      ]
+    },
+    {
+      "id": "BK-1077",
+      "serviceId": "full-vehicle-inspection",
+      "serviceName": "Full Vehicle Inspection",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "5/24/2026",
+      "endDate": "5/25/2026",
+      "status": "Accepted",
+      "price": 130,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 2"
+        }
+      ]
+    },
+    {
+      "id": "BK-1078",
+      "serviceId": "wheel-alignment",
+      "serviceName": "Wheel Alignment",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "5/27/2026",
+      "endDate": "5/27/2026",
+      "status": "Cancelled",
+      "price": 125,
+      "serviceDetails": [
+        {
+          "label": "Tire Size",
+          "value": "225/45R17"
+        },
+        {
+          "label": "Alignment",
+          "value": "Front axle"
+        }
+      ]
+    },
+    {
+      "id": "BK-1079",
+      "serviceId": "engine-diagnostics",
+      "serviceName": "Engine Diagnostics",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "5/30/2026",
+      "endDate": "5/30/2026",
+      "status": "Completed",
+      "price": 160,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 4"
+        }
+      ]
+    },
+    {
+      "id": "BK-1080",
+      "serviceId": "ac-repair",
+      "serviceName": "A/C Repair",
+      "serviceIcon": "/assets/battery_service.svg",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "6/2/2026",
+      "endDate": "6/2/2026",
+      "status": "In-Progress",
+      "price": 210,
+      "serviceDetails": [
+        {
+          "label": "System",
+          "value": "Cooling"
+        },
+        {
+          "label": "Check",
+          "value": "Diagnostics included"
+        }
+      ]
+    },
+    {
+      "id": "BK-1081",
+      "serviceId": "brake-pad-replacement",
+      "serviceName": "Brake Pad Replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "6/5/2026",
+      "endDate": "6/5/2026",
+      "status": "Pending",
+      "price": 190,
+      "serviceDetails": [
+        {
+          "label": "Axle",
+          "value": "Front"
+        },
+        {
+          "label": "Pad Type",
+          "value": "Semi-Metallic"
+        }
+      ]
+    },
+    {
+      "id": "BK-1082",
+      "serviceId": "dent-removal",
+      "serviceName": "Dent Removal",
+      "serviceIcon": "/assets/paint_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "6/8/2026",
+      "endDate": "6/8/2026",
+      "status": "Accepted",
+      "price": 160,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Premium"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 3"
+        }
+      ]
+    },
+    {
+      "id": "BK-1083",
+      "serviceId": "tire-replacement",
+      "serviceName": "Tire Replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "6/11/2026",
+      "endDate": "6/11/2026",
+      "status": "Cancelled",
+      "price": 270,
+      "serviceDetails": [
+        {
+          "label": "Tire Size",
+          "value": "205/55R16"
+        },
+        {
+          "label": "Alignment",
+          "value": "Four wheel"
+        }
+      ]
+    },
+    {
+      "id": "BK-1084",
+      "serviceId": "oil-change",
+      "serviceName": "Oil Change",
+      "serviceIcon": "/assets/oil_icon.png",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "6/14/2026",
+      "endDate": "6/14/2026",
+      "status": "In-Progress",
+      "price": 125,
+      "serviceDetails": [
+        {
+          "label": "Oil",
+          "value": "0W-20 Full Synthetic"
+        },
+        {
+          "label": "Filter",
+          "value": "Mann-Filter"
+        }
+      ]
+    },
+    {
+      "id": "BK-1085",
+      "serviceId": "battery-replacement",
+      "serviceName": "Battery Replacement",
+      "serviceIcon": "/assets/battery_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "6/17/2026",
+      "endDate": "6/17/2026",
+      "status": "Pending",
+      "price": 165,
+      "serviceDetails": [
+        {
+          "label": "System",
+          "value": "Charging"
+        },
+        {
+          "label": "Check",
+          "value": "Diagnostics included"
+        }
+      ]
+    },
+    {
+      "id": "BK-1086",
+      "serviceId": "engine-tune-up",
+      "serviceName": "Engine Tune-Up",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "6/20/2026",
+      "endDate": "6/20/2026",
+      "status": "Accepted",
+      "price": 170,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Premium"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 3"
+        }
+      ]
+    },
+    {
+      "id": "BK-1087",
+      "serviceId": "car-wash-detailing",
+      "serviceName": "Car Wash & Detailing",
+      "serviceIcon": "/assets/paint_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "6/23/2026",
+      "endDate": "6/23/2026",
+      "status": "Cancelled",
+      "price": 85,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 4"
+        }
+      ]
+    },
+    {
+      "id": "BK-1088",
+      "serviceId": "brake-fluid-flush",
+      "serviceName": "Brake Fluid Flush",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "6/26/2026",
+      "endDate": "6/27/2026",
+      "status": "Completed",
+      "price": 125,
+      "serviceDetails": [
+        {
+          "label": "Axle",
+          "value": "Rear"
+        },
+        {
+          "label": "Pad Type",
+          "value": "Ceramic"
+        }
+      ]
+    },
+    {
+      "id": "BK-1089",
+      "serviceId": "full-vehicle-inspection",
+      "serviceName": "Full Vehicle Inspection",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "6/29/2026",
+      "endDate": "6/29/2026",
+      "status": "In-Progress",
+      "price": 150,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 2"
+        }
+      ]
+    },
+    {
+      "id": "BK-1090",
+      "serviceId": "wheel-alignment",
+      "serviceName": "Wheel Alignment",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "7/2/2026",
+      "endDate": "7/2/2026",
+      "status": "Pending",
+      "price": 95,
+      "serviceDetails": [
+        {
+          "label": "Tire Size",
+          "value": "225/45R17"
+        },
+        {
+          "label": "Alignment",
+          "value": "Front axle"
+        }
+      ]
+    },
+    {
+      "id": "BK-1091",
+      "serviceId": "engine-diagnostics",
+      "serviceName": "Engine Diagnostics",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "7/5/2026",
+      "endDate": "7/5/2026",
+      "status": "Cancelled",
+      "price": 130,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 4"
+        }
+      ]
+    },
+    {
+      "id": "BK-1092",
+      "serviceId": "ac-repair",
+      "serviceName": "A/C Repair",
+      "serviceIcon": "/assets/battery_service.svg",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "7/8/2026",
+      "endDate": "7/8/2026",
+      "status": "Completed",
+      "price": 230,
+      "serviceDetails": [
+        {
+          "label": "System",
+          "value": "Cooling"
+        },
+        {
+          "label": "Check",
+          "value": "Diagnostics included"
+        }
+      ]
+    },
+    {
+      "id": "BK-1093",
+      "serviceId": "brake-pad-replacement",
+      "serviceName": "Brake Pad Replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "7/11/2026",
+      "endDate": "7/11/2026",
+      "status": "In-Progress",
+      "price": 210,
+      "serviceDetails": [
+        {
+          "label": "Axle",
+          "value": "Front"
+        },
+        {
+          "label": "Pad Type",
+          "value": "Semi-Metallic"
+        }
+      ]
+    },
+    {
+      "id": "BK-1094",
+      "serviceId": "dent-removal",
+      "serviceName": "Dent Removal",
+      "serviceIcon": "/assets/paint_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "7/14/2026",
+      "endDate": "7/14/2026",
+      "status": "Pending",
+      "price": 180,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Premium"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 3"
+        }
+      ]
+    },
+    {
+      "id": "BK-1095",
+      "serviceId": "tire-replacement",
+      "serviceName": "Tire Replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "7/17/2026",
+      "endDate": "7/17/2026",
+      "status": "Accepted",
+      "price": 240,
+      "serviceDetails": [
+        {
+          "label": "Tire Size",
+          "value": "205/55R16"
+        },
+        {
+          "label": "Alignment",
+          "value": "Four wheel"
+        }
+      ]
+    },
+    {
+      "id": "BK-1096",
+      "serviceId": "oil-change",
+      "serviceName": "Oil Change",
+      "serviceIcon": "/assets/oil_icon.png",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Nadine Ali",
+      "carMake": "Mercedes",
+      "carModel": "C200",
+      "carYear": "2022",
+      "startDate": "7/20/2026",
+      "endDate": "7/20/2026",
+      "status": "Cancelled",
+      "price": 95,
+      "serviceDetails": [
+        {
+          "label": "Oil",
+          "value": "0W-20 Full Synthetic"
+        },
+        {
+          "label": "Filter",
+          "value": "Mann-Filter"
+        }
+      ]
+    },
+    {
+      "id": "BK-1097",
+      "serviceId": "battery-replacement",
+      "serviceName": "Battery Replacement",
+      "serviceIcon": "/assets/battery_service.svg",
+      "ownerIcon": "/assets/man2.avif",
+      "name": "Farah Blake",
+      "carMake": "Hyundai",
+      "carModel": "Elantra",
+      "carYear": "2021",
+      "startDate": "7/23/2026",
+      "endDate": "7/23/2026",
+      "status": "Completed",
+      "price": 185,
+      "serviceDetails": [
+        {
+          "label": "System",
+          "value": "Charging"
+        },
+        {
+          "label": "Check",
+          "value": "Diagnostics included"
+        }
+      ]
+    },
+    {
+      "id": "BK-1098",
+      "serviceId": "engine-tune-up",
+      "serviceName": "Engine Tune-Up",
+      "serviceIcon": "/assets/engine_service.svg",
+      "ownerIcon": "/assets/woman1.jpg",
+      "name": "Ziad Mansour",
+      "carMake": "Volkswagen",
+      "carModel": "Golf",
+      "carYear": "2020",
+      "startDate": "4/19/2026",
+      "endDate": "4/19/2026",
+      "status": "Pending",
+      "price": 190,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Premium"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 3"
+        }
+      ]
+    },
+    {
+      "id": "BK-1099",
+      "serviceId": "car-wash-detailing",
+      "serviceName": "Car Wash & Detailing",
+      "serviceIcon": "/assets/paint_service.svg",
+      "ownerIcon": "/assets/woman2.avif",
+      "name": "Amira Shaw",
+      "carMake": "Peugeot",
+      "carModel": "508",
+      "carYear": "2022",
+      "startDate": "4/22/2026",
+      "endDate": "4/23/2026",
+      "status": "Accepted",
+      "price": 105,
+      "serviceDetails": [
+        {
+          "label": "Package",
+          "value": "Standard"
+        },
+        {
+          "label": "Bay",
+          "value": "Bay 4"
+        }
+      ]
+    },
+    {
+      "id": "BK-1100",
+      "serviceId": "brake-fluid-flush",
+      "serviceName": "Brake Fluid Flush",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "ownerIcon": "/assets/man1.avif",
+      "name": "Omar Hassan",
+      "carMake": "Toyota",
+      "carModel": "Corolla",
+      "carYear": "2021",
+      "startDate": "4/25/2026",
+      "endDate": "4/25/2026",
+      "status": "Cancelled",
+      "price": 95,
+      "serviceDetails": [
+        {
+          "label": "Axle",
+          "value": "Rear"
+        },
+        {
+          "label": "Pad Type",
+          "value": "Ceramic"
+        }
+      ]
+    }
+  ],
+  "payments": [
+    {
+      "id": "PAY-9001",
+      "customer": "Karim Saleh",
+      "item": "Tire Replacement",
+      "method": "Fawry",
+      "date": "2/21/2026",
+      "amount": 255,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9002",
+      "customer": "Adam Brooks",
+      "item": "Dent Removal",
+      "method": "PayPal",
+      "date": "2/26/2026",
+      "amount": 170,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9003",
+      "customer": "Youssef Nabil",
+      "item": "Brake Pad Replacement",
+      "method": "Cash",
+      "date": "3/3/2026",
+      "amount": 225,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9004",
+      "customer": "Hana Osman",
+      "item": "AGM Battery",
+      "method": "VISA",
+      "date": "3/8/2026",
+      "amount": 165,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9005",
+      "customer": "Farah Blake",
+      "item": "Engine Diagnostics",
+      "method": "Fawry",
+      "date": "3/13/2026",
+      "amount": 195,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9006",
+      "customer": "Jana Wells",
+      "item": "Wheel Alignment",
+      "method": "Cash",
+      "date": "3/18/2026",
+      "amount": 95,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9007",
+      "customer": "Layla Smith",
+      "item": "Full Vehicle Inspection",
+      "method": "VISA",
+      "date": "3/23/2026",
+      "amount": 125,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9008",
+      "customer": "Dina Ibrahim",
+      "item": "Synthetic Engine Oil",
+      "method": "Fawry",
+      "date": "3/28/2026",
+      "amount": 42,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9009",
+      "customer": "Sara Johnson",
+      "item": "Engine Coolant",
+      "method": "PayPal",
+      "date": "4/2/2026",
+      "amount": 56,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9010",
+      "customer": "Amira Shaw",
+      "item": "Engine Tune-Up",
+      "method": "Cash",
+      "date": "4/7/2026",
+      "amount": 220,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9011",
+      "customer": "Rana Yassin",
+      "item": "Battery Replacement",
+      "method": "VISA",
+      "date": "4/12/2026",
+      "amount": 240,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9012",
+      "customer": "Nora Khaled",
+      "item": "AGM Battery",
+      "method": "PayPal",
+      "date": "4/17/2026",
+      "amount": 165,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9013",
+      "customer": "Laila Morgan",
+      "item": "Tire Replacement",
+      "method": "Cash",
+      "date": "4/22/2026",
+      "amount": 255,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9014",
+      "customer": "Maya Ford",
+      "item": "Dent Removal",
+      "method": "VISA",
+      "date": "4/27/2026",
+      "amount": 170,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9015",
+      "customer": "Nadine Ali",
+      "item": "Brake Pad Replacement",
+      "method": "Fawry",
+      "date": "5/2/2026",
+      "amount": 225,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9016",
+      "customer": "Salma Reed",
+      "item": "Synthetic Engine Oil",
+      "method": "PayPal",
+      "date": "5/7/2026",
+      "amount": 42,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9017",
+      "customer": "Tarek Stone",
+      "item": "Engine Diagnostics",
+      "method": "Cash",
+      "date": "5/12/2026",
+      "amount": 195,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9018",
+      "customer": "Mina Adel",
+      "item": "Air Filter",
+      "method": "Fawry",
+      "date": "5/17/2026",
+      "amount": 66,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9019",
+      "customer": "Noah Carter",
+      "item": "Full Vehicle Inspection",
+      "method": "PayPal",
+      "date": "5/22/2026",
+      "amount": 125,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9020",
+      "customer": "Ziad Mansour",
+      "item": "AGM Battery",
+      "method": "Cash",
+      "date": "5/27/2026",
+      "amount": 165,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9021",
+      "customer": "Mark Evans",
+      "item": "Car Wash & Detailing",
+      "method": "VISA",
+      "date": "6/1/2026",
+      "amount": 110,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9022",
+      "customer": "Hossam Farouk",
+      "item": "Engine Tune-Up",
+      "method": "Fawry",
+      "date": "6/6/2026",
+      "amount": 220,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9023",
+      "customer": "Leo Parker",
+      "item": "Battery Replacement",
+      "method": "PayPal",
+      "date": "6/11/2026",
+      "amount": 240,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9024",
+      "customer": "Malik Grant",
+      "item": "Synthetic Engine Oil",
+      "method": "VISA",
+      "date": "6/16/2026",
+      "amount": 42,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9025",
+      "customer": "Omar Hassan",
+      "item": "Tire Replacement",
+      "method": "Fawry",
+      "date": "6/21/2026",
+      "amount": 255,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9026",
+      "customer": "Karim Saleh",
+      "item": "Dent Removal",
+      "method": "PayPal",
+      "date": "6/26/2026",
+      "amount": 170,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9027",
+      "customer": "Adam Brooks",
+      "item": "Brake Fluid",
+      "method": "Cash",
+      "date": "7/1/2026",
+      "amount": 96,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9028",
+      "customer": "Youssef Nabil",
+      "item": "AGM Battery",
+      "method": "VISA",
+      "date": "7/6/2026",
+      "amount": 165,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9029",
+      "customer": "Hana Osman",
+      "item": "Engine Diagnostics",
+      "method": "Fawry",
+      "date": "7/11/2026",
+      "amount": 195,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9030",
+      "customer": "Farah Blake",
+      "item": "Wheel Alignment",
+      "method": "Cash",
+      "date": "7/16/2026",
+      "amount": 95,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9031",
+      "customer": "Jana Wells",
+      "item": "Full Vehicle Inspection",
+      "method": "VISA",
+      "date": "7/21/2026",
+      "amount": 125,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9032",
+      "customer": "Layla Smith",
+      "item": "Synthetic Engine Oil",
+      "method": "Fawry",
+      "date": "7/26/2026",
+      "amount": 42,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9033",
+      "customer": "Dina Ibrahim",
+      "item": "Car Wash & Detailing",
+      "method": "PayPal",
+      "date": "2/16/2026",
+      "amount": 110,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9034",
+      "customer": "Sara Johnson",
+      "item": "Engine Tune-Up",
+      "method": "Cash",
+      "date": "2/21/2026",
+      "amount": 220,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9035",
+      "customer": "Amira Shaw",
+      "item": "Battery Replacement",
+      "method": "VISA",
+      "date": "2/26/2026",
+      "amount": 240,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9036",
+      "customer": "Rana Yassin",
+      "item": "AGM Battery",
+      "method": "PayPal",
+      "date": "3/3/2026",
+      "amount": 165,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9037",
+      "customer": "Nora Khaled",
+      "item": "Tire Replacement",
+      "method": "Cash",
+      "date": "3/8/2026",
+      "amount": 255,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9038",
+      "customer": "Laila Morgan",
+      "item": "Dent Removal",
+      "method": "VISA",
+      "date": "3/13/2026",
+      "amount": 170,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9039",
+      "customer": "Maya Ford",
+      "item": "Brake Pad Replacement",
+      "method": "Fawry",
+      "date": "3/18/2026",
+      "amount": 225,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9040",
+      "customer": "Nadine Ali",
+      "item": "Synthetic Engine Oil",
+      "method": "PayPal",
+      "date": "3/23/2026",
+      "amount": 42,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9041",
+      "customer": "Salma Reed",
+      "item": "Engine Diagnostics",
+      "method": "Cash",
+      "date": "3/28/2026",
+      "amount": 195,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9042",
+      "customer": "Tarek Stone",
+      "item": "Wheel Alignment",
+      "method": "Fawry",
+      "date": "4/2/2026",
+      "amount": 95,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9043",
+      "customer": "Mina Adel",
+      "item": "Full Vehicle Inspection",
+      "method": "PayPal",
+      "date": "4/7/2026",
+      "amount": 125,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9044",
+      "customer": "Noah Carter",
+      "item": "AGM Battery",
+      "method": "Cash",
+      "date": "4/12/2026",
+      "amount": 165,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9045",
+      "customer": "Ziad Mansour",
+      "item": "All-Season Tire",
+      "method": "VISA",
+      "date": "4/17/2026",
+      "amount": 210,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9046",
+      "customer": "Mark Evans",
+      "item": "Engine Tune-Up",
+      "method": "Fawry",
+      "date": "4/22/2026",
+      "amount": 220,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9047",
+      "customer": "Hossam Farouk",
+      "item": "Battery Replacement",
+      "method": "PayPal",
+      "date": "4/27/2026",
+      "amount": 240,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9048",
+      "customer": "Leo Parker",
+      "item": "Synthetic Engine Oil",
+      "method": "VISA",
+      "date": "5/2/2026",
+      "amount": 42,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9049",
+      "customer": "Malik Grant",
+      "item": "Tire Replacement",
+      "method": "Fawry",
+      "date": "5/7/2026",
+      "amount": 255,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9050",
+      "customer": "Omar Hassan",
+      "item": "Dent Removal",
+      "method": "PayPal",
+      "date": "5/12/2026",
+      "amount": 170,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9051",
+      "customer": "Karim Saleh",
+      "item": "Brake Pad Replacement",
+      "method": "Cash",
+      "date": "5/17/2026",
+      "amount": 225,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9052",
+      "customer": "Adam Brooks",
+      "item": "AGM Battery",
+      "method": "VISA",
+      "date": "5/22/2026",
+      "amount": 165,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9053",
+      "customer": "Youssef Nabil",
+      "item": "Engine Diagnostics",
+      "method": "Fawry",
+      "date": "5/27/2026",
+      "amount": 195,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9054",
+      "customer": "Hana Osman",
+      "item": "Brake Pads",
+      "method": "Cash",
+      "date": "6/1/2026",
+      "amount": 192,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9055",
+      "customer": "Farah Blake",
+      "item": "Full Vehicle Inspection",
+      "method": "VISA",
+      "date": "6/6/2026",
+      "amount": 125,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9056",
+      "customer": "Jana Wells",
+      "item": "Synthetic Engine Oil",
+      "method": "Fawry",
+      "date": "6/11/2026",
+      "amount": 42,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9057",
+      "customer": "Layla Smith",
+      "item": "Car Wash & Detailing",
+      "method": "PayPal",
+      "date": "6/16/2026",
+      "amount": 110,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9058",
+      "customer": "Dina Ibrahim",
+      "item": "Engine Tune-Up",
+      "method": "Cash",
+      "date": "6/21/2026",
+      "amount": 220,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9059",
+      "customer": "Sara Johnson",
+      "item": "Battery Replacement",
+      "method": "VISA",
+      "date": "6/26/2026",
+      "amount": 240,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9060",
+      "customer": "Amira Shaw",
+      "item": "AGM Battery",
+      "method": "PayPal",
+      "date": "7/1/2026",
+      "amount": 165,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9061",
+      "customer": "Rana Yassin",
+      "item": "Tire Replacement",
+      "method": "Cash",
+      "date": "7/6/2026",
+      "amount": 255,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9062",
+      "customer": "Nora Khaled",
+      "item": "Dent Removal",
+      "method": "VISA",
+      "date": "7/11/2026",
+      "amount": 170,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9063",
+      "customer": "Laila Morgan",
+      "item": "Oil Filter",
+      "method": "Fawry",
+      "date": "7/16/2026",
+      "amount": 72,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9064",
+      "customer": "Maya Ford",
+      "item": "Synthetic Engine Oil",
+      "method": "PayPal",
+      "date": "7/21/2026",
+      "amount": 42,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9065",
+      "customer": "Nadine Ali",
+      "item": "Engine Diagnostics",
+      "method": "Cash",
+      "date": "7/26/2026",
+      "amount": 195,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9066",
+      "customer": "Salma Reed",
+      "item": "Wheel Alignment",
+      "method": "Fawry",
+      "date": "2/16/2026",
+      "amount": 95,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9067",
+      "customer": "Tarek Stone",
+      "item": "Full Vehicle Inspection",
+      "method": "PayPal",
+      "date": "2/21/2026",
+      "amount": 125,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9068",
+      "customer": "Mina Adel",
+      "item": "AGM Battery",
+      "method": "Cash",
+      "date": "2/26/2026",
+      "amount": 165,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9069",
+      "customer": "Noah Carter",
+      "item": "Car Wash & Detailing",
+      "method": "VISA",
+      "date": "3/3/2026",
+      "amount": 110,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9070",
+      "customer": "Ziad Mansour",
+      "item": "Engine Tune-Up",
+      "method": "Fawry",
+      "date": "3/8/2026",
+      "amount": 220,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9071",
+      "customer": "Mark Evans",
+      "item": "Battery Replacement",
+      "method": "PayPal",
+      "date": "3/13/2026",
+      "amount": 240,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9072",
+      "customer": "Hossam Farouk",
+      "item": "Synthetic Engine Oil",
+      "method": "VISA",
+      "date": "3/18/2026",
+      "amount": 42,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9073",
+      "customer": "Leo Parker",
+      "item": "Tire Replacement",
+      "method": "Fawry",
+      "date": "3/23/2026",
+      "amount": 255,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9074",
+      "customer": "Malik Grant",
+      "item": "Dent Removal",
+      "method": "PayPal",
+      "date": "3/28/2026",
+      "amount": 170,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9075",
+      "customer": "Omar Hassan",
+      "item": "Brake Pad Replacement",
+      "method": "Cash",
+      "date": "4/2/2026",
+      "amount": 225,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9076",
+      "customer": "Karim Saleh",
+      "item": "AGM Battery",
+      "method": "VISA",
+      "date": "4/7/2026",
+      "amount": 165,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9077",
+      "customer": "Adam Brooks",
+      "item": "Engine Diagnostics",
+      "method": "Fawry",
+      "date": "4/12/2026",
+      "amount": 195,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9078",
+      "customer": "Youssef Nabil",
+      "item": "Wheel Alignment",
+      "method": "Cash",
+      "date": "4/17/2026",
+      "amount": 95,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9079",
+      "customer": "Hana Osman",
+      "item": "Full Vehicle Inspection",
+      "method": "VISA",
+      "date": "4/22/2026",
+      "amount": 125,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9080",
+      "customer": "Farah Blake",
+      "item": "Synthetic Engine Oil",
+      "method": "Fawry",
+      "date": "4/27/2026",
+      "amount": 42,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9081",
+      "customer": "Jana Wells",
+      "item": "Engine Coolant",
+      "method": "PayPal",
+      "date": "5/2/2026",
+      "amount": 56,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9082",
+      "customer": "Layla Smith",
+      "item": "Engine Tune-Up",
+      "method": "Cash",
+      "date": "5/7/2026",
+      "amount": 220,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9083",
+      "customer": "Dina Ibrahim",
+      "item": "Battery Replacement",
+      "method": "VISA",
+      "date": "5/12/2026",
+      "amount": 240,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9084",
+      "customer": "Sara Johnson",
+      "item": "AGM Battery",
+      "method": "PayPal",
+      "date": "5/17/2026",
+      "amount": 165,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9085",
+      "customer": "Amira Shaw",
+      "item": "Tire Replacement",
+      "method": "Cash",
+      "date": "5/22/2026",
+      "amount": 255,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9086",
+      "customer": "Rana Yassin",
+      "item": "Dent Removal",
+      "method": "VISA",
+      "date": "5/27/2026",
+      "amount": 170,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9087",
+      "customer": "Nora Khaled",
+      "item": "Brake Pad Replacement",
+      "method": "Fawry",
+      "date": "6/1/2026",
+      "amount": 225,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9088",
+      "customer": "Laila Morgan",
+      "item": "Synthetic Engine Oil",
+      "method": "PayPal",
+      "date": "6/6/2026",
+      "amount": 42,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9089",
+      "customer": "Maya Ford",
+      "item": "Engine Diagnostics",
+      "method": "Cash",
+      "date": "6/11/2026",
+      "amount": 195,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9090",
+      "customer": "Nadine Ali",
+      "item": "Air Filter",
+      "method": "Fawry",
+      "date": "6/16/2026",
+      "amount": 66,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9091",
+      "customer": "Salma Reed",
+      "item": "Full Vehicle Inspection",
+      "method": "PayPal",
+      "date": "6/21/2026",
+      "amount": 125,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9092",
+      "customer": "Tarek Stone",
+      "item": "AGM Battery",
+      "method": "Cash",
+      "date": "6/26/2026",
+      "amount": 165,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9093",
+      "customer": "Mina Adel",
+      "item": "Car Wash & Detailing",
+      "method": "VISA",
+      "date": "7/1/2026",
+      "amount": 110,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9094",
+      "customer": "Noah Carter",
+      "item": "Engine Tune-Up",
+      "method": "Fawry",
+      "date": "7/6/2026",
+      "amount": 220,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9095",
+      "customer": "Ziad Mansour",
+      "item": "Battery Replacement",
+      "method": "PayPal",
+      "date": "7/11/2026",
+      "amount": 240,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9096",
+      "customer": "Mark Evans",
+      "item": "Synthetic Engine Oil",
+      "method": "VISA",
+      "date": "7/16/2026",
+      "amount": 42,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9097",
+      "customer": "Hossam Farouk",
+      "item": "Tire Replacement",
+      "method": "Fawry",
+      "date": "7/21/2026",
+      "amount": 255,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9098",
+      "customer": "Leo Parker",
+      "item": "Dent Removal",
+      "method": "PayPal",
+      "date": "7/26/2026",
+      "amount": 170,
+      "kind": "service"
+    },
+    {
+      "id": "PAY-9099",
+      "customer": "Malik Grant",
+      "item": "Brake Fluid",
+      "method": "Cash",
+      "date": "2/16/2026",
+      "amount": 96,
+      "kind": "item"
+    },
+    {
+      "id": "PAY-9100",
+      "customer": "Omar Hassan",
+      "item": "AGM Battery",
+      "method": "VISA",
+      "date": "2/21/2026",
+      "amount": 165,
+      "kind": "item"
+    }
+  ],
+  "inventoryItems": [
+    {
+      "id": "inv-oil-synthetic",
+      "category": "Engine Oils",
+      "name": "Synthetic Engine Oil",
+      "company": "Shell",
+      "brand": "Shell",
+      "type": "Fully Synthetic",
+      "specification": "5W-30",
+      "viscosity": "5W-30",
+      "capacity": "4L",
+      "volume": "4L",
+      "apiSpec": "API SP",
+      "application": "Gasoline engines",
+      "details": "Full synthetic motor oil for daily service jobs.",
+      "usedInServices": [
+        "Oil Change",
+        "Engine Tune-Up"
+      ],
+      "imageUrl": "/assets/oil_icon.png",
+      "price": 42,
+      "purchasePrice": 28,
+      "currency": "USD",
+      "deliveryTime": "2 days",
+      "quantity": 18,
+      "lowStockThreshold": 6,
+      "status": "active"
+    },
+    {
+      "id": "inv-oil-filter",
+      "category": "Filters",
+      "name": "Oil Filter",
+      "company": "Bosch",
+      "brand": "Bosch",
+      "type": "Premium",
+      "specification": "Spin-on",
+      "viscosity": null,
+      "capacity": null,
+      "volume": null,
+      "apiSpec": null,
+      "application": "Engine oil service",
+      "details": "Premium oil filter for compact and midsize cars.",
+      "usedInServices": [
+        "Oil Change"
+      ],
+      "imageUrl": "/assets/engine_service.svg",
+      "price": 18,
+      "purchasePrice": 9,
+      "currency": "USD",
+      "deliveryTime": "1 day",
+      "quantity": 32,
+      "lowStockThreshold": 10,
+      "status": "active"
+    },
+    {
+      "id": "inv-brake-pads",
+      "category": "Brake Parts",
+      "name": "Brake Pads",
+      "company": "Brembo",
+      "brand": "Brembo",
+      "type": "Ceramic",
+      "specification": "Front axle",
+      "viscosity": null,
+      "capacity": null,
+      "volume": null,
+      "apiSpec": null,
+      "application": "Sedans",
+      "details": "Low dust ceramic pad set.",
+      "usedInServices": [
+        "Brake Pad Replacement"
+      ],
+      "imageUrl": "/assets/wheel_service.svg",
+      "price": 64,
+      "purchasePrice": 39,
+      "currency": "USD",
+      "deliveryTime": "3 days",
+      "quantity": 12,
+      "lowStockThreshold": 4,
+      "status": "active"
+    },
+    {
+      "id": "inv-tire-all-season",
+      "category": "Tires",
+      "name": "All-Season Tire",
+      "company": "Michelin",
+      "brand": "Michelin",
+      "type": "All-Season",
+      "specification": "205/55R16",
+      "viscosity": null,
+      "capacity": null,
+      "volume": null,
+      "apiSpec": null,
+      "application": "Compact cars",
+      "details": "Comfort-focused all-season tire.",
+      "usedInServices": [
+        "Tire Replacement",
+        "Wheel Balancing"
+      ],
+      "imageUrl": "/assets/wheel_service.svg",
+      "price": 105,
+      "purchasePrice": 78,
+      "currency": "USD",
+      "deliveryTime": "4 days",
+      "quantity": 24,
+      "lowStockThreshold": 8,
+      "status": "active"
+    },
+    {
+      "id": "inv-battery-agm",
+      "category": "Batteries",
+      "name": "AGM Battery",
+      "company": "Varta",
+      "brand": "Varta",
+      "type": "AGM",
+      "specification": "70Ah",
+      "viscosity": null,
+      "capacity": "70Ah",
+      "volume": null,
+      "apiSpec": null,
+      "application": "Start-stop vehicles",
+      "details": "AGM battery for newer vehicles.",
+      "usedInServices": [
+        "Battery Replacement"
+      ],
+      "imageUrl": "/assets/battery_service.svg",
+      "price": 165,
+      "purchasePrice": 118,
+      "currency": "USD",
+      "deliveryTime": "2 days",
+      "quantity": 0,
+      "lowStockThreshold": 3,
+      "status": "active"
+    }
+  ],
+  "inventoryTransactions": [
+    {
+      "id": "txn-001",
+      "inventoryItemId": "inv-oil-synthetic",
+      "type": "purchase",
+      "quantity": 24,
+      "unitPrice": 28,
+      "paymentId": null,
+      "note": "Opening stock",
+      "createdAt": "2026-06-01T09:00:00.000Z"
+    }
+  ],
+  "inventoryCatalog": {
+    "categories": [
+      {
+        "name": "Engine Oils",
+        "icon": "/assets/oil_icon.png",
+        "itemNames": [
+          "Synthetic Engine Oil",
+          "Semi-Synthetic Engine Oil",
+          "Diesel Engine Oil"
+        ],
+        "companies": [
+          "Shell",
+          "Mobil",
+          "Castrol"
+        ],
+        "specifications": [
+          "0W-20",
+          "5W-30",
+          "10W-40"
+        ],
+        "capacities": [
+          "1L",
+          "4L",
+          "5L"
+        ],
+        "details": [
+          "Full synthetic",
+          "Semi-synthetic",
+          "High mileage"
+        ],
+        "usedInServices": [
+          "Oil Change",
+          "Engine Tune-Up"
+        ]
+      },
+      {
+        "name": "Brake Parts",
+        "icon": "/assets/wheel_service.svg",
+        "itemNames": [
+          "Brake Pads",
+          "Brake Disc",
+          "Brake Fluid"
+        ],
+        "companies": [
+          "Brembo",
+          "Bosch",
+          "ACDelco"
+        ],
+        "specifications": [
+          "Front axle",
+          "Rear axle",
+          "DOT 4"
+        ],
+        "capacities": [
+          "1L",
+          "Set"
+        ],
+        "details": [
+          "Ceramic",
+          "Semi-metallic"
+        ],
+        "usedInServices": [
+          "Brake Pad Replacement",
+          "Brake Fluid Flush"
+        ]
+      }
+    ]
+  },
+  "reports": {
+    "week": {
+      "period": "week",
+      "rangeLabel": "Jun 22 - Jun 28",
+      "axisLabels": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat",
+        "Sun"
+      ],
+      "stats": [
+        {
+          "key": "customers",
+          "label": "Customers",
+          "value": 15,
+          "icon": "customers",
+          "delta": 12.5
+        },
+        {
+          "key": "bookings",
+          "label": "Bookings",
+          "value": 25,
+          "icon": "bookings",
+          "delta": 18.1
+        },
+        {
+          "key": "revenue",
+          "label": "Revenue",
+          "value": 4000,
+          "icon": "revenue",
+          "delta": 22.4
+        },
+        {
+          "key": "cars",
+          "label": "Cars Serviced",
+          "value": 7,
+          "icon": "cars",
+          "delta": 9.3
+        }
+      ],
+      "services": [
+        {
+          "key": "service:oil-change",
+          "label": "Oil Change",
+          "profit": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "units": 0,
+          "delta": 6
+        },
+        {
+          "key": "service:engine-diagnostics",
+          "label": "Engine Diagnostics",
+          "profit": [
+            195,
+            390,
+            195,
+            195,
+            195,
+            195,
+            195
+          ],
+          "units": 8,
+          "delta": 8.4
+        },
+        {
+          "key": "service:engine-tune-up",
+          "label": "Engine Tune-Up",
+          "profit": [
+            220,
+            220,
+            440,
+            220,
+            220,
+            220,
+            220
+          ],
+          "units": 8,
+          "delta": 10.8
+        },
+        {
+          "key": "service:brake-pad-replacement",
+          "label": "Brake Pad Replacement",
+          "profit": [
+            225,
+            225,
+            0,
+            225,
+            225,
+            225,
+            225
+          ],
+          "units": 6,
+          "delta": 13.2
+        },
+        {
+          "key": "service:brake-fluid-flush",
+          "label": "Brake Fluid Flush",
+          "profit": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "units": 0,
+          "delta": 15.6
+        }
+      ],
+      "items": [
+        {
+          "key": "item:synthetic-engine-oil",
+          "label": "Synthetic Engine Oil",
+          "profit": [
+            84,
+            84,
+            84,
+            84,
+            84,
+            42,
+            42
+          ],
+          "units": 12,
+          "delta": 4
+        },
+        {
+          "key": "item:oil-filter",
+          "label": "Oil Filter",
+          "profit": [
+            0,
+            72,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "units": 1,
+          "delta": 6.1
+        },
+        {
+          "key": "item:brake-pads",
+          "label": "Brake Pads",
+          "profit": [
+            0,
+            0,
+            192,
+            0,
+            0,
+            0,
+            0
+          ],
+          "units": 1,
+          "delta": 8.2
+        },
+        {
+          "key": "item:all-season-tire",
+          "label": "All-Season Tire",
+          "profit": [
+            0,
+            0,
+            0,
+            210,
+            0,
+            0,
+            0
+          ],
+          "units": 1,
+          "delta": 10.3
+        },
+        {
+          "key": "item:agm-battery",
+          "label": "AGM Battery",
+          "profit": [
+            330,
+            330,
+            330,
+            165,
+            330,
+            330,
+            330
+          ],
+          "units": 13,
+          "delta": 12.4
+        }
+      ]
+    },
+    "month": {
+      "period": "month",
+      "rangeLabel": "June 2026",
+      "axisLabels": [
+        "Week 1",
+        "Week 2",
+        "Week 3",
+        "Week 4"
+      ],
+      "stats": [
+        {
+          "key": "customers",
+          "label": "Customers",
+          "value": 45,
+          "icon": "customers",
+          "delta": 12.5
+        },
+        {
+          "key": "bookings",
+          "label": "Bookings",
+          "value": 75,
+          "icon": "bookings",
+          "delta": 18.1
+        },
+        {
+          "key": "revenue",
+          "label": "Revenue",
+          "value": 11999,
+          "icon": "revenue",
+          "delta": 22.4
+        },
+        {
+          "key": "cars",
+          "label": "Cars Serviced",
+          "value": 21,
+          "icon": "cars",
+          "delta": 9.3
+        }
+      ],
+      "services": [
+        {
+          "key": "service:oil-change",
+          "label": "Oil Change",
+          "profit": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "units": 0,
+          "delta": 6
+        },
+        {
+          "key": "service:engine-diagnostics",
+          "label": "Engine Diagnostics",
+          "profit": [
+            390,
+            390,
+            390,
+            390
+          ],
+          "units": 8,
+          "delta": 8.4
+        },
+        {
+          "key": "service:engine-tune-up",
+          "label": "Engine Tune-Up",
+          "profit": [
+            440,
+            440,
+            440,
+            440
+          ],
+          "units": 8,
+          "delta": 10.8
+        },
+        {
+          "key": "service:brake-pad-replacement",
+          "label": "Brake Pad Replacement",
+          "profit": [
+            450,
+            225,
+            225,
+            450
+          ],
+          "units": 6,
+          "delta": 13.2
+        },
+        {
+          "key": "service:brake-fluid-flush",
+          "label": "Brake Fluid Flush",
+          "profit": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "units": 0,
+          "delta": 15.6
+        }
+      ],
+      "items": [
+        {
+          "key": "item:synthetic-engine-oil",
+          "label": "Synthetic Engine Oil",
+          "profit": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "units": 12,
+          "delta": 4
+        },
+        {
+          "key": "item:oil-filter",
+          "label": "Oil Filter",
+          "profit": [
+            0,
+            72,
+            0,
+            0
+          ],
+          "units": 1,
+          "delta": 6.1
+        },
+        {
+          "key": "item:brake-pads",
+          "label": "Brake Pads",
+          "profit": [
+            0,
+            0,
+            192,
+            0
+          ],
+          "units": 1,
+          "delta": 8.2
+        },
+        {
+          "key": "item:all-season-tire",
+          "label": "All-Season Tire",
+          "profit": [
+            0,
+            0,
+            0,
+            210
+          ],
+          "units": 1,
+          "delta": 10.3
+        },
+        {
+          "key": "item:agm-battery",
+          "label": "AGM Battery",
+          "profit": [
+            660,
+            495,
+            495,
+            495
+          ],
+          "units": 13,
+          "delta": 12.4
+        }
+      ]
+    },
+    "year": {
+      "period": "year",
+      "rangeLabel": "2026",
+      "axisLabels": [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun"
+      ],
+      "stats": [
+        {
+          "key": "customers",
+          "label": "Customers",
+          "value": 60,
+          "icon": "customers",
+          "delta": 12.5
+        },
+        {
+          "key": "bookings",
+          "label": "Bookings",
+          "value": 100,
+          "icon": "bookings",
+          "delta": 18.1
+        },
+        {
+          "key": "revenue",
+          "label": "Revenue",
+          "value": 15999,
+          "icon": "revenue",
+          "delta": 22.4
+        },
+        {
+          "key": "cars",
+          "label": "Cars Serviced",
+          "value": 29,
+          "icon": "cars",
+          "delta": 9.3
+        }
+      ],
+      "services": [
+        {
+          "key": "service:oil-change",
+          "label": "Oil Change",
+          "profit": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "units": 0,
+          "delta": 6
+        },
+        {
+          "key": "service:engine-diagnostics",
+          "label": "Engine Diagnostics",
+          "profit": [
+            195,
+            390,
+            390,
+            195,
+            195,
+            195
+          ],
+          "units": 8,
+          "delta": 8.4
+        },
+        {
+          "key": "service:engine-tune-up",
+          "label": "Engine Tune-Up",
+          "profit": [
+            220,
+            220,
+            440,
+            440,
+            220,
+            220
+          ],
+          "units": 8,
+          "delta": 10.8
+        },
+        {
+          "key": "service:brake-pad-replacement",
+          "label": "Brake Pad Replacement",
+          "profit": [
+            225,
+            225,
+            225,
+            225,
+            225,
+            225
+          ],
+          "units": 6,
+          "delta": 13.2
+        },
+        {
+          "key": "service:brake-fluid-flush",
+          "label": "Brake Fluid Flush",
+          "profit": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "units": 0,
+          "delta": 15.6
+        }
+      ],
+      "items": [
+        {
+          "key": "item:synthetic-engine-oil",
+          "label": "Synthetic Engine Oil",
+          "profit": [
+            84,
+            84,
+            84,
+            84,
+            84,
+            84
+          ],
+          "units": 12,
+          "delta": 4
+        },
+        {
+          "key": "item:oil-filter",
+          "label": "Oil Filter",
+          "profit": [
+            0,
+            72,
+            0,
+            0,
+            0,
+            0
+          ],
+          "units": 1,
+          "delta": 6.1
+        },
+        {
+          "key": "item:brake-pads",
+          "label": "Brake Pads",
+          "profit": [
+            0,
+            0,
+            192,
+            0,
+            0,
+            0
+          ],
+          "units": 1,
+          "delta": 8.2
+        },
+        {
+          "key": "item:all-season-tire",
+          "label": "All-Season Tire",
+          "profit": [
+            0,
+            0,
+            0,
+            210,
+            0,
+            0
+          ],
+          "units": 1,
+          "delta": 10.3
+        },
+        {
+          "key": "item:agm-battery",
+          "label": "AGM Battery",
+          "profit": [
+            330,
+            330,
+            330,
+            330,
+            495,
+            330
+          ],
+          "units": 13,
+          "delta": 12.4
+        }
+      ]
+    }
+  },
+  "billingAccounts": [
+    {
+      "id": "bill-001",
+      "bankName": "Mockup National Bank",
+      "accountHolder": "Mockup Auto Service",
+      "accountNumber": "123456789012",
+      "iban": "EG380019000500000000263180002",
+      "swift": "MNBAEGCX",
+      "branch": "Cairo Main",
+      "billingEmail": "mockup@gmail.com",
+      "status": "under_review"
+    }
+  ],
+  "supportedBanks": [
+    {
+      "name": "Mockup National Bank",
+      "imageUrl": null,
+      "supportsBulkPayment": true
+    },
+    {
+      "name": "Cairo Business Bank",
+      "imageUrl": null,
+      "supportsBulkPayment": true
+    }
+  ],
+  "inboxMessages": [
+    {
+      "id": "msg-001",
+      "title": "Security settings checked",
+      "body": "Mock MFA and login alert settings were reviewed.",
+      "status": "unread",
+      "type": "security mfa",
+      "createdAt": "2026-06-28T06:07:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/settings/security",
+      "actorName": "System",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "System",
+        "actionUrl": "/settings/security"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-002",
+      "title": "Car Wash & Detailing cancelled",
+      "body": "Omar Hassan's booking was cancelled.",
+      "status": "unread",
+      "type": "service cancelled denied",
+      "createdAt": "2026-06-27T07:14:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Omar Hassan",
+      "bookingId": "BK-1015",
+      "serviceId": "car-wash-detailing",
+      "serviceIcon": "/assets/paint_service.svg",
+      "serviceName": "Car Wash & Detailing",
+      "data": {
+        "bookingId": "BK-1015",
+        "paymentId": null,
+        "serviceName": "Car Wash & Detailing",
+        "customerName": "Omar Hassan",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-003",
+      "title": "Payment export is ready",
+      "body": "A mock payments export finished successfully and is ready to download.",
+      "status": "read",
+      "type": "export complete",
+      "createdAt": "2026-06-27T08:21:00.000Z",
+      "readAt": "2026-06-27T08:21:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/payments/export/details",
+      "actorName": "Reports",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "Reports",
+        "actionUrl": "/payments/export/details"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-004",
+      "title": "Full Vehicle Inspection accepted",
+      "body": "Amira Shaw's booking moved into the service queue.",
+      "status": "unread",
+      "type": "service accepted approved",
+      "createdAt": "2026-06-26T09:28:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Amira Shaw",
+      "bookingId": "BK-1029",
+      "serviceId": "full-vehicle-inspection",
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Full Vehicle Inspection",
+      "data": {
+        "bookingId": "BK-1029",
+        "paymentId": null,
+        "serviceName": "Full Vehicle Inspection",
+        "customerName": "Amira Shaw",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-005",
+      "title": "Inventory item sold",
+      "body": "Dent Removal was sold and stock was adjusted.",
+      "status": "unread",
+      "type": "storage item sold inventory",
+      "createdAt": "2026-06-26T10:35:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/inventory",
+      "actorName": "Storage",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Dent Removal",
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": "Dent Removal",
+        "customerName": "Storage",
+        "actionUrl": "/inventory"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-006",
+      "title": "Engine Diagnostics completed",
+      "body": "Ziad Mansour's Volkswagen Golf was marked completed.",
+      "status": "read",
+      "type": "booking completed",
+      "createdAt": "2026-06-25T11:42:00.000Z",
+      "readAt": "2026-06-25T11:42:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Ziad Mansour",
+      "bookingId": "BK-1043",
+      "serviceId": "engine-diagnostics",
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Engine Diagnostics",
+      "data": {
+        "bookingId": "BK-1043",
+        "paymentId": null,
+        "serviceName": "Engine Diagnostics",
+        "customerName": "Ziad Mansour",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-007",
+      "title": "Payment PAY-9036 received",
+      "body": "Rana Yassin paid $165 for AGM Battery using PayPal.",
+      "status": "unread",
+      "type": "payment paid",
+      "createdAt": "2026-06-25T12:49:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/payments",
+      "actorName": "Rana Yassin",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "AGM Battery",
+      "data": {
+        "bookingId": null,
+        "paymentId": "PAY-9036",
+        "serviceName": "AGM Battery",
+        "customerName": "Rana Yassin",
+        "actionUrl": "/payments"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-008",
+      "title": "Business profile saved",
+      "body": "Mockup Auto Service profile data was saved.",
+      "status": "unread",
+      "type": "settings profile saved",
+      "createdAt": "2026-06-24T13:56:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/settings/business",
+      "actorName": "Admin",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "Admin",
+        "actionUrl": "/settings/business"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-009",
+      "title": "New booking request from Amira Shaw",
+      "body": "Amira Shaw requested Brake Fluid Flush for 7/22/2026.",
+      "status": "read",
+      "type": "booking request pending",
+      "createdAt": "2026-06-24T14:03:00.000Z",
+      "readAt": "2026-06-24T14:03:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Amira Shaw",
+      "bookingId": "BK-1064",
+      "serviceId": "brake-fluid-flush",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "serviceName": "Brake Fluid Flush",
+      "data": {
+        "bookingId": "BK-1064",
+        "paymentId": null,
+        "serviceName": "Brake Fluid Flush",
+        "customerName": "Amira Shaw",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-010",
+      "title": "Security settings checked",
+      "body": "Mock MFA and login alert settings were reviewed.",
+      "status": "unread",
+      "type": "security mfa",
+      "createdAt": "2026-06-23T05:10:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/settings/security",
+      "actorName": "System",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "System",
+        "actionUrl": "/settings/security"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-011",
+      "title": "Wheel Alignment cancelled",
+      "body": "Ziad Mansour's booking was cancelled.",
+      "status": "unread",
+      "type": "service cancelled denied",
+      "createdAt": "2026-06-23T06:17:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Ziad Mansour",
+      "bookingId": "BK-1078",
+      "serviceId": "wheel-alignment",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "serviceName": "Wheel Alignment",
+      "data": {
+        "bookingId": "BK-1078",
+        "paymentId": null,
+        "serviceName": "Wheel Alignment",
+        "customerName": "Ziad Mansour",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-012",
+      "title": "Payment export is ready",
+      "body": "A mock payments export finished successfully and is ready to download.",
+      "status": "read",
+      "type": "export complete",
+      "createdAt": "2026-06-22T07:24:00.000Z",
+      "readAt": "2026-06-22T07:24:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/payments/export/details",
+      "actorName": "Reports",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "Reports",
+        "actionUrl": "/payments/export/details"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-013",
+      "title": "A/C Repair accepted",
+      "body": "Farah Blake's booking moved into the service queue.",
+      "status": "unread",
+      "type": "service accepted approved",
+      "createdAt": "2026-06-22T08:31:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Farah Blake",
+      "bookingId": "BK-1092",
+      "serviceId": "ac-repair",
+      "serviceIcon": "/assets/battery_service.svg",
+      "serviceName": "A/C Repair",
+      "data": {
+        "bookingId": "BK-1092",
+        "paymentId": null,
+        "serviceName": "A/C Repair",
+        "customerName": "Farah Blake",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-014",
+      "title": "Inventory item sold",
+      "body": "Battery Replacement was sold and stock was adjusted.",
+      "status": "unread",
+      "type": "storage item sold inventory",
+      "createdAt": "2026-06-21T09:38:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/inventory",
+      "actorName": "Storage",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Battery Replacement",
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": "Battery Replacement",
+        "customerName": "Storage",
+        "actionUrl": "/inventory"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-015",
+      "title": "Wheel Alignment completed",
+      "body": "Nadine Ali's Mercedes C200 was marked completed.",
+      "status": "read",
+      "type": "booking completed",
+      "createdAt": "2026-06-21T10:45:00.000Z",
+      "readAt": "2026-06-21T10:45:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Nadine Ali",
+      "bookingId": "BK-1006",
+      "serviceId": "wheel-alignment",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "serviceName": "Wheel Alignment",
+      "data": {
+        "bookingId": "BK-1006",
+        "paymentId": null,
+        "serviceName": "Wheel Alignment",
+        "customerName": "Nadine Ali",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-016",
+      "title": "Payment PAY-9081 received",
+      "body": "Jana Wells paid $56 for Engine Coolant using PayPal.",
+      "status": "unread",
+      "type": "payment paid",
+      "createdAt": "2026-06-20T11:52:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/payments",
+      "actorName": "Jana Wells",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Engine Coolant",
+      "data": {
+        "bookingId": null,
+        "paymentId": "PAY-9081",
+        "serviceName": "Engine Coolant",
+        "customerName": "Jana Wells",
+        "actionUrl": "/payments"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-017",
+      "title": "Business profile saved",
+      "body": "Mockup Auto Service profile data was saved.",
+      "status": "unread",
+      "type": "settings profile saved",
+      "createdAt": "2026-06-20T12:59:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/settings/business",
+      "actorName": "Admin",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "Admin",
+        "actionUrl": "/settings/business"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-018",
+      "title": "New booking request from Farah Blake",
+      "body": "Farah Blake requested Car Wash & Detailing for 7/9/2026.",
+      "status": "read",
+      "type": "booking request pending",
+      "createdAt": "2026-06-19T13:06:00.000Z",
+      "readAt": "2026-06-19T13:06:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Farah Blake",
+      "bookingId": "BK-1027",
+      "serviceId": "car-wash-detailing",
+      "serviceIcon": "/assets/paint_service.svg",
+      "serviceName": "Car Wash & Detailing",
+      "data": {
+        "bookingId": "BK-1027",
+        "paymentId": null,
+        "serviceName": "Car Wash & Detailing",
+        "customerName": "Farah Blake",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-019",
+      "title": "Security settings checked",
+      "body": "Mock MFA and login alert settings were reviewed.",
+      "status": "archived",
+      "type": "security mfa",
+      "createdAt": "2026-06-19T14:13:00.000Z",
+      "readAt": null,
+      "archivedAt": "2026-06-20T14:13:00.000Z",
+      "actionUrl": "/settings/security",
+      "actorName": "System",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "System",
+        "actionUrl": "/settings/security"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-020",
+      "title": "Full Vehicle Inspection cancelled",
+      "body": "Nadine Ali's booking was cancelled.",
+      "status": "unread",
+      "type": "service cancelled denied",
+      "createdAt": "2026-06-18T05:20:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Nadine Ali",
+      "bookingId": "BK-1041",
+      "serviceId": "full-vehicle-inspection",
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Full Vehicle Inspection",
+      "data": {
+        "bookingId": "BK-1041",
+        "paymentId": null,
+        "serviceName": "Full Vehicle Inspection",
+        "customerName": "Nadine Ali",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-021",
+      "title": "Payment export is ready",
+      "body": "A mock payments export finished successfully and is ready to download.",
+      "status": "read",
+      "type": "export complete",
+      "createdAt": "2026-06-18T06:27:00.000Z",
+      "readAt": "2026-06-18T06:27:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/payments/export/details",
+      "actorName": "Reports",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "Reports",
+        "actionUrl": "/payments/export/details"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-022",
+      "title": "Engine Diagnostics accepted",
+      "body": "Omar Hassan's booking moved into the service queue.",
+      "status": "unread",
+      "type": "service accepted approved",
+      "createdAt": "2026-06-17T07:34:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Omar Hassan",
+      "bookingId": "BK-1055",
+      "serviceId": "engine-diagnostics",
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Engine Diagnostics",
+      "data": {
+        "bookingId": "BK-1055",
+        "paymentId": null,
+        "serviceName": "Engine Diagnostics",
+        "customerName": "Omar Hassan",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-023",
+      "title": "Inventory item sold",
+      "body": "Synthetic Engine Oil was sold and stock was adjusted.",
+      "status": "unread",
+      "type": "storage item sold inventory",
+      "createdAt": "2026-06-17T08:41:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/inventory",
+      "actorName": "Storage",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Synthetic Engine Oil",
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": "Synthetic Engine Oil",
+        "customerName": "Storage",
+        "actionUrl": "/inventory"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-024",
+      "title": "Brake Pad Replacement completed",
+      "body": "Amira Shaw's Peugeot 508 was marked completed.",
+      "status": "read",
+      "type": "booking completed",
+      "createdAt": "2026-06-16T09:48:00.000Z",
+      "readAt": "2026-06-16T09:48:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Amira Shaw",
+      "bookingId": "BK-1069",
+      "serviceId": "brake-pad-replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "serviceName": "Brake Pad Replacement",
+      "data": {
+        "bookingId": "BK-1069",
+        "paymentId": null,
+        "serviceName": "Brake Pad Replacement",
+        "customerName": "Amira Shaw",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-025",
+      "title": "Payment PAY-9026 received",
+      "body": "Karim Saleh paid $170 for Dent Removal using PayPal.",
+      "status": "unread",
+      "type": "payment paid",
+      "createdAt": "2026-06-16T10:55:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/payments",
+      "actorName": "Karim Saleh",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": "/assets/wheel_service.svg",
+      "serviceName": "Dent Removal",
+      "data": {
+        "bookingId": null,
+        "paymentId": "PAY-9026",
+        "serviceName": "Dent Removal",
+        "customerName": "Karim Saleh",
+        "actionUrl": "/payments"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-026",
+      "title": "Business profile saved",
+      "body": "Mockup Auto Service profile data was saved.",
+      "status": "unread",
+      "type": "settings profile saved",
+      "createdAt": "2026-06-15T11:02:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/settings/business",
+      "actorName": "Admin",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "Admin",
+        "actionUrl": "/settings/business"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-027",
+      "title": "New booking request from Omar Hassan",
+      "body": "Omar Hassan requested Wheel Alignment for 7/2/2026.",
+      "status": "read",
+      "type": "booking request pending",
+      "createdAt": "2026-06-15T12:09:00.000Z",
+      "readAt": "2026-06-15T12:09:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Omar Hassan",
+      "bookingId": "BK-1090",
+      "serviceId": "wheel-alignment",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "serviceName": "Wheel Alignment",
+      "data": {
+        "bookingId": "BK-1090",
+        "paymentId": null,
+        "serviceName": "Wheel Alignment",
+        "customerName": "Omar Hassan",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-028",
+      "title": "Security settings checked",
+      "body": "Mock MFA and login alert settings were reviewed.",
+      "status": "unread",
+      "type": "security mfa",
+      "createdAt": "2026-06-14T13:16:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/settings/security",
+      "actorName": "System",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "System",
+        "actionUrl": "/settings/security"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-029",
+      "title": "Brake Fluid Flush cancelled",
+      "body": "Amira Shaw's booking was cancelled.",
+      "status": "unread",
+      "type": "service cancelled denied",
+      "createdAt": "2026-06-14T14:23:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Amira Shaw",
+      "bookingId": "BK-1004",
+      "serviceId": "brake-fluid-flush",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "serviceName": "Brake Fluid Flush",
+      "data": {
+        "bookingId": "BK-1004",
+        "paymentId": null,
+        "serviceName": "Brake Fluid Flush",
+        "customerName": "Amira Shaw",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-030",
+      "title": "Payment export is ready",
+      "body": "A mock payments export finished successfully and is ready to download.",
+      "status": "read",
+      "type": "export complete",
+      "createdAt": "2026-06-13T05:30:00.000Z",
+      "readAt": "2026-06-13T05:30:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/payments/export/details",
+      "actorName": "Reports",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "Reports",
+        "actionUrl": "/payments/export/details"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-031",
+      "title": "Wheel Alignment accepted",
+      "body": "Ziad Mansour's booking moved into the service queue.",
+      "status": "unread",
+      "type": "service accepted approved",
+      "createdAt": "2026-06-13T06:37:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Ziad Mansour",
+      "bookingId": "BK-1018",
+      "serviceId": "wheel-alignment",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "serviceName": "Wheel Alignment",
+      "data": {
+        "bookingId": "BK-1018",
+        "paymentId": null,
+        "serviceName": "Wheel Alignment",
+        "customerName": "Ziad Mansour",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-032",
+      "title": "Inventory item sold",
+      "body": "Tire Replacement was sold and stock was adjusted.",
+      "status": "unread",
+      "type": "storage item sold inventory",
+      "createdAt": "2026-06-12T07:44:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/inventory",
+      "actorName": "Storage",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Tire Replacement",
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": "Tire Replacement",
+        "customerName": "Storage",
+        "actionUrl": "/inventory"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-033",
+      "title": "A/C Repair completed",
+      "body": "Farah Blake's Hyundai Elantra was marked completed.",
+      "status": "read",
+      "type": "booking completed",
+      "createdAt": "2026-06-12T08:51:00.000Z",
+      "readAt": "2026-06-12T08:51:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Farah Blake",
+      "bookingId": "BK-1032",
+      "serviceId": "ac-repair",
+      "serviceIcon": "/assets/battery_service.svg",
+      "serviceName": "A/C Repair",
+      "data": {
+        "bookingId": "BK-1032",
+        "paymentId": null,
+        "serviceName": "A/C Repair",
+        "customerName": "Farah Blake",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-034",
+      "title": "Payment PAY-9071 received",
+      "body": "Mark Evans paid $240 for Battery Replacement using PayPal.",
+      "status": "unread",
+      "type": "payment paid",
+      "createdAt": "2026-06-11T09:58:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/payments",
+      "actorName": "Mark Evans",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": "/assets/paint_service.svg",
+      "serviceName": "Battery Replacement",
+      "data": {
+        "bookingId": null,
+        "paymentId": "PAY-9071",
+        "serviceName": "Battery Replacement",
+        "customerName": "Mark Evans",
+        "actionUrl": "/payments"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-035",
+      "title": "Business profile saved",
+      "body": "Mockup Auto Service profile data was saved.",
+      "status": "unread",
+      "type": "settings profile saved",
+      "createdAt": "2026-06-11T10:05:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/settings/business",
+      "actorName": "Admin",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "Admin",
+        "actionUrl": "/settings/business"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-036",
+      "title": "New booking request from Ziad Mansour",
+      "body": "Ziad Mansour requested Full Vehicle Inspection for 6/19/2026.",
+      "status": "read",
+      "type": "booking request pending",
+      "createdAt": "2026-06-10T11:12:00.000Z",
+      "readAt": "2026-06-10T11:12:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Ziad Mansour",
+      "bookingId": "BK-1053",
+      "serviceId": "full-vehicle-inspection",
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Full Vehicle Inspection",
+      "data": {
+        "bookingId": "BK-1053",
+        "paymentId": null,
+        "serviceName": "Full Vehicle Inspection",
+        "customerName": "Ziad Mansour",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-037",
+      "title": "Security settings checked",
+      "body": "Mock MFA and login alert settings were reviewed.",
+      "status": "unread",
+      "type": "security mfa",
+      "createdAt": "2026-06-10T12:19:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/settings/security",
+      "actorName": "System",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "System",
+        "actionUrl": "/settings/security"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-038",
+      "title": "Engine Diagnostics cancelled",
+      "body": "Farah Blake's booking was cancelled.",
+      "status": "archived",
+      "type": "service cancelled denied",
+      "createdAt": "2026-06-09T13:26:00.000Z",
+      "readAt": null,
+      "archivedAt": "2026-06-10T13:26:00.000Z",
+      "actionUrl": "/bookings",
+      "actorName": "Farah Blake",
+      "bookingId": "BK-1067",
+      "serviceId": "engine-diagnostics",
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Engine Diagnostics",
+      "data": {
+        "bookingId": "BK-1067",
+        "paymentId": null,
+        "serviceName": "Engine Diagnostics",
+        "customerName": "Farah Blake",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-039",
+      "title": "Payment export is ready",
+      "body": "A mock payments export finished successfully and is ready to download.",
+      "status": "read",
+      "type": "export complete",
+      "createdAt": "2026-06-09T14:33:00.000Z",
+      "readAt": "2026-06-09T14:33:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/payments/export/details",
+      "actorName": "Reports",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "Reports",
+        "actionUrl": "/payments/export/details"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-040",
+      "title": "Brake Pad Replacement accepted",
+      "body": "Nadine Ali's booking moved into the service queue.",
+      "status": "unread",
+      "type": "service accepted approved",
+      "createdAt": "2026-06-08T05:40:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Nadine Ali",
+      "bookingId": "BK-1081",
+      "serviceId": "brake-pad-replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "serviceName": "Brake Pad Replacement",
+      "data": {
+        "bookingId": "BK-1081",
+        "paymentId": null,
+        "serviceName": "Brake Pad Replacement",
+        "customerName": "Nadine Ali",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-041",
+      "title": "Inventory item sold",
+      "body": "Wheel Alignment was sold and stock was adjusted.",
+      "status": "unread",
+      "type": "storage item sold inventory",
+      "createdAt": "2026-06-08T06:47:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/inventory",
+      "actorName": "Storage",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Wheel Alignment",
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": "Wheel Alignment",
+        "customerName": "Storage",
+        "actionUrl": "/inventory"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-042",
+      "title": "Tire Replacement completed",
+      "body": "Omar Hassan's Toyota Corolla was marked completed.",
+      "status": "read",
+      "type": "booking completed",
+      "createdAt": "2026-06-07T07:54:00.000Z",
+      "readAt": "2026-06-07T07:54:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Omar Hassan",
+      "bookingId": "BK-1095",
+      "serviceId": "tire-replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "serviceName": "Tire Replacement",
+      "data": {
+        "bookingId": "BK-1095",
+        "paymentId": null,
+        "serviceName": "Tire Replacement",
+        "customerName": "Omar Hassan",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-043",
+      "title": "Payment PAY-9016 received",
+      "body": "Salma Reed paid $42 for Synthetic Engine Oil using PayPal.",
+      "status": "unread",
+      "type": "payment paid",
+      "createdAt": "2026-06-07T08:01:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/payments",
+      "actorName": "Salma Reed",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Synthetic Engine Oil",
+      "data": {
+        "bookingId": null,
+        "paymentId": "PAY-9016",
+        "serviceName": "Synthetic Engine Oil",
+        "customerName": "Salma Reed",
+        "actionUrl": "/payments"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-044",
+      "title": "Business profile saved",
+      "body": "Mockup Auto Service profile data was saved.",
+      "status": "unread",
+      "type": "settings profile saved",
+      "createdAt": "2026-06-06T09:08:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/settings/business",
+      "actorName": "Admin",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "Admin",
+        "actionUrl": "/settings/business"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-045",
+      "title": "New booking request from Nadine Ali",
+      "body": "Nadine Ali requested Brake Fluid Flush for 6/6/2026.",
+      "status": "read",
+      "type": "booking request pending",
+      "createdAt": "2026-06-06T10:15:00.000Z",
+      "readAt": "2026-06-06T10:15:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Nadine Ali",
+      "bookingId": "BK-1016",
+      "serviceId": "brake-fluid-flush",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "serviceName": "Brake Fluid Flush",
+      "data": {
+        "bookingId": "BK-1016",
+        "paymentId": null,
+        "serviceName": "Brake Fluid Flush",
+        "customerName": "Nadine Ali",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-046",
+      "title": "Security settings checked",
+      "body": "Mock MFA and login alert settings were reviewed.",
+      "status": "unread",
+      "type": "security mfa",
+      "createdAt": "2026-06-05T11:22:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/settings/security",
+      "actorName": "System",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "System",
+        "actionUrl": "/settings/security"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-047",
+      "title": "Wheel Alignment cancelled",
+      "body": "Omar Hassan's booking was cancelled.",
+      "status": "unread",
+      "type": "service cancelled denied",
+      "createdAt": "2026-06-05T12:29:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Omar Hassan",
+      "bookingId": "BK-1030",
+      "serviceId": "wheel-alignment",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "serviceName": "Wheel Alignment",
+      "data": {
+        "bookingId": "BK-1030",
+        "paymentId": null,
+        "serviceName": "Wheel Alignment",
+        "customerName": "Omar Hassan",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-048",
+      "title": "Payment export is ready",
+      "body": "A mock payments export finished successfully and is ready to download.",
+      "status": "read",
+      "type": "export complete",
+      "createdAt": "2026-06-04T13:36:00.000Z",
+      "readAt": "2026-06-04T13:36:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/payments/export/details",
+      "actorName": "Reports",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "Reports",
+        "actionUrl": "/payments/export/details"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-049",
+      "title": "A/C Repair accepted",
+      "body": "Amira Shaw's booking moved into the service queue.",
+      "status": "unread",
+      "type": "service accepted approved",
+      "createdAt": "2026-06-04T14:43:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Amira Shaw",
+      "bookingId": "BK-1044",
+      "serviceId": "ac-repair",
+      "serviceIcon": "/assets/battery_service.svg",
+      "serviceName": "A/C Repair",
+      "data": {
+        "bookingId": "BK-1044",
+        "paymentId": null,
+        "serviceName": "A/C Repair",
+        "customerName": "Amira Shaw",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-050",
+      "title": "Inventory item sold",
+      "body": "Brake Pad Replacement was sold and stock was adjusted.",
+      "status": "unread",
+      "type": "storage item sold inventory",
+      "createdAt": "2026-06-03T05:50:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/inventory",
+      "actorName": "Storage",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Brake Pad Replacement",
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": "Brake Pad Replacement",
+        "customerName": "Storage",
+        "actionUrl": "/inventory"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-051",
+      "title": "Dent Removal completed",
+      "body": "Ziad Mansour's Volkswagen Golf was marked completed.",
+      "status": "read",
+      "type": "booking completed",
+      "createdAt": "2026-06-03T06:57:00.000Z",
+      "readAt": "2026-06-03T06:57:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Ziad Mansour",
+      "bookingId": "BK-1058",
+      "serviceId": "dent-removal",
+      "serviceIcon": "/assets/paint_service.svg",
+      "serviceName": "Dent Removal",
+      "data": {
+        "bookingId": "BK-1058",
+        "paymentId": null,
+        "serviceName": "Dent Removal",
+        "customerName": "Ziad Mansour",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-052",
+      "title": "Payment PAY-9061 received",
+      "body": "Rana Yassin paid $255 for Tire Replacement using Cash.",
+      "status": "unread",
+      "type": "payment paid",
+      "createdAt": "2026-06-02T07:04:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/payments",
+      "actorName": "Rana Yassin",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Tire Replacement",
+      "data": {
+        "bookingId": null,
+        "paymentId": "PAY-9061",
+        "serviceName": "Tire Replacement",
+        "customerName": "Rana Yassin",
+        "actionUrl": "/payments"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-053",
+      "title": "Business profile saved",
+      "body": "Mockup Auto Service profile data was saved.",
+      "status": "unread",
+      "type": "settings profile saved",
+      "createdAt": "2026-06-02T08:11:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/settings/business",
+      "actorName": "Admin",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "Admin",
+        "actionUrl": "/settings/business"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-054",
+      "title": "New booking request from Amira Shaw",
+      "body": "Amira Shaw requested Engine Diagnostics for 5/30/2026.",
+      "status": "read",
+      "type": "booking request pending",
+      "createdAt": "2026-06-01T09:18:00.000Z",
+      "readAt": "2026-06-01T09:18:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Amira Shaw",
+      "bookingId": "BK-1079",
+      "serviceId": "engine-diagnostics",
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Engine Diagnostics",
+      "data": {
+        "bookingId": "BK-1079",
+        "paymentId": null,
+        "serviceName": "Engine Diagnostics",
+        "customerName": "Amira Shaw",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-055",
+      "title": "Security settings checked",
+      "body": "Mock MFA and login alert settings were reviewed.",
+      "status": "unread",
+      "type": "security mfa",
+      "createdAt": "2026-06-01T10:25:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/settings/security",
+      "actorName": "System",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "System",
+        "actionUrl": "/settings/security"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-056",
+      "title": "Brake Pad Replacement cancelled",
+      "body": "Ziad Mansour's booking was cancelled.",
+      "status": "unread",
+      "type": "service cancelled denied",
+      "createdAt": "2026-05-31T11:32:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Ziad Mansour",
+      "bookingId": "BK-1093",
+      "serviceId": "brake-pad-replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "serviceName": "Brake Pad Replacement",
+      "data": {
+        "bookingId": "BK-1093",
+        "paymentId": null,
+        "serviceName": "Brake Pad Replacement",
+        "customerName": "Ziad Mansour",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-057",
+      "title": "Payment export is ready",
+      "body": "A mock payments export finished successfully and is ready to download.",
+      "status": "archived",
+      "type": "export complete",
+      "createdAt": "2026-05-31T12:39:00.000Z",
+      "readAt": null,
+      "archivedAt": "2026-06-01T12:39:00.000Z",
+      "actionUrl": "/payments/export/details",
+      "actorName": "Reports",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "Reports",
+        "actionUrl": "/payments/export/details"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-058",
+      "title": "Engine Diagnostics accepted",
+      "body": "Farah Blake's booking moved into the service queue.",
+      "status": "unread",
+      "type": "service accepted approved",
+      "createdAt": "2026-05-30T13:46:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Farah Blake",
+      "bookingId": "BK-1007",
+      "serviceId": "engine-diagnostics",
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Engine Diagnostics",
+      "data": {
+        "bookingId": "BK-1007",
+        "paymentId": null,
+        "serviceName": "Engine Diagnostics",
+        "customerName": "Farah Blake",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-059",
+      "title": "Inventory item sold",
+      "body": "Synthetic Engine Oil was sold and stock was adjusted.",
+      "status": "unread",
+      "type": "storage item sold inventory",
+      "createdAt": "2026-05-30T14:53:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/inventory",
+      "actorName": "Storage",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Synthetic Engine Oil",
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": "Synthetic Engine Oil",
+        "customerName": "Storage",
+        "actionUrl": "/inventory"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-060",
+      "title": "Brake Pad Replacement completed",
+      "body": "Nadine Ali's Mercedes C200 was marked completed.",
+      "status": "read",
+      "type": "booking completed",
+      "createdAt": "2026-05-29T05:00:00.000Z",
+      "readAt": "2026-05-29T05:00:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Nadine Ali",
+      "bookingId": "BK-1021",
+      "serviceId": "brake-pad-replacement",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "serviceName": "Brake Pad Replacement",
+      "data": {
+        "bookingId": "BK-1021",
+        "paymentId": null,
+        "serviceName": "Brake Pad Replacement",
+        "customerName": "Nadine Ali",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-061",
+      "title": "Payment PAY-9006 received",
+      "body": "Jana Wells paid $95 for Wheel Alignment using Cash.",
+      "status": "unread",
+      "type": "payment paid",
+      "createdAt": "2026-05-29T06:07:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/payments",
+      "actorName": "Jana Wells",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": "/assets/wheel_service.svg",
+      "serviceName": "Wheel Alignment",
+      "data": {
+        "bookingId": null,
+        "paymentId": "PAY-9006",
+        "serviceName": "Wheel Alignment",
+        "customerName": "Jana Wells",
+        "actionUrl": "/payments"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-062",
+      "title": "Business profile saved",
+      "body": "Mockup Auto Service profile data was saved.",
+      "status": "unread",
+      "type": "settings profile saved",
+      "createdAt": "2026-05-28T07:14:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/settings/business",
+      "actorName": "Admin",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "Admin",
+        "actionUrl": "/settings/business"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-063",
+      "title": "New booking request from Farah Blake",
+      "body": "Farah Blake requested Wheel Alignment for 5/17/2026.",
+      "status": "read",
+      "type": "booking request pending",
+      "createdAt": "2026-05-28T08:21:00.000Z",
+      "readAt": "2026-05-28T08:21:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Farah Blake",
+      "bookingId": "BK-1042",
+      "serviceId": "wheel-alignment",
+      "serviceIcon": "/assets/wheel_service.svg",
+      "serviceName": "Wheel Alignment",
+      "data": {
+        "bookingId": "BK-1042",
+        "paymentId": null,
+        "serviceName": "Wheel Alignment",
+        "customerName": "Farah Blake",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-064",
+      "title": "Security settings checked",
+      "body": "Mock MFA and login alert settings were reviewed.",
+      "status": "unread",
+      "type": "security mfa",
+      "createdAt": "2026-05-27T09:28:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/settings/security",
+      "actorName": "System",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "System",
+        "actionUrl": "/settings/security"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-065",
+      "title": "A/C Repair cancelled",
+      "body": "Nadine Ali's booking was cancelled.",
+      "status": "unread",
+      "type": "service cancelled denied",
+      "createdAt": "2026-05-27T10:35:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Nadine Ali",
+      "bookingId": "BK-1056",
+      "serviceId": "ac-repair",
+      "serviceIcon": "/assets/battery_service.svg",
+      "serviceName": "A/C Repair",
+      "data": {
+        "bookingId": "BK-1056",
+        "paymentId": null,
+        "serviceName": "A/C Repair",
+        "customerName": "Nadine Ali",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-066",
+      "title": "Payment export is ready",
+      "body": "A mock payments export finished successfully and is ready to download.",
+      "status": "read",
+      "type": "export complete",
+      "createdAt": "2026-05-26T11:42:00.000Z",
+      "readAt": "2026-05-26T11:42:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/payments/export/details",
+      "actorName": "Reports",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "Reports",
+        "actionUrl": "/payments/export/details"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-067",
+      "title": "Dent Removal accepted",
+      "body": "Omar Hassan's booking moved into the service queue.",
+      "status": "unread",
+      "type": "service accepted approved",
+      "createdAt": "2026-05-26T12:49:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Omar Hassan",
+      "bookingId": "BK-1070",
+      "serviceId": "dent-removal",
+      "serviceIcon": "/assets/paint_service.svg",
+      "serviceName": "Dent Removal",
+      "data": {
+        "bookingId": "BK-1070",
+        "paymentId": null,
+        "serviceName": "Dent Removal",
+        "customerName": "Omar Hassan",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-068",
+      "title": "Inventory item sold",
+      "body": "Engine Diagnostics was sold and stock was adjusted.",
+      "status": "unread",
+      "type": "storage item sold inventory",
+      "createdAt": "2026-05-25T13:56:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/inventory",
+      "actorName": "Storage",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Engine Diagnostics",
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": "Engine Diagnostics",
+        "customerName": "Storage",
+        "actionUrl": "/inventory"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-069",
+      "title": "Oil Change completed",
+      "body": "Amira Shaw's Peugeot 508 was marked completed.",
+      "status": "read",
+      "type": "booking completed",
+      "createdAt": "2026-05-25T14:03:00.000Z",
+      "readAt": "2026-05-25T14:03:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Amira Shaw",
+      "bookingId": "BK-1084",
+      "serviceId": "oil-change",
+      "serviceIcon": "/assets/oil_icon.png",
+      "serviceName": "Oil Change",
+      "data": {
+        "bookingId": "BK-1084",
+        "paymentId": null,
+        "serviceName": "Oil Change",
+        "customerName": "Amira Shaw",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-070",
+      "title": "Payment PAY-9051 received",
+      "body": "Karim Saleh paid $225 for Brake Pad Replacement using Cash.",
+      "status": "unread",
+      "type": "payment paid",
+      "createdAt": "2026-05-24T05:10:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/payments",
+      "actorName": "Karim Saleh",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Brake Pad Replacement",
+      "data": {
+        "bookingId": null,
+        "paymentId": "PAY-9051",
+        "serviceName": "Brake Pad Replacement",
+        "customerName": "Karim Saleh",
+        "actionUrl": "/payments"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-071",
+      "title": "Business profile saved",
+      "body": "Mockup Auto Service profile data was saved.",
+      "status": "unread",
+      "type": "settings profile saved",
+      "createdAt": "2026-05-24T06:17:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/settings/business",
+      "actorName": "Admin",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "Admin",
+        "actionUrl": "/settings/business"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-072",
+      "title": "New booking request from Omar Hassan",
+      "body": "Omar Hassan requested Full Vehicle Inspection for 5/4/2026.",
+      "status": "read",
+      "type": "booking request pending",
+      "createdAt": "2026-05-23T07:24:00.000Z",
+      "readAt": "2026-05-23T07:24:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Omar Hassan",
+      "bookingId": "BK-1005",
+      "serviceId": "full-vehicle-inspection",
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Full Vehicle Inspection",
+      "data": {
+        "bookingId": "BK-1005",
+        "paymentId": null,
+        "serviceName": "Full Vehicle Inspection",
+        "customerName": "Omar Hassan",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-073",
+      "title": "Security settings checked",
+      "body": "Mock MFA and login alert settings were reviewed.",
+      "status": "unread",
+      "type": "security mfa",
+      "createdAt": "2026-05-23T08:31:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/settings/security",
+      "actorName": "System",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "System",
+        "actionUrl": "/settings/security"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-074",
+      "title": "Engine Diagnostics cancelled",
+      "body": "Amira Shaw's booking was cancelled.",
+      "status": "unread",
+      "type": "service cancelled denied",
+      "createdAt": "2026-05-22T09:38:00.000Z",
+      "readAt": null,
+      "archivedAt": null,
+      "actionUrl": "/bookings",
+      "actorName": "Amira Shaw",
+      "bookingId": "BK-1019",
+      "serviceId": "engine-diagnostics",
+      "serviceIcon": "/assets/engine_service.svg",
+      "serviceName": "Engine Diagnostics",
+      "data": {
+        "bookingId": "BK-1019",
+        "paymentId": null,
+        "serviceName": "Engine Diagnostics",
+        "customerName": "Amira Shaw",
+        "actionUrl": "/bookings"
+      },
+      "metadata": null
+    },
+    {
+      "id": "msg-075",
+      "title": "Payment export is ready",
+      "body": "A mock payments export finished successfully and is ready to download.",
+      "status": "read",
+      "type": "export complete",
+      "createdAt": "2026-05-22T10:45:00.000Z",
+      "readAt": "2026-05-22T10:45:00.000Z",
+      "archivedAt": null,
+      "actionUrl": "/payments/export/details",
+      "actorName": "Reports",
+      "bookingId": null,
+      "serviceId": null,
+      "serviceIcon": null,
+      "serviceName": null,
+      "data": {
+        "bookingId": null,
+        "paymentId": null,
+        "serviceName": null,
+        "customerName": "Reports",
+        "actionUrl": "/payments/export/details"
+      },
+      "metadata": null
+    }
+  ],
+  "helpCenter": {
+    "categories": [
+      {
+        "id": "getting-started",
+        "title": "Getting started",
+        "articles": [
+          {
+            "id": "mock-mode",
+            "title": "Using mock mode",
+            "body": "Sign in with mockup@gmail.com and Mockup123456! when the backend is not available."
+          }
+        ]
+      },
+      {
+        "id": "operations",
+        "title": "Operations",
+        "articles": [
+          {
+            "id": "bookings",
+            "title": "Managing bookings",
+            "body": "Bookings can be filtered, accepted, completed, or cancelled while using mock data."
+          }
+        ]
+      }
+    ]
+  },
+  "feedback": [],
+  "supportTickets": [],
+  "notificationDevices": [],
+  "paymentExportJobs": []
+}

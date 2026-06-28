@@ -7,7 +7,12 @@ import type {
   PaymentSortKey,
   PaymentSummary,
 } from "@/domain/entities/Payment";
-import { apiClient, type PaginatedResponse } from "@/infrastructure/api/client";
+import {
+  apiClient,
+  getStoredAuthSession,
+  type PaginatedResponse,
+} from "@/infrastructure/api/client";
+import { isMockAuthSession } from "@/infrastructure/mock/mock-api";
 
 export const PAYMENT_METHOD_FILTERS: PaymentMethod[] = [
   "VISA",
@@ -111,6 +116,34 @@ export function getPaymentExportJob(jobId: string) {
 }
 
 export async function downloadPaymentExport(job: PaymentExportJob) {
+  if (isMockAuthSession(getStoredAuthSession())) {
+    const response = await listPayments({ page: 1, limit: 1000 });
+    const blob = new Blob(
+      [
+        JSON.stringify(
+          {
+            generatedAt: new Date().toISOString(),
+            job,
+            summary: response.summary,
+            payments: response.data,
+          },
+          null,
+          2,
+        ),
+      ],
+      { type: "application/json;charset=utf-8" },
+    );
+    const objectUrl = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = objectUrl;
+    anchor.download = `${job.id}.json`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(objectUrl);
+    return;
+  }
+
   const { getAccessToken } = await import("@/infrastructure/api/client");
   const token = getAccessToken();
   const baseUrl =

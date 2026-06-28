@@ -1,9 +1,9 @@
-export const DEMO_BUSINESS_ACCOUNT = {
-  email: "demo.business@example.com",
-  password: "CarService123!",
+export const MOCKUP_BUSINESS_ACCOUNT = {
+  email: "mockup@gmail.com",
+  password: "Mockup123456!",
   owner: {
-    firstName: "Maro",
-    lastName: "Workshop",
+    firstName: "Mockup",
+    lastName: "Owner",
     phoneNumber: "+201001234567",
     streetAddress: "12 Nile Corniche",
     country: "eg",
@@ -12,7 +12,7 @@ export const DEMO_BUSINESS_ACCOUNT = {
     zipCode: "11511",
   },
   business: {
-    name: "Demo Auto Service",
+    name: "Mockup Auto Service",
     phoneNumber: "+201009876543",
     commercialRegistrationNumber: "123456789",
     taxIdentificationNumber: "987654321",
@@ -25,3 +25,5 @@ export const DEMO_BUSINESS_ACCOUNT = {
     zipCode: "11511",
   },
 };
+
+export const DEMO_BUSINESS_ACCOUNT = MOCKUP_BUSINESS_ACCOUNT;
