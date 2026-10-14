@@ -44,7 +44,7 @@ I was responsible for the frontend development of the admin dashboard, focusing 
 
 2. Navigate to the project folder:
 
-   cd Sal7ha-Admin-Dashboard-Web
+   cd Sal7ha-Frontend-Development
 
 
 3. Install dependencies:
